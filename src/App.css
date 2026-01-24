@@ -607,10 +607,15 @@ body {
 ================================================== */
 
 /* ---------- GLOBAL ANTI OVERFLOW ---------- */
-html, body {
+html {
   max-width: 100%;
+}
+
+body {
+  margin: 0;
   overflow-x: hidden;
 }
+
 
 /* ---------- CONTAINER LEBIH AMAN ---------- */
 .container {
