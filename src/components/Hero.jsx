@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Counter from "./Counter";
 import illustration from "../assets/illustration.png";
 import smk2Logo from "../assets/smk2.png";
@@ -8,12 +8,30 @@ export default function Hero() {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const handlePopupToggle = () => {
-    setIsPopupOpen(!isPopupOpen);
+    setIsPopupOpen((prev) => !prev);
   };
 
   const handleFlipToggle = () => {
-    setIsFlipped(!isFlipped);
+    setIsFlipped((prev) => !prev);
   };
+
+  /* =========================================
+     LOCK BODY + FIX POPUP DESKTOP & MOBILE
+  ========================================= */
+  useEffect(() => {
+    if (isPopupOpen) {
+      document.body.classList.add("popup-open");
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.classList.remove("popup-open");
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.classList.remove("popup-open");
+      document.body.style.overflow = "";
+    };
+  }, [isPopupOpen]);
 
   return (
     <section className="hero">
@@ -69,21 +87,18 @@ export default function Hero() {
 
           <div className="card-text">
             <p className="card-title">
-              Sebagai bagian dari komunitas sekolah, kita semua berperan dalam
-              memilih untuk membawa perubahan positif sekolah.
+              Berperan dalam memilih untuk membawa perubahan positif sekolah.
             </p>
 
             <p className="card-desc">
-              Website ini menyediakan informasi tentang calon ketua OSIS dan
-              program kerja mereka.{" "}
-              <span style={{ color: "green" }}>
-                Bekerja sama dengan siswa jurusan Rekayasa Perangkat Lunak
-              </span>{" "}
-              yang turut membangun website ini. Jika ada masalah, segera melapor
-              melalui{" "}
+              Jika ada masalah, segera melapor melalui{" "}
               <span
                 onClick={handlePopupToggle}
-                style={{ color: "blue", cursor: "pointer" }}
+                style={{
+                  color: "#2563eb",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
               >
                 Instagram
               </span>
@@ -95,30 +110,37 @@ export default function Hero() {
 
       {/* ================= POPUP INSTAGRAM ================= */}
       {isPopupOpen && (
-        <div className="popup">
-          <div className="popup-content">
-            <h3>Pilih Lapor</h3>
-            <ul>
-              <li>
-                <a
-                  href="https://instagram.com/osissmkn2bekasi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Osissmkn2bekasi
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://instagram.com/13bagas.exv"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  @13bagas.exv
-                </a>
-              </li>
-            </ul>
-            <button onClick={handlePopupToggle}>Tutup</button>
+        <div className="popup-overlay" onClick={handlePopupToggle}>
+          <div
+            className="popup-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Pilih Instagram</h3>
+
+            <a
+              href="https://instagram.com/osissmkn2bekasi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="popup-link"
+            >
+              @osissmkn2bekasi
+            </a>
+
+            <a
+              href="https://instagram.com/13bagas.exv"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="popup-link"
+            >
+              @13bagas.exv
+            </a>
+
+            <button
+              className="popup-close"
+              onClick={handlePopupToggle}
+            >
+              Tutup
+            </button>
           </div>
         </div>
       )}
@@ -136,7 +158,11 @@ export default function Hero() {
         <div className="steps-card-grid">
           <div className="steps-card">
             <div className="steps-number">1</div>
-            <img src={illustration} alt="Pahami isu" className="steps-image" />
+            <img
+              src={illustration}
+              alt="Pahami isu"
+              className="steps-image"
+            />
             <h3>Pahami isu</h3>
             <p>
               Mulai dengan mencari tahu kebijakan dan masalah yang paling dekat
@@ -146,7 +172,11 @@ export default function Hero() {
 
           <div className="steps-card">
             <div className="steps-number">2</div>
-            <img src={illustration} alt="Kenali calon" className="steps-image" />
+            <img
+              src={illustration}
+              alt="Kenali calon"
+              className="steps-image"
+            />
             <h3>Kenali calon</h3>
             <p>
               Pelajari visi, misi, dan program kerja calon ketua OSIS sebelum
