@@ -819,3 +819,26 @@ textarea {
   -webkit-user-select: text;
   user-select: text;
 }
+/* =========================================
+   FIX HIGHLIGHT BIRU & TEXT SELECTION
+========================================= */
+
+/* global anti select */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* khusus logo flip */
+.logo-flip,
+.logo-flip * {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* gambar juga aman */
+.logo-flip img {
+  pointer-events: none;
+}
