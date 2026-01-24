@@ -5,9 +5,14 @@ import smk2Logo from "../assets/smk2.png";
 
 export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const handlePopupToggle = () => {
     setIsPopupOpen(!isPopupOpen);
+  };
+
+  const handleFlipToggle = () => {
+    setIsFlipped(!isFlipped);
   };
 
   return (
@@ -16,7 +21,10 @@ export default function Hero() {
       <div className="hero-grid container">
         {/* KIRI - LOGO FLIP */}
         <div className="hero-left">
-          <div className="logo-flip">
+          <div
+            className={`logo-flip ${isFlipped ? "is-flipped" : ""}`}
+            onClick={handleFlipToggle}
+          >
             <div className="logo-flip-inner">
               {/* DEPAN */}
               <img
@@ -27,7 +35,7 @@ export default function Hero() {
 
               {/* BELAKANG */}
               <img
-               src={smk2Logo}
+                src={smk2Logo}
                 alt="Logo SMKN 2"
                 className="logo-face logo-back"
               />
@@ -126,14 +134,9 @@ export default function Hero() {
       {/* ================= CARD STEPS ================= */}
       <div className="steps-card-section container">
         <div className="steps-card-grid">
-          {/* CARD 1 */}
           <div className="steps-card">
             <div className="steps-number">1</div>
-            <img
-              src={illustration}
-              alt="Pahami isu"
-              className="steps-image"
-            />
+            <img src={illustration} alt="Pahami isu" className="steps-image" />
             <h3>Pahami isu</h3>
             <p>
               Mulai dengan mencari tahu kebijakan dan masalah yang paling dekat
@@ -141,14 +144,9 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* CARD 2 */}
           <div className="steps-card">
             <div className="steps-number">2</div>
-            <img
-              src={illustration}
-              alt="Kenali calon"
-              className="steps-image"
-            />
+            <img src={illustration} alt="Kenali calon" className="steps-image" />
             <h3>Kenali calon</h3>
             <p>
               Pelajari visi, misi, dan program kerja calon ketua OSIS sebelum
@@ -156,7 +154,6 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* CARD 3 */}
           <div className="steps-card">
             <div className="steps-number">3</div>
             <img

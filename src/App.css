@@ -593,5 +593,13 @@ body {
 .hero {
   padding-top: clamp(56px, 10vh, 96px);
 }
+.logo-flip:hover .logo-flip-inner,
+.logo-flip:active .logo-flip-inner {
+  transform: none;
+}
+
+.logo-flip.is-flipped .logo-flip-inner {
+  transform: rotateY(180deg);
+}
 
 }
