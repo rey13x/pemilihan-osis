@@ -7,6 +7,15 @@ export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const jurusanLogos = [
+    "RPL",
+    "TKJ",
+    "TEI",
+    "TBSM",
+    "AKL",
+    "TET",
+  ];
+
   const handlePopupToggle = () => {
     setIsPopupOpen((prev) => !prev);
   };
@@ -16,19 +25,16 @@ export default function Hero() {
   };
 
   /* =========================================
-     LOCK BODY + FIX POPUP DESKTOP & MOBILE
+     LOCK BODY SAAT POPUP
   ========================================= */
   useEffect(() => {
     if (isPopupOpen) {
-      document.body.classList.add("popup-open");
       document.body.style.overflow = "hidden";
     } else {
-      document.body.classList.remove("popup-open");
       document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.classList.remove("popup-open");
       document.body.style.overflow = "";
     };
   }, [isPopupOpen]);
@@ -37,21 +43,18 @@ export default function Hero() {
     <section className="hero">
       {/* ================= HERO UTAMA ================= */}
       <div className="hero-grid container">
-        {/* KIRI - LOGO FLIP */}
+        {/* KIRI */}
         <div className="hero-left">
           <div
             className={`logo-flip ${isFlipped ? "is-flipped" : ""}`}
             onClick={handleFlipToggle}
           >
             <div className="logo-flip-inner">
-              {/* DEPAN */}
               <img
                 src={illustration}
                 alt="Logo OSIS"
                 className="logo-face logo-front"
               />
-
-              {/* BELAKANG */}
               <img
                 src={smk2Logo}
                 alt="Logo SMKN 2"
@@ -77,7 +80,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ================= CARD DESKRIPSI ================= */}
+      {/* ================= HERO CARD ================= */}
       <div className="hero-card container">
         <div className="hero-card-inner">
           <div className="card-logo-stack">
@@ -86,8 +89,20 @@ export default function Hero() {
           </div>
 
           <div className="card-text">
+            {/* ===== MINI MARQUEE JURUSAN ===== */}
+            <div className="jurusan-strip">
+  <div className="jurusan-track">
+    {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
+      <div className="jurusan-item" key={i}>
+        <img src={`/jurusan/${j}.png`} alt={j} />
+      </div>
+    ))}
+  </div>
+</div>
+
+
             <p className="card-title">
-              Berperan dalam memilih untuk membawa perubahan positif sekolah.
+              Berperan dalam memilih untuk membawa perubahan positif.
             </p>
 
             <p className="card-desc">
@@ -153,16 +168,12 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ================= CARD STEPS ================= */}
+      {/* ================= STEPS CARD ================= */}
       <div className="steps-card-section container">
         <div className="steps-card-grid">
           <div className="steps-card">
             <div className="steps-number">1</div>
-            <img
-              src={illustration}
-              alt="Pahami isu"
-              className="steps-image"
-            />
+            <img src={illustration} alt="Pahami isu" className="steps-image" />
             <h3>Pahami isu</h3>
             <p>
               Mulai dengan mencari tahu kebijakan dan masalah yang paling dekat
@@ -172,11 +183,7 @@ export default function Hero() {
 
           <div className="steps-card">
             <div className="steps-number">2</div>
-            <img
-              src={illustration}
-              alt="Kenali calon"
-              className="steps-image"
-            />
+            <img src={illustration} alt="Kenali calon" className="steps-image" />
             <h3>Kenali calon</h3>
             <p>
               Pelajari visi, misi, dan program kerja calon ketua OSIS sebelum
