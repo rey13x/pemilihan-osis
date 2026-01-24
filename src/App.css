@@ -802,3 +802,20 @@ body {
   visibility: visible !important;
   transform: none;
 }
+
+/* ==================================================
+   DISABLE TEXT SELECTION (ANTI BIRU)
+================================================== */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* TAPI BOLEH SELECT DI INPUT / TEXTAREA */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}

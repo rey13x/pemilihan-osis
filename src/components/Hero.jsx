@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Counter from "./Counter";
 import illustration from "../assets/illustration.png";
 import smk2Logo from "../assets/smk2.png";
@@ -6,15 +6,9 @@ import smk2Logo from "../assets/smk2.png";
 export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const autoFlipRef = useRef(null);
 
-  const jurusanLogos = [
-    "RPL",
-    "TKJ",
-    "TEI",
-    "TBSM",
-    "AKL",
-    "TET",
-  ];
+  const jurusanLogos = ["RPL", "TKJ", "TEI", "TBSM", "AKL", "TET"];
 
   const handlePopupToggle = () => {
     setIsPopupOpen((prev) => !prev);
@@ -24,16 +18,38 @@ export default function Hero() {
     setIsFlipped((prev) => !prev);
   };
 
+/* =========================================
+   AUTO FLIP LOGO OSIS
+   - TUNGGU 8 DETIK
+   - FLIP 1x
+   - LOOP SETIAP 10 DETIK
+========================================= */
+useEffect(() => {
+  const startAutoFlip = () => {
+    autoFlipRef.current = setInterval(() => {
+      setIsFlipped(true);
+      setTimeout(() => setIsFlipped(false), 1000);
+    }, 10000);
+  };
+
+  // tunggu 8 detik baru flip pertama
+  const delay = setTimeout(() => {
+    setIsFlipped(true);
+    setTimeout(() => setIsFlipped(false), 1000);
+    startAutoFlip();
+  }, 6000);
+
+  return () => {
+    clearTimeout(delay);
+    clearInterval(autoFlipRef.current);
+  };
+}, []);
+
   /* =========================================
      LOCK BODY SAAT POPUP
   ========================================= */
   useEffect(() => {
-    if (isPopupOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
+    document.body.style.overflow = isPopupOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -54,11 +70,13 @@ export default function Hero() {
                 src={illustration}
                 alt="Logo OSIS"
                 className="logo-face logo-front"
+                draggable="false"
               />
               <img
                 src={smk2Logo}
                 alt="Logo SMKN 2"
                 className="logo-face logo-back"
+                draggable="false"
               />
             </div>
           </div>
@@ -89,18 +107,20 @@ export default function Hero() {
           </div>
 
           <div className="card-text">
-            {/* ===== MINI MARQUEE JURUSAN ===== */}
-           <div className="jurusan-strip">
-  <div className="jurusan-track">
-    {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
-      <div className="jurusan-item" key={i}>
-        <img src={`/jurusan/${j}.png`} alt={j} />
-      </div>
-    ))}
-  </div>
-</div>
-
-
+            {/* ===== MARQUEE JURUSAN ===== */}
+            <div className="jurusan-strip">
+              <div className="jurusan-track">
+                {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
+                  <div className="jurusan-item" key={i}>
+                    <img
+                      src={`/jurusan/${j}.png`}
+                      alt={j}
+                      draggable="false"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <p className="card-title">
               Berperan dalam memilih untuk membawa perubahan positif.
@@ -151,10 +171,7 @@ export default function Hero() {
               @13bagas.exv
             </a>
 
-            <button
-              className="popup-close"
-              onClick={handlePopupToggle}
-            >
+            <button className="popup-close" onClick={handlePopupToggle}>
               Tutup
             </button>
           </div>
@@ -170,52 +187,53 @@ export default function Hero() {
       </div>
 
       {/* ================= STEPS CARD ================= */}
-<div className="steps-card-section container">
-  <div className="steps-card-grid">
+      <div className="steps-card-section container">
+        <div className="steps-card-grid">
+          <div className="steps-card">
+            <div className="steps-number">1</div>
+            <img
+              src="/steps/step-1.png"
+              alt="Kenali Calon"
+              className="steps-image"
+              draggable="false"
+            />
+            <h3>Kenali Calon</h3>
+            <p>
+              Cermati visi, misi, dan program kerja calon OSIS sebelum
+              menentukan pilihan.
+            </p>
+          </div>
 
-    <div className="steps-card">
-      <div className="steps-number">1</div>
-      <img
-        src="/steps/step-1.png"
-        alt="Pahami isu"
-        className="steps-image"
-      />
-      <h3>Kenali Calon</h3>
-      <p>
-       Cermati visi, misi, dan program kerja calon OSIS sebelum
-        menentukan pilihan.
-      </p>
-    </div>
+          <div className="steps-card">
+            <div className="steps-number">2</div>
+            <img
+              src="/steps/step-2.png"
+              alt="Pilih Osis"
+              className="steps-image"
+              draggable="false"
+            />
+            <h3>Pilih Osis</h3>
+            <p>
+              Kunjungi Website Pilih Osis dan gunakan aksesmu dengan NIS.
+            </p>
+          </div>
 
-    <div className="steps-card">
-      <div className="steps-number">2</div>
-      <img
-        src="/steps/step-2.png"
-        alt="Kenali calon"
-        className="steps-image"
-      />
-      <h3>Pilih Osis</h3>
-      <p>
-        Kunjungi Website Pilih Osis dan gunakan aksesmu dengan NIS.
-      </p>
-    </div>
-
-    <div className="steps-card">
-      <div className="steps-number">3</div>
-      <img
-        src="/steps/step-3.png"
-        alt="Gunakan hak pilih"
-        className="steps-image"
-      />
-      <h3>Terpilih</h3>
-      <p>
-        Pilihanmu berhasil masuk ke Pilih Osis dan menunggu waktu pengunguman hasil Pilih Osis.
-      </p>
-    </div>
-
-  </div>
-</div>
-
+          <div className="steps-card">
+            <div className="steps-number">3</div>
+            <img
+              src="/steps/step-3.png"
+              alt="Terpilih"
+              className="steps-image"
+              draggable="false"
+            />
+            <h3>Terpilih</h3>
+            <p>
+              Pilihanmu tersimpan dan menunggu waktu pengumuman hasil
+              Pilih Osis.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
