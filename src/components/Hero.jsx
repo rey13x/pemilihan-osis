@@ -90,7 +90,7 @@ export default function Hero() {
 
           <div className="card-text">
             {/* ===== MINI MARQUEE JURUSAN ===== */}
-            <div className="jurusan-strip">
+           <div className="jurusan-strip">
   <div className="jurusan-track">
     {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
       <div className="jurusan-item" key={i}>
@@ -99,6 +99,7 @@ export default function Hero() {
     ))}
   </div>
 </div>
+
 
 
             <p className="card-title">
@@ -169,43 +170,52 @@ export default function Hero() {
       </div>
 
       {/* ================= STEPS CARD ================= */}
-      <div className="steps-card-section container">
-        <div className="steps-card-grid">
-          <div className="steps-card">
-            <div className="steps-number">1</div>
-            <img src={illustration} alt="Pahami isu" className="steps-image" />
-            <h3>Pahami isu</h3>
-            <p>
-              Mulai dengan mencari tahu kebijakan dan masalah yang paling dekat
-              dengan kehidupan sekolahmu.
-            </p>
-          </div>
+<div className="steps-card-section container">
+  <div className="steps-card-grid">
 
-          <div className="steps-card">
-            <div className="steps-number">2</div>
-            <img src={illustration} alt="Kenali calon" className="steps-image" />
-            <h3>Kenali calon</h3>
-            <p>
-              Pelajari visi, misi, dan program kerja calon ketua OSIS sebelum
-              menentukan pilihan.
-            </p>
-          </div>
+    <div className="steps-card">
+      <div className="steps-number">1</div>
+      <img
+        src="/steps/step-1.png"
+        alt="Pahami isu"
+        className="steps-image"
+      />
+      <h3>Kenali Calon</h3>
+      <p>
+       Cermati visi, misi, dan program kerja calon OSIS sebelum
+        menentukan pilihan.
+      </p>
+    </div>
 
-          <div className="steps-card">
-            <div className="steps-number">3</div>
-            <img
-              src={illustration}
-              alt="Gunakan hak pilih"
-              className="steps-image"
-            />
-            <h3>Gunakan hak pilih</h3>
-            <p>
-              Datang ke tempat pemilihan dan gunakan suaramu dengan bijak untuk
-              masa depan sekolah.
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="steps-card">
+      <div className="steps-number">2</div>
+      <img
+        src="/steps/step-2.png"
+        alt="Kenali calon"
+        className="steps-image"
+      />
+      <h3>Pilih Osis</h3>
+      <p>
+        Kunjungi Website Pilih Osis dan gunakan aksesmu dengan NIS.
+      </p>
+    </div>
+
+    <div className="steps-card">
+      <div className="steps-number">3</div>
+      <img
+        src="/steps/step-3.png"
+        alt="Gunakan hak pilih"
+        className="steps-image"
+      />
+      <h3>Terpilih</h3>
+      <p>
+        Pilihanmu berhasil masuk ke Pilih Osis dan menunggu waktu pengunguman hasil Pilih Osis.
+      </p>
+    </div>
+
+  </div>
+</div>
+
     </section>
   );
 }

@@ -534,7 +534,7 @@ body {
 /* ===== POPUP BOX ===== */
 .popup-content {
   width: 100%;
-  max-width: 360px;
+  max-width: 295px;
 
   background: #ffffff;
   border-radius: 22px;
