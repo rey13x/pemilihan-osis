@@ -1,9 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
-// Gantilah dengan konfigurasi Firebase dari project Firebase kamu
-
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBwbe9BRC5ftgezUBvbv99fKGtsdEgf93s",
   authDomain: "osis-smk2.firebaseapp.com",
@@ -14,8 +13,9 @@ const firebaseConfig = {
   measurementId: "G-C2MCG67XD2"
 };
 
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+export { db, auth };

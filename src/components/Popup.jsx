@@ -1,9 +1,9 @@
-const Popup = ({ children }) => {
+export default function Popup({ children }) {
   return (
-    <div className="popup-overlay">
-      <div className="popup-content">{children}</div>
+    <div style={{ background: "#0008", padding: 40 }}>
+      <div style={{ background: "#fff", padding: 20 }}>
+        {children}
+      </div>
     </div>
   );
-};
-
-export default Popup;
+}

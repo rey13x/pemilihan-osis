@@ -1,29 +1,65 @@
+import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Counter() {
-  const end = new Date("2026-02-01T08:00:00").getTime();
-  const [time, setTime] = useState(end - Date.now());
+  const controls = useAnimation();
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setTime(end - Date.now());
-    }, 1000);
-    return () => clearInterval(t);
-  }, []);
+    let current = 0;
 
-  if (time <= 0) return <span>Selesai</span>;
+    // ===== PHASE 1: 0 → 100 (PELANN) =====
+    const slowInterval = setInterval(() => {
+      current += 4;
+      setValue(current);
 
-  const d = Math.floor(time / 86400000);
-  const h = Math.floor((time / 3600000) % 24);
-  const m = Math.floor((time / 60000) % 60);
-  const s = Math.floor((time / 1000) % 60);
+      if (current >= 100) {
+        clearInterval(slowInterval);
+
+        // ===== PHASE 2: 100 → 2000 (NGEBUT + GETER) =====
+        controls.start({
+          x: [-4, 4, -4, 4],
+          rotate: [-1, 1, -1, 1],
+          transition: {
+            duration: 0.1,
+            repeat: Infinity,
+          },
+        });
+
+        const fastInterval = setInterval(() => {
+          current += 60;
+          setValue(current);
+
+          if (current >= 2000) {
+            clearInterval(fastInterval);
+            setValue(2000);
+
+            // STOP GETER
+            controls.stop();
+
+            // ===== PHASE 3: BOUNCY ZOOM =====
+            controls.start({
+              scale: [1, 1.25, 0.95, 1],
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 12,
+              },
+            });
+          }
+        }, 20);
+      }
+    }, 30);
+
+    return () => {
+      clearInterval(slowInterval);
+    };
+  }, [controls]);
 
   return (
-    <div className="countdown">
-      <span>{d}h</span>
-      <span>{h}j</span>
-      <span>{m}m</span>
-      <span>{s}d</span>
-    </div>
+    <motion.div className="counter" animate={controls}>
+      <span className="counter-big">{value}</span>
+      <span className="counter-small">SISWA/I</span>
+    </motion.div>
   );
 }

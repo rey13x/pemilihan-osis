@@ -1,45 +1,79 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { useState } from "react";
+import { db } from "../firebase/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/voting'); // Redirect to voting page after login
-    } catch (err) {
-      setError('Invalid email or password');
-    }
-  };
+  const [nis, setNis] = useState("");
+  const [kelas, setKelas] = useState("");
+  const [jurusan, setJurusan] = useState("");
+  const [token, setToken] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+  if (!nis || !kelas || !jurusan || !token) {
+    setError("Semua data wajib diisi");
+    return;
+  }
+
+  const snap = await getDoc(doc(db, "users", nis));
+  if (!snap.exists()) {
+    setError("Data tidak ditemukan");
+    return;
+  }
+
+  const user = snap.data();
+
+  if (
+    user.kelas !== kelas ||
+    user.jurusan !== jurusan ||
+    user.token !== token
+  ) {
+    setError("Data tidak cocok");
+    return;
+  }
+
+  // Cek apakah sudah voting
+  if (user.sudahVote === true) {
+    setError("Kamu sudah voting");
+    return;
+  }
+
+  navigate("/simulasi");
+};
 
   return (
-    <div className="container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required
-        />
-        {error && <p>{error}</p>}
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <>
+      <section className="login-hero">
+        <button className="back-btn" onClick={() => navigate("/")}>
+          ← Kembali
+        </button>
+
+        <div className="login-hero-text">
+          {/* <div className="badge">SAAT HARI</div> */}
+          <h1>LoGin</h1>
+          <p>isi sesuai format yap!</p>
+        </div>
+      </section>
+
+      <section className="login-form-section">
+        <div className="login-card">
+          {/* <h2>Yuk isi Data Kamu</h2> */}
+
+          <input placeholder="NIS" onChange={e => setNis(e.target.value)} />
+          <input placeholder="Kelas (XII)" onChange={e => setKelas(e.target.value)} />
+          <input placeholder="Jurusan (RPL 2)" onChange={e => setJurusan(e.target.value)} />
+          <input type="password" placeholder="Token" onChange={e => setToken(e.target.value)} />
+
+          {error && <p className="error-text">{error}</p>}
+
+          <button className="login-btn" onClick={handleLogin}>
+            Masuk!
+          </button>
+        </div>
+      </section>
+    </>
   );
 }

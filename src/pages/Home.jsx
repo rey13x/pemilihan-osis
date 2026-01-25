@@ -1,37 +1,63 @@
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { useState } from "react";
-import Popup from "../components/Popup";
 
 export default function Home() {
-  const nav = useNavigate();
-  const [show, setShow] = useState(false);
-
-  const handleClick = async () => {
-    const user = auth.currentUser;
-    if (!user) return nav("/login");
-
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists() && snap.data().sudahVoting) {
-      setShow(true);
-    } else {
-      nav("/voting");
-    }
-  };
+  const navigate = useNavigate();
 
   return (
-    <div className="container">
-      <button className="simulasi-btn" onClick={handleClick}>
-        AYO PILIH OSIS
-      </button>
+    <>
+      {/* STEPS */}
+      <div className="steps-section container">
+        <div className="steps-wrapper">
+          <h2 className="steps-top">3 Cara Kamu</h2>
+          <div className="steps-bottom">Pilih OSIS</div>
+        </div>
+      </div>
 
-      {show && (
-        <Popup>
-          <h3>Kamu sudah memilih</h3>
-          <button onClick={() => setShow(false)}>Tutup</button>
-        </Popup>
-      )}
-    </div>
+      <div className="steps-card-section container">
+        <div className="steps-card-grid">
+          <div className="steps-card">
+            <div className="steps-number">1</div>
+            <img src="/steps/step-1.png" className="steps-image" />
+            <h3>Kenali Paslon</h3>
+            <p>Cermati visi, misi, dan program kerja Paslon OSIS.</p>
+          </div>
+
+          <div className="steps-card">
+            <div className="steps-number">2</div>
+            <img src="/steps/step-2.png" className="steps-image" />
+            <h3>Pilih OSIS</h3>
+            <p>Gunakan akses NIS kamu untuk memilih.</p>
+          </div>
+
+          <div className="steps-card">
+            <div className="steps-number">3</div>
+            <img src="/steps/step-3.png" className="steps-image" />
+            <h3>Terpilih</h3>
+            <p>Pilihanmu tersimpan hingga pengumuman.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* SIMULASI CTA */}
+      <div className="simulasi-section container">
+        <div className="simulasi-card">
+          <div className="simulasi-text">
+            <h2>
+              TENTUKAN <br /> PILIHANMU!
+            </h2>
+            <button
+              className="simulasi-btn"
+              onClick={() => navigate("/login")}
+            >
+              Gaskeun!
+            </button>
+          </div>
+
+          <div className="simulasi-image-single">
+            <img src="/simulasi/foto-2.png" />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

@@ -1,9 +1,0 @@
-.countdown {
-  display: flex;
-  gap: 10px;
-}
-
-.countdown span {
-  font-weight: 900;
-  font-size: 15px;
-}

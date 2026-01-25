@@ -8,17 +8,8 @@ export default function Countdown() {
     const timer = setInterval(() => {
       setTimeLeft(deadline - Date.now());
     }, 1000);
-
     return () => clearInterval(timer);
   }, [deadline]);
-
-  if (timeLeft <= 0) {
-    return (
-      <div className="countdown-finish">
-        Yeay Pilih Osis sudah selesai!
-      </div>
-    );
-  }
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
   const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
