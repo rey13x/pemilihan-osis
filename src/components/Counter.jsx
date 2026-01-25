@@ -1,82 +1,29 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function Counter() {
-  const [num, setNum] = useState(0);
-  const [shake, setShake] = useState(false);
-  const [bounce, setBounce] = useState(false);
+  const end = new Date("2026-02-01T08:00:00").getTime();
+  const [time, setTime] = useState(end - Date.now());
 
   useEffect(() => {
-    let current = 0;
-    const target = 2000;
-    const duration = 5000; // 5 detik
-    const fps = 60;
-    const totalFrames = Math.round((duration / 1000) * fps);
-    let frame = 0;
-
-    const interval = setInterval(() => {
-      frame++;
-      const progress = frame / totalFrames;
-
-      // easeOutCubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      current = Math.round(eased * target);
-
-      // 🔥 SHAKE aktif dari 1000 → sebelum 2000
-      if (current >= 1000 && current < target) {
-        setShake(true);
-      } else {
-        setShake(false);
-      }
-
-      if (frame >= totalFrames) {
-        setNum(target);
-        setShake(false);
-
-        // 💥 BOUNCE DI AKHIR
-        setBounce(true);
-        setTimeout(() => setBounce(false), 400);
-
-        clearInterval(interval);
-      } else {
-        setNum(current);
-      }
-    }, 1000 / fps);
-
-    return () => clearInterval(interval);
+    const t = setInterval(() => {
+      setTime(end - Date.now());
+    }, 1000);
+    return () => clearInterval(t);
   }, []);
 
-  return (
-    <motion.div
-      className="counter"
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 160, damping: 18 }}
-    >
-      {/* 🔢 ANGKA SAJA YANG GERAK */}
-      <motion.span
-        className="counter-big"
-        animate={{
-          x: shake ? [-3, 3, -3, 3, -2, 2, 0] : 0,
-          scale: bounce ? [1, 1.08, 0.98, 1] : 1
-        }}
-        transition={{
-          x: {
-            duration: 0.25,
-            repeat: shake ? Infinity : 0,
-            ease: "linear"
-          },
-          scale: {
-            duration: 0.4,
-            ease: "easeOut"
-          }
-        }}
-      >
-        {num}
-      </motion.span>
+  if (time <= 0) return <span>Selesai</span>;
 
-      {/* 🏷️ TEKS DIAM */}
-      <span className="counter-small">SISWA/I</span>
-    </motion.div>
+  const d = Math.floor(time / 86400000);
+  const h = Math.floor((time / 3600000) % 24);
+  const m = Math.floor((time / 60000) % 60);
+  const s = Math.floor((time / 1000) % 60);
+
+  return (
+    <div className="countdown">
+      <span>{d}h</span>
+      <span>{h}j</span>
+      <span>{m}m</span>
+      <span>{s}d</span>
+    </div>
   );
 }

@@ -1,41 +1,37 @@
 import { useState } from "react";
+import { auth, db } from "../firebase/firebase";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-const Voting = () => {
-  const [selectedPaslon, setSelectedPaslon] = useState(null);
-  const navigate = useNavigate();
+export default function Voting() {
+  const [pilihan, setPilihan] = useState(null);
+  const nav = useNavigate();
 
-  const handleSelect = (paslon) => {
-    setSelectedPaslon(paslon);
-  };
+  const submit = async () => {
+    const user = auth.currentUser;
+    if (!user || !pilihan) return;
 
-  const handleConfirm = () => {
-    alert("Pastikan ini Pilihanmu!"); // Mengonfirmasi pilihan
-    setTimeout(() => {
-      alert("Yeay Pilihanmu Tersimpan!");
-      setTimeout(() => {
-        navigate("/"); // Kembali ke halaman utama setelah 5 detik
-      }, 5000);
-    }, 1000);
+    await setDoc(doc(db, "votes", user.uid), {
+      paslon: pilihan,
+      waktu: new Date(),
+    });
+
+    await updateDoc(doc(db, "users", user.uid), {
+      sudahVoting: true,
+    });
+
+    alert("Pilihan tersimpan");
+    nav("/");
   };
 
   return (
-    <div>
-      <h1>Pilih Paslon</h1>
-      <div>
-        <button onClick={() => handleSelect("Anies & Cak Imin")}>Anies & Cak Imin</button>
-        <button onClick={() => handleSelect("Prabowo & Gibran")}>Prabowo & Gibran</button>
-        <button onClick={() => handleSelect("Ganjar & Mahfud")}>Ganjar & Mahfud</button>
-      </div>
-      <button 
-        disabled={!selectedPaslon}
-        onClick={handleConfirm}
-        style={{ backgroundColor: selectedPaslon ? "green" : "gray" }}
-      >
-        Pilih
+    <div className="container">
+      <button onClick={() => setPilihan(1)}>Paslon 1</button>
+      <button onClick={() => setPilihan(2)}>Paslon 2</button>
+      <button onClick={() => setPilihan(3)}>Paslon 3</button>
+      <button onClick={submit} disabled={!pilihan}>
+        Kirim
       </button>
     </div>
   );
-};
-
-export default Voting;
+}
