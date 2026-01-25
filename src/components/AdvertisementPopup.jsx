@@ -25,7 +25,7 @@ export default function AdvertisementPopup() {
         
         <div className="ad-image-container">
           <img
-            src="/info-1.jpg"
+            src="/info/info-1.jpg"
             alt="Advertisement"
             className="ad-image"
           />
