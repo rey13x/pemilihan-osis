@@ -82,10 +82,17 @@ export default function Hero() {
           {/* 🔥 COUNTER ANIMATED (0 → 2000 + shake + bounce) */}
           <Counter />
 
-          <h1 className="hero-title">
-            Pilihanmu Masa Depan <br />
-            <span className="word">OSKADUSI</span>
-          </h1>
+          <div className="hero-title">
+            <p className="hero-subtitle">Pilihanmu Masa Depan</p>
+            <div className="hero-animated-group">
+              <h1 className="animated-text">
+                <span className="slide-text slide-text-1">OSKADUSI</span>
+              </h1>
+              <p className="animated-subtext">
+                <span className="slide-text slide-text-2">SMK NEGERI 2 KOTA BEKASI</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
