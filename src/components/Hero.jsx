@@ -53,12 +53,12 @@ export default function Hero() {
   }, [isPopupOpen]);
 
   /* ===============================
-     TEXT TOGGLE ANIMATION (2s cycle)
+     TEXT TOGGLE ANIMATION (3s cycle)
   =============================== */
   useEffect(() => {
     textToggleRef.current = setInterval(() => {
       setShowOskadusi((prev) => !prev);
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(textToggleRef.current);
   }, []);
