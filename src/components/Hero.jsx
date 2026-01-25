@@ -7,7 +7,9 @@ import Counter from "./Counter";
 export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showOskadusi, setShowOskadusi] = useState(true);
   const autoFlipRef = useRef(null);
+  const textToggleRef = useRef(null);
 
   const jurusanLogos = ["RPL", "TKJ", "TEI", "TBSM", "AKL", "TET"];
 
@@ -50,6 +52,17 @@ export default function Hero() {
     return () => (document.body.style.overflow = "");
   }, [isPopupOpen]);
 
+  /* ===============================
+     TEXT TOGGLE ANIMATION (2s cycle)
+  =============================== */
+  useEffect(() => {
+    textToggleRef.current = setInterval(() => {
+      setShowOskadusi((prev) => !prev);
+    }, 2000);
+
+    return () => clearInterval(textToggleRef.current);
+  }, []);
+
   return (
     <section className="hero">
       {/* ================= HERO ATAS ================= */}
@@ -82,17 +95,15 @@ export default function Hero() {
           {/* 🔥 COUNTER ANIMATED (0 → 2000 + shake + bounce) */}
           <Counter />
 
-          <div className="hero-title">
-            <p className="hero-subtitle">Pilihanmu Masa Depan</p>
-            <div className="hero-animated-group">
-              <h1 className="animated-text">
-                <span className="slide-text slide-text-1">OSKADUSI</span>
-              </h1>
-              <p className="animated-subtext">
-                <span className="slide-text slide-text-2">SMK NEGERI 2 KOTA BEKASI</span>
-              </p>
+          <h1 className="hero-title">
+            Pilihanmu Masa Depan <br />
+            <div className="word-slider">
+              <div className={`word-track ${showOskadusi ? "show-first" : "show-second"}`}>
+                <span className="word">OSKADUSI</span>
+                <span className="word">SMK NEGERI 2<br />KOTA BEKASI</span>
+              </div>
             </div>
-          </div>
+          </h1>
         </div>
       </div>
 
