@@ -983,3 +983,94 @@ textarea {
     width: 250px;
   }
 }
+/* ================================================== 
+   BUTTON GASKEUN!
+================================================== */
+.simulasi-btn {
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 14px 30px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.simulasi-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ================================================== 
+   FORM SIMULASI
+================================================== */
+.simulasi-section {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.simulasi-card {
+  background: #ef6a4b;
+  border-radius: 40px;
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 32px;
+  overflow: hidden;
+}
+
+.simulasi-text h2 {
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 900;
+  line-height: 1.05;
+  color: #ffffff;
+  margin-bottom: 18px;
+}
+
+.simulasi-text input {
+  margin: 10px 0;
+  padding: 12px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Popup */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 26px 22px;
+  text-align: center;
+}
+
+.popup-content h3 {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.loading-line {
+  width: 60px;
+  height: 6px;
+  background-color: #ef6a4b;
+  margin: 10px auto;
+  animation: loading-line 1s infinite;
+}
+
+@keyframes loading-line {
+  0% { width: 0; }
+  50% { width: 50%; }
+  100% { width: 0; }
+}
