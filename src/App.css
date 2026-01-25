@@ -184,11 +184,15 @@ html * {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .counter {
   display: flex;
   align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
 }
 
 .counter-big {
@@ -201,6 +205,13 @@ html * {
   font-size: clamp(18px, 3vw, 32px);
   font-weight: 800;
   margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .hero-right {
+    align-items: center;
+    text-align: center;
+  }
 }
 
 /* ==================================================
@@ -268,25 +279,31 @@ html * {
 
 /* Scroll animation - auto apply to common elements */
 .hero, .hero-card, .steps-section, .steps-card, .simulasi-section, 
-.login-hero, .login-form-section, .pilih-paslon-container, .kandidat-card {
-  animation: fadeUp 0.6s ease forwards;
+.login-hero, .login-form-section, .pilih-paslon-container, .kandidat-card,
+.card-title, .card-desc, .counter-big, .counter-small {
+  animation: fadeUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   opacity: 0;
 }
 
-.hero { animation-delay: 0.1s; }
-.hero-card { animation-delay: 0.2s; }
+.hero { animation-delay: 0.15s; }
+.hero-card { animation-delay: 0.3s; }
+.card-title { animation-delay: 0.35s; }
+.card-desc { animation-delay: 0.4s; }
+.counter { animation-delay: 0.2s; }
+.counter-big { animation-delay: 0.25s; }
+.counter-small { animation-delay: 0.2s; }
 .steps-section { animation-delay: 0.1s; }
-.steps-card:nth-child(1) { animation-delay: 0.2s; }
+.steps-card:nth-child(1) { animation-delay: 0.15s; }
 .steps-card:nth-child(2) { animation-delay: 0.3s; }
-.steps-card:nth-child(3) { animation-delay: 0.4s; }
+.steps-card:nth-child(3) { animation-delay: 0.45s; }
 .simulasi-section { animation-delay: 0.1s; }
 .login-hero { animation-delay: 0.1s; }
 .login-form-section { animation-delay: 0.2s; }
 .pilih-paslon-container { animation-delay: 0.1s; }
-.kandidat-card:nth-child(1) { animation-delay: 0.15s; }
-.kandidat-card:nth-child(2) { animation-delay: 0.25s; }
-.kandidat-card:nth-child(3) { animation-delay: 0.35s; }
-.kandidat-card:nth-child(4) { animation-delay: 0.45s; }
+.kandidat-card:nth-child(1) { animation-delay: 0.12s; }
+.kandidat-card:nth-child(2) { animation-delay: 0.24s; }
+.kandidat-card:nth-child(3) { animation-delay: 0.36s; }
+.kandidat-card:nth-child(4) { animation-delay: 0.48s; }
 /* ==================================================
    HERO CARD — TEKS DESKRIPSI (CENTER & AMAN)
 ================================================== */
