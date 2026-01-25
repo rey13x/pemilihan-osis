@@ -191,6 +191,7 @@ html * {
   font-size: clamp(64px, 9vw, 120px);
   font-weight: 900;
   line-height: 0.9;
+  color: #ef6a4b;
 }
 
 .counter-small {
@@ -203,9 +204,9 @@ html * {
 @media (max-width: 768px) {
   .counter {
     justify-content: center;
-    flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 4px;
   }
 }
 
@@ -230,8 +231,9 @@ html * {
   display: inline-block;
   height: 1.15em;
   overflow: hidden;
-  vertical-align: top;
+  vertical-align: baseline;
   min-width: 200px;
+  line-height: 1.15;
 }
 
 .word-track {
