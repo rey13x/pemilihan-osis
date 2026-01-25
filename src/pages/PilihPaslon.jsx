@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
 import { updateDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import NotificationPopup from "../components/NotificationPopup";
 
 const KandidatCard = ({ kandidat, onSelect, isSelected }) => {
   return (
@@ -19,8 +21,30 @@ const KandidatCard = ({ kandidat, onSelect, isSelected }) => {
 };
 
 const PilihPaslon = () => {
+  const navigate = useNavigate();
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [userNIS, setUserNIS] = useState("");
+  const [notification, setNotification] = useState({
+    isOpen: false,
+    message: "",
+    type: "success"
+  });
+
+  useEffect(() => {
+    // Ambil NIS dari sessionStorage (disimpan saat login)
+    const nis = sessionStorage.getItem("userNIS");
+    if (!nis) {
+      setNotification({
+        isOpen: true,
+        message: "Session expired! Silakan login ulang",
+        type: "error"
+      });
+      setTimeout(() => navigate("/login"), 2000);
+      return;
+    }
+    setUserNIS(nis);
+  }, [navigate]);
 
   const kandidatList = [
     {
@@ -49,41 +73,64 @@ const PilihPaslon = () => {
   };
 
   const handleVote = async () => {
-    if (!selectedPaslon) return;
+    if (!selectedPaslon || !userNIS) return;
 
     try {
-      const userRef = doc(db, "users", "userNIS"); // Ganti "userNIS" dengan NIS user yang valid
+      const userRef = doc(db, "users", userNIS);
       await updateDoc(userRef, {
         sudahVote: true,
-        vote: selectedPaslon,
+        pilihan: selectedPaslon,
       });
-      alert("Vote berhasil!");
+      
+      setNotification({
+        isOpen: true,
+        message: "Suara kamu berhasil tercatat!",
+        type: "success"
+      });
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2500);
     } catch (err) {
       console.error("Error updating document: ", err);
+      setNotification({
+        isOpen: true,
+        message: "Gagal menyimpan suara, coba lagi!",
+        type: "error"
+      });
     }
   };
 
   return (
-    <div className="pilih-paslon-container">
-      <h2>Pilih Paslon</h2>
-      <div className="kandidat-cards">
-        {kandidatList.map((kandidat) => (
-          <KandidatCard
-            key={kandidat.id}
-            kandidat={kandidat}
-            onSelect={handleSelectPaslon}
-            isSelected={selectedPaslon === kandidat.id}
-          />
-        ))}
+    <>
+      <NotificationPopup
+        isOpen={notification.isOpen}
+        message={notification.message}
+        type={notification.type}
+        onClose={() => setNotification({ ...notification, isOpen: false })}
+      />
+      
+      <div className="pilih-paslon-container">
+        <h2>Pilih Paslon</h2>
+        <div className="kandidat-cards">
+          {kandidatList.map((kandidat) => (
+            <KandidatCard
+              key={kandidat.id}
+              kandidat={kandidat}
+              onSelect={handleSelectPaslon}
+              isSelected={selectedPaslon === kandidat.id}
+            />
+          ))}
+        </div>
+        <button
+          className={`pilih-btn ${isButtonEnabled ? "active" : "disabled"}`}
+          onClick={handleVote}
+          disabled={!isButtonEnabled}
+        >
+          PILIH!
+        </button>
       </div>
-      <button
-        className={`pilih-btn ${isButtonEnabled ? "active" : "disabled"}`}
-        onClick={handleVote}
-        disabled={!isButtonEnabled}
-      >
-        PILIH!
-      </button>
-    </div>
+    </>
   );
 };
 

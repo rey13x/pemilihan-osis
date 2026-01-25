@@ -70,6 +70,9 @@ export default function Login() {
       type: "success"
     });
 
+    // Simpan NIS ke sessionStorage untuk dipakai di PilihPaslon
+    sessionStorage.setItem("userNIS", nis);
+
     // Redirect setelah popup selesai
     setTimeout(() => {
       navigate("/pilih-paslon");
