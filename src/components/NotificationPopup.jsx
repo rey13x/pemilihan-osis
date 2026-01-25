@@ -2,43 +2,31 @@ import { useState, useEffect } from "react";
 import "./NotificationPopup.css";
 
 export default function NotificationPopup({ message, type, isOpen, onClose }) {
-  const [progress, setProgress] = useState(100);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          setTimeout(() => onClose(), 300);
-          return 0;
-        }
-        return prev - 1.5;
-      });
-    }, 20);
+    setIsAnimating(true);
+    const timer = setTimeout(() => {
+      onClose();
+    }, 2500);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  const isSuccess = type === "success";
-  const bgColor = isSuccess ? "#10b981" : "#ef4444";
-  const icon = isSuccess ? "✓" : "✕";
+  const emoji = type === "success" ? "👍" : "😢";
 
   return (
     <div className="notification-overlay">
-      <div className={`notification-popup ${type}`}>
+      <div className={`notification-popup ${type} ${isAnimating ? "animate" : ""}`}>
         <div className="notification-header">
-          <span className="notification-icon">{icon}</span>
+          <span className={`notification-emoji ${isAnimating ? "bouncy" : ""}`}>
+            {emoji}
+          </span>
           <p className="notification-message">{message}</p>
-        </div>
-        <div className="notification-progress-bar">
-          <div
-            className="notification-progress-fill"
-            style={{ width: `${progress}%`, backgroundColor: bgColor }}
-          ></div>
         </div>
       </div>
     </div>

@@ -84,7 +84,12 @@ export default function Hero() {
 
           <h1 className="hero-title">
             Pilihanmu Masa Depan <br />
-            <span className="word">OSKADUSI</span>
+            <span className="word-slider">
+              <div className="word-track">
+                <span className="word">OSKADUSI</span>
+                <span className="word">SMKN 2 KOTA BEKASI</span>
+              </div>
+            </span>
           </h1>
         </div>
       </div>

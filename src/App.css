@@ -33,11 +33,17 @@ html * {
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: clamp(16px, 4vw, 24px);
+  padding-inline: clamp(16px, 5vw, 48px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: clamp(20px, 6vw, 32px);
+  }
 }
 
 /* ==================================================
@@ -223,6 +229,19 @@ html * {
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -1.2px;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .hero-title {
+    text-align: center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .hero-title {
+    text-align: left;
+  }
 }
 
 .word-slider {
@@ -234,26 +253,20 @@ html * {
 .word-track {
   display: flex;
   flex-direction: column;
-  animation: slideWords 9s infinite;
+  animation: slideWords 12s infinite ease-in-out;
 }
 
 .word {
   height: 1.15em;
   font-weight: 800;
   color: #ef6a4b;
-}
-
-/* ==================================================
-   BASIC ANIMATIONS
-================================================== */
-@keyframes subtle-bounce {
-  0%, 80%, 100% { transform: scale(1); }
-  90% { transform: scale(1.03); }
+  display: flex;
+  align-items: center;
 }
 
 @keyframes slideWords {
-  0%, 45% { transform: translateY(0); }
-  50%, 95% { transform: translateY(-1.15em); }
+  0%, 40% { transform: translateY(0); }
+  50%, 90% { transform: translateY(-1.15em); }
   100% { transform: translateY(0); }
 }
 
