@@ -221,19 +221,19 @@ html * {
   height: 1.15em;
   overflow: hidden;
   vertical-align: top;
-  min-width: 280px;
+  min-width: 200px;
 }
 
 .word-track {
   display: flex;
-  flex-direction: row;
-  gap: 24px;
-  animation: slideWordsRight 3s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  flex-direction: column;
+  gap: 0;
+  animation: slideWordsDown 3s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
   will-change: transform;
 }
 
 .word-track.show-second {
-  animation: slideWordsRight 3s cubic-bezier(0.34, 1.56, 0.64, 1) 3s infinite;
+  animation: slideWordsDown 3s cubic-bezier(0.34, 1.56, 0.64, 1) 3s infinite;
 }
 
 .word {
@@ -242,8 +242,8 @@ html * {
   color: #ef6a4b;
   display: flex;
   align-items: center;
+  line-height: 1.15;
   white-space: nowrap;
-  flex-shrink: 0;
 }
 
 /* ==================================================
@@ -254,9 +254,9 @@ html * {
   90% { transform: scale(1.03); }
 }
 
-@keyframes slideWordsRight {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+@keyframes slideWordsDown {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1.15em); }
 }
 /* ==================================================
    HERO CARD — TEKS DESKRIPSI (CENTER & AMAN)
