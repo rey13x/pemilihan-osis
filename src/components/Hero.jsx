@@ -52,17 +52,6 @@ export default function Hero() {
     return () => (document.body.style.overflow = "");
   }, [isPopupOpen]);
 
-  /* ===============================
-     TEXT TOGGLE ANIMATION (3s cycle)
-  =============================== */
-  useEffect(() => {
-    textToggleRef.current = setInterval(() => {
-      setShowOskadusi((prev) => !prev);
-    }, 3000);
-
-    return () => clearInterval(textToggleRef.current);
-  }, []);
-
   return (
     <section className="hero">
       {/* ================= HERO ATAS ================= */}
@@ -98,9 +87,9 @@ export default function Hero() {
           <h1 className="hero-title">
             Pilihanmu Masa Depan <br />
             <div className="word-slider">
-              <div className={`word-track ${showOskadusi ? "show-first" : "show-second"}`}>
-                <span className="word">OSKADUSI</span>
+              <div className="word-track">
                 <span className="word">SMK NEGERI 2 KOTA BEKASI</span>
+                <span className="word">OSKADUSI</span>
               </div>
             </div>
           </h1>
