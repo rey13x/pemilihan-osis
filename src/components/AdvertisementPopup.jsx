@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 
 export default function AdvertisementPopup() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Tampilkan popup setelah 500ms
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);
