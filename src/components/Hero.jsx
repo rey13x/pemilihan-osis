@@ -10,56 +10,59 @@ export default function Hero() {
 
   const jurusanLogos = ["RPL", "TKJ", "TEI", "TBSM", "AKL", "TET"];
 
+  /* ===============================
+     POPUP TOGGLE
+  =============================== */
   const handlePopupToggle = () => {
     setIsPopupOpen((prev) => !prev);
   };
 
+  /* ===============================
+     MANUAL FLIP
+  =============================== */
   const handleFlipToggle = () => {
     setIsFlipped((prev) => !prev);
   };
 
-/* =========================================
-   AUTO FLIP LOGO OSIS
-   - TUNGGU 8 DETIK
-   - FLIP 1x
-   - LOOP SETIAP 10 DETIK
-========================================= */
-useEffect(() => {
-  const startAutoFlip = () => {
-    autoFlipRef.current = setInterval(() => {
+  /* ===============================
+     AUTO FLIP LOGO
+     - tunggu 8 detik
+     - flip 1x
+     - loop tiap 10 detik
+  =============================== */
+  useEffect(() => {
+    const startLoop = () => {
+      autoFlipRef.current = setInterval(() => {
+        setIsFlipped(true);
+        setTimeout(() => setIsFlipped(false), 1000);
+      }, 10000);
+    };
+
+    const delay = setTimeout(() => {
       setIsFlipped(true);
       setTimeout(() => setIsFlipped(false), 1000);
-    }, 10000);
-  };
+      startLoop();
+    }, 8000);
 
-  // tunggu 8 detik baru flip pertama
-  const delay = setTimeout(() => {
-    setIsFlipped(true);
-    setTimeout(() => setIsFlipped(false), 1000);
-    startAutoFlip();
-  }, 6000);
+    return () => {
+      clearTimeout(delay);
+      clearInterval(autoFlipRef.current);
+    };
+  }, []);
 
-  return () => {
-    clearTimeout(delay);
-    clearInterval(autoFlipRef.current);
-  };
-}, []);
-
-  /* =========================================
-     LOCK BODY SAAT POPUP
-  ========================================= */
+  /* ===============================
+     LOCK SCROLL SAAT POPUP
+  =============================== */
   useEffect(() => {
     document.body.style.overflow = isPopupOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => (document.body.style.overflow = "");
   }, [isPopupOpen]);
 
   return (
     <section className="hero">
       {/* ================= HERO UTAMA ================= */}
       <div className="hero-grid container">
-        {/* KIRI */}
+        {/* LEFT */}
         <div className="hero-left">
           <div
             className={`logo-flip ${isFlipped ? "is-flipped" : ""}`}
@@ -69,7 +72,7 @@ useEffect(() => {
               <img
                 src={illustration}
                 alt="Logo OSIS"
-                className="logo-face logo-front"
+                className="logo-face"
                 draggable="false"
               />
               <img
@@ -82,7 +85,7 @@ useEffect(() => {
           </div>
         </div>
 
-        {/* KANAN */}
+        {/* RIGHT */}
         <div className="hero-right">
           <Counter />
 
@@ -101,13 +104,8 @@ useEffect(() => {
       {/* ================= HERO CARD ================= */}
       <div className="hero-card container">
         <div className="hero-card-inner">
-          <div className="card-logo-stack">
-            <span className="card-logo-top">Pilih</span>
-            <span className="card-logo-bottom">Osis</span>
-          </div>
-
           <div className="card-text">
-            {/* ===== MARQUEE JURUSAN ===== */}
+            {/* ===== MARQUEE ===== */}
             <div className="jurusan-strip">
               <div className="jurusan-track">
                 {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
@@ -121,23 +119,24 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-{/* ================= VIDEO YOUTUBE ================= */}
-  <div className="hero-video">
-    <div className="hero-video-inner">
-      <iframe
-        src="https://www.youtube.com/embed/TgIUYdV1TkY?autoplay=1&mute=1&controls=0&loop=1&playlist=TgIUYdV1TkY&playsinline=1&rel=0"
-        title="Video OSIS"
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-      />
-    </div>
 
-    {/* UNMUTE HINT */}
-    <div className="video-hint">
-      Tap untuk aktifkan suara
-    </div>
-  </div>
+            {/* ===== VIDEO ===== */}
+            <div className="hero-video">
+              <div className="hero-video-inner">
+                <iframe
+                  src="https://www.youtube.com/embed/TgIUYdV1TkY?autoplay=1&mute=1&controls=0&loop=1&playlist=TgIUYdV1TkY&playsinline=1&rel=0"
+                  title="Video OSIS"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                />
+              </div>
+
+              <div className="video-hint">
+                Tap untuk aktifkan suara
+              </div>
+            </div>
+
+            {/* ===== TEXT ===== */}
             <p className="card-title">
               Berperan dalam memilih untuk membawa perubahan positif.
             </p>
@@ -194,7 +193,7 @@ useEffect(() => {
         </div>
       )}
 
-      {/* ================= 3 CARA PILIH OSIS ================= */}
+      {/* ================= STEPS ================= */}
       <div className="steps-section container">
         <div className="steps-wrapper">
           <h2 className="steps-top">3 Cara Kamu</h2>
@@ -202,32 +201,20 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* ================= STEPS CARD ================= */}
       <div className="steps-card-section container">
         <div className="steps-card-grid">
           <div className="steps-card">
             <div className="steps-number">1</div>
-            <img
-              src="/steps/step-1.png"
-              alt="Kenali Calon"
-              className="steps-image"
-              draggable="false"
-            />
-            <h3>Kenali Calon</h3>
+            <img src="/steps/step-1.png" className="steps-image" draggable="false" />
+            <h3>Kenali Paslon</h3>
             <p>
-              Cermati visi, misi, dan program kerja calon OSIS sebelum
-              menentukan pilihan.
+              Cermati visi, misi, dan program kerja Paslon OSIS sebelum menentukan pilihan.
             </p>
           </div>
 
           <div className="steps-card">
             <div className="steps-number">2</div>
-            <img
-              src="/steps/step-2.png"
-              alt="Pilih Osis"
-              className="steps-image"
-              draggable="false"
-            />
+            <img src="/steps/step-2.png" className="steps-image" draggable="false" />
             <h3>Pilih Osis</h3>
             <p>
               Kunjungi Website Pilih Osis dan gunakan aksesmu dengan NIS.
@@ -236,20 +223,36 @@ useEffect(() => {
 
           <div className="steps-card">
             <div className="steps-number">3</div>
-            <img
-              src="/steps/step-3.png"
-              alt="Terpilih"
-              className="steps-image"
-              draggable="false"
-            />
+            <img src="/steps/step-3.png" className="steps-image" draggable="false" />
             <h3>Terpilih</h3>
             <p>
-              Pilihanmu tersimpan dan menunggu waktu pengumuman hasil
-              Pilih Osis.
+              Pilihanmu tersimpan dan menunggu waktu pengumuman hasil Pilih Osis.
             </p>
           </div>
         </div>
       </div>
+
+      {/* ================= SIMULASI PILIH OSIS ================= */}
+<div className="simulasi-section container">
+  <div className="simulasi-card">
+
+    {/* TEKS */}
+    <div className="simulasi-text">
+      <h2>SIMULASI<br />PILIH OSIS!</h2>
+      <button className="simulasi-btn">Gaskeun!</button>
+    </div>
+
+    {/* GAMBAR TUNGGAL */}
+    <div className="simulasi-image-single">
+      <img src="/simulasi/foto-2.png" alt="Simulasi Pilih OSIS" />
+    </div>
+
+  </div>
+</div>
+
+
     </section>
+
+    
   );
 }
