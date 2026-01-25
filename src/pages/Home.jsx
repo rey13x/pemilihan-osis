@@ -1,7 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProgressPopup from "../components/ProgressPopup";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [showProgress, setShowProgress] = useState(false);
+
+  const handleGaskeun = () => {
+    setShowProgress(true);
+  };
+
+  const handleCloseProgress = () => {
+    setShowProgress(false);
+  };
 
   return (
     <>
@@ -47,7 +58,7 @@ export default function Home() {
             </h2>
             <button
               className="simulasi-btn"
-              onClick={() => navigate("/login")}
+              onClick={handleGaskeun}
             >
               Gaskeun!
             </button>
@@ -58,6 +69,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      <ProgressPopup isOpen={showProgress} onClose={handleCloseProgress} />
     </>
   );
 }

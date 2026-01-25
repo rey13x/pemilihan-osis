@@ -1,16 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function AdvertisementPopup() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // Show popup on first load
-    const hasShownAd = localStorage.getItem("adShown");
-    if (!hasShownAd) {
-      setIsOpen(true);
-      localStorage.setItem("adShown", "true");
-    }
-  }, []);
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleClose = () => {
     setIsOpen(false);

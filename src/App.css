@@ -126,6 +126,63 @@ html * {
 }
 
 /* ==================================================
+   PROGRESS POPUP
+================================================== */
+.progress-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.progress-popup {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: popupSlideIn 0.4s ease-out;
+  text-align: center;
+}
+
+.progress-popup h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #2b2b2b;
+  line-height: 1.4;
+}
+
+.progress-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: #ef6a4b;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.progress-button:hover {
+  background: #e85a3b;
+  transform: translateY(-2px);
+}
+
+.progress-button:active {
+  transform: translateY(0);
+}
+
+/* ==================================================
    CONTAINER GLOBAL
 ================================================== */
 .container {
