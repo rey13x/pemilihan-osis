@@ -7,9 +7,7 @@ import Counter from "./Counter";
 export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showOskadusi, setShowOskadusi] = useState(true);
   const autoFlipRef = useRef(null);
-  const textToggleRef = useRef(null);
 
   const jurusanLogos = ["RPL", "TKJ", "TEI", "TBSM", "AKL", "TET"];
 

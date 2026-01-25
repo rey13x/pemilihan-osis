@@ -197,6 +197,16 @@ html * {
   font-size: clamp(18px, 3vw, 32px);
   font-weight: 800;
   margin-bottom: 8px;
+  color: #ef6a4b;
+}
+
+@media (max-width: 768px) {
+  .counter {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 /* ==================================================
