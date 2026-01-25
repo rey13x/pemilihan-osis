@@ -477,7 +477,7 @@ body {
 
   .jurusan-strip {
     width: var(--marquee-width-mobile);
-    padding: 14px 0;
+    padding: 25px 0;
     border-radius: 22px;
   }
 
@@ -819,26 +819,73 @@ textarea {
   -webkit-user-select: text;
   user-select: text;
 }
-/* =========================================
-   FIX HIGHLIGHT BIRU & TEXT SELECTION
-========================================= */
-
-/* global anti select */
-* {
-  -webkit-tap-highlight-color: transparent;
+/* ==================================================
+   MEDIA STRIP — PREMIUM CENTER
+================================================== */
+.media-strip {
+  max-width: 900px;
+  margin: 0 auto 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-/* khusus logo flip */
-.logo-flip,
-.logo-flip * {
-  user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-
-  -webkit-tap-highlight-color: transparent;
+/* ==================================================
+   HERO VIDEO — CLEAN & PREMIUM
+================================================== */
+.hero-video {
+  position: relative;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
 }
 
-/* gambar juga aman */
-.logo-flip img {
+.hero-video-inner {
+  position: relative;
+  padding-top: 56.25%; /* 16:9 */
+}
+
+.hero-video-inner iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ==================================================
+   UNMUTE HINT
+================================================== */
+.video-hint {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
   pointer-events: none;
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+@media (max-width: 720px) {
+  .media-strip {
+    max-width: 100%;
+    padding-inline: 6px;
+  }
+
+  .hero-video {
+    border-radius: 30px;
+  }
+
+  .video-hint {
+    font-size: 11px;
+    bottom: 10px;
+    right: 10px;
+  }
 }

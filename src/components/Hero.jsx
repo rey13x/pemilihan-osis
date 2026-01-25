@@ -121,7 +121,23 @@ useEffect(() => {
                 ))}
               </div>
             </div>
+{/* ================= VIDEO YOUTUBE ================= */}
+  <div className="hero-video">
+    <div className="hero-video-inner">
+      <iframe
+        src="https://www.youtube.com/embed/TgIUYdV1TkY?autoplay=1&mute=1&controls=0&loop=1&playlist=TgIUYdV1TkY&playsinline=1&rel=0"
+        title="Video OSIS"
+        frameBorder="0"
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+      />
+    </div>
 
+    {/* UNMUTE HINT */}
+    <div className="video-hint">
+      Tap untuk aktifkan suara
+    </div>
+  </div>
             <p className="card-title">
               Berperan dalam memilih untuk membawa perubahan positif.
             </p>
