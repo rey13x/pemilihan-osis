@@ -100,7 +100,7 @@ export default function Hero() {
             <div className="word-slider">
               <div className={`word-track ${showOskadusi ? "show-first" : "show-second"}`}>
                 <span className="word">OSKADUSI</span>
-                <span className="word">SMK NEGERI 2<br />KOTA BEKASI</span>
+                <span className="word">SMK NEGERI 2 KOTA BEKASI</span>
               </div>
             </div>
           </h1>
