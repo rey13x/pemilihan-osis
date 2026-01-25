@@ -25,13 +25,20 @@ export default function AdvertisementPopup() {
         
         <div className="ad-image-container">
           <img
-            src="/ads/banner.png"
+            src="/info-1.jpg"
             alt="Advertisement"
             className="ad-image"
           />
         </div>
 
-        <button className="ad-button">PANTAU INFO!</button>
+        <a 
+          href="https://whatsapp.com/channel/0029Vb5fhRYLSmbjTfTUYZ2p"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ad-button"
+        >
+          PANTAU INFO!
+        </a>
       </div>
     </div>
   );
