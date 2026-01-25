@@ -8,24 +8,36 @@ export default function Counter() {
   useEffect(() => {
     let current = 0;
 
-    // ===== PHASE 1: 0 → 100 (LAMBAT) =====
+    // ===== PHASE 1: 0 → 100 (PELANN) =====
     const slowInterval = setInterval(() => {
-      current += 3;
+      current += 4;
       setValue(current);
 
       if (current >= 100) {
         clearInterval(slowInterval);
 
-        // ===== PHASE 2: 100 → 2000 (SEDANG TANPA GETER) =====
+        // ===== PHASE 2: 100 → 2000 (NGEBUT + GETER) =====
+        controls.start({
+          x: [-4, 4, -4, 4],
+          rotate: [-1, 1, -1, 1],
+          transition: {
+            duration: 0.1,
+            repeat: Infinity,
+          },
+        });
+
         const fastInterval = setInterval(() => {
-          current += 40;
+          current += 60;
           setValue(current);
 
           if (current >= 2000) {
             clearInterval(fastInterval);
             setValue(2000);
 
-            // ===== PHASE 3: BOUNCY ZOOM (HANYA NUMBER) =====
+            // STOP GETER
+            controls.stop();
+
+            // ===== PHASE 3: BOUNCY ZOOM =====
             controls.start({
               scale: [1, 1.25, 0.95, 1],
               transition: {
@@ -35,9 +47,9 @@ export default function Counter() {
               },
             });
           }
-        }, 40);
+        }, 20);
       }
-    }, 50);
+    }, 30);
 
     return () => {
       clearInterval(slowInterval);

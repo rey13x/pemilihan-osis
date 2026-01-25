@@ -6,31 +6,28 @@ import Register from "./pages/Register";
 import Simulasi from "./pages/Simulasi";
 import Voting from "./pages/Voting";
 import ProtectedRoute from "./components/ProtectedRoute";
-import AdvertisementPopup from "./components/AdvertisementPopup";
-import PilihPaslon from "./pages/PilihPaslon";
+import PilihPaslon from "./pages/PilihPaslon"; // Import PilihPaslon.jsx
 
 export default function App() {
   return (
-    <>
-      <AdvertisementPopup />
-      <BrowserRouter>
-        <Routes>
-          {/* ================= HOME / LANDING ================= */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Home />} />
-          </Route>
+    <BrowserRouter>
+      <Routes>
+        {/* ================= HOME / LANDING ================= */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
 
-          {/* ================= LOGIN (ONE PAGE ONLY) ================= */}
-          <Route path="/login" element={<Login />} />
+        {/* ================= LOGIN (ONE PAGE ONLY) ================= */}
+        <Route path="/login" element={<Login />} />
 
-          {/* ================= SIMULASI (HALAMAN SENDIRI) ================= */}
-          <Route path="/simulasi" element={<Simulasi />} />
+        {/* ================= SIMULASI (HALAMAN SENDIRI) ================= */}
+        <Route path="/simulasi" element={<Simulasi />} />
 
-          {/* ================= REGISTER ================= */}
-          <Route path="/register" element={<Register />} />
+        {/* ================= REGISTER ================= */}
+        <Route path="/register" element={<Register />} />
 
-          {/* ================= PILIH PASLON ================= */}
-          <Route
+        {/* ================= PILIH PASLON ================= */}
+        <Route
           path="/pilih-paslon"
           element={
             <ProtectedRoute>
@@ -50,6 +47,5 @@ export default function App() {
         />
       </Routes>
     </BrowserRouter>
-    </>
   );
 }

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import NotificationPopup from "../components/NotificationPopup";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,82 +10,42 @@ export default function Login() {
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
   const [token, setToken] = useState("");
-  const [notification, setNotification] = useState({
-    isOpen: false,
-    message: "",
-    type: "success"
-  });
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    if (!nis || !kelas || !jurusan || !token) {
-      setNotification({
-        isOpen: true,
-        message: "Akun kamu gak Terpilih!",
-        type: "error"
-      });
-      return;
-    }
+  if (!nis || !kelas || !jurusan || !token) {
+    setError("Semua data wajib diisi");
+    return;
+  }
 
-    const snap = await getDoc(doc(db, "users", nis));
-    if (!snap.exists()) {
-      setNotification({
-        isOpen: true,
-        message: "Akun kamu gak Terpilih!",
-        type: "error"
-      });
-      return;
-    }
+  const snap = await getDoc(doc(db, "users", nis));
+  if (!snap.exists()) {
+    setError("Data tidak ditemukan");
+    return;
+  }
 
-    const user = snap.data();
+  const user = snap.data();
 
-    if (
-      user.kelas !== kelas ||
-      user.jurusan !== jurusan ||
-      user.token !== token
-    ) {
-      setNotification({
-        isOpen: true,
-        message: "Akun kamu gak Terpilih!",
-        type: "error"
-      });
-      return;
-    }
+  if (
+    user.kelas !== kelas ||
+    user.jurusan !== jurusan ||
+    user.token !== token
+  ) {
+    setError("Data tidak cocok");
+    return;
+  }
 
-    // Cek apakah sudah voting
-    if (user.sudahVote === true) {
-      setNotification({
-        isOpen: true,
-        message: "Akun kamu gak Terpilih!",
-        type: "error"
-      });
-      return;
-    }
+  // Cek apakah sudah voting
+  if (user.sudahVote === true) {
+    setError("Kamu sudah voting");
+    return;
+  }
 
-    // Success
-    setNotification({
-      isOpen: true,
-      message: "Akun kamu terpilih!",
-      type: "success"
-    });
-
-    // Simpan NIS ke sessionStorage untuk dipakai di PilihPaslon
-    sessionStorage.setItem("userNIS", nis);
-
-    // Redirect setelah popup selesai
-    setTimeout(() => {
-      navigate("/pilih-paslon");
-    }, 2500);
-  };
+  navigate("/simulasi");
+};
 
   return (
     <>
-      <NotificationPopup
-        isOpen={notification.isOpen}
-        message={notification.message}
-        type={notification.type}
-        onClose={() => setNotification({ ...notification, isOpen: false })}
-      />
-
       <section className="login-hero">
         <button className="back-btn" onClick={() => navigate("/")}>
           ← Kembali
@@ -107,6 +66,8 @@ export default function Login() {
           <input placeholder="Kelas (XII)" onChange={e => setKelas(e.target.value)} />
           <input placeholder="Jurusan (RPL 2)" onChange={e => setJurusan(e.target.value)} />
           <input type="password" placeholder="Token" onChange={e => setToken(e.target.value)} />
+
+          {error && <p className="error-text">{error}</p>}
 
           <button className="login-btn" onClick={handleLogin}>
             Masuk!
