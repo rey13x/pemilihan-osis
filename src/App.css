@@ -332,8 +332,16 @@ html * {
   height: 1.15em;
   overflow: hidden;
   vertical-align: baseline;
-  min-width: 200px;
+  min-width: auto;
   line-height: 1.15;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .word-slider {
+    min-width: 200px;
+    width: auto;
+  }
 }
 
 .word-track {
@@ -342,18 +350,30 @@ html * {
   gap: 0;
   animation: smoothSlideWords 6.6s ease-in-out infinite;
   will-change: transform;
-  text-align: center;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .word-track {
+    text-align: center;
+  }
 }
 
 .word {
   height: 1.15em;
-  font-weight: 600;
+  font-weight: 800;
   color: #ef6a4b;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   line-height: 1.15;
   white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .word {
+    justify-content: center;
+  }
 }
 
 /* ==================================================
