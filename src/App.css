@@ -11,8 +11,8 @@ html,
 body {
   width: 100%;
   max-width: 100%;
-  /* overflow-x: hidden;
-  overflow-y: visible; */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -1202,23 +1202,46 @@ button:hover {
 /* ================= PILIH PASLON ================= */
 .pilih-paslon-container {
   text-align: center;
-  padding: 30px;
+  padding: clamp(20px, 5vw, 30px);
 }
 
 .kandidat-cards {
   display: flex;
-  justify-content: space-around;
-  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(12px, 3vw, 20px);
   margin-bottom: 20px;
 }
 
 .kandidat-card {
   background-color: #fff;
-  padding: 20px;
+  padding: clamp(16px, 3vw, 20px);
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
+  flex: 1 1 calc(50% - 10px);
+  min-width: 140px;
+  max-width: 180px;
+}
+
+@media (max-width: 768px) {
+  .kandidat-card {
+    flex: 1 1 calc(50% - 8px);
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .kandidat-cards {
+    gap: 10px;
+  }
+  
+  .kandidat-card {
+    flex: 1 1 calc(50% - 5px);
+    max-width: 130px;
+    padding: 12px;
+  }
 }
 
 .kandidat-card:hover {
@@ -1234,17 +1257,17 @@ button:hover {
 }
 
 .kandidat-info h3 {
-  font-size: 20px;
+  font-size: clamp(16px, 4vw, 20px);
   font-weight: bold;
 }
 
 .kandidat-info p {
-  font-size: 14px;
+  font-size: clamp(12px, 2.5vw, 14px);
   color: #777;
 }
 
 .bullet-point {
-  font-size: 30px;
+  font-size: clamp(24px, 6vw, 30px);
   color: #ef6a4b;
   text-align: center;
   margin-top: 10px;
@@ -1253,8 +1276,8 @@ button:hover {
 .pilih-btn {
   background-color: #ef6a4b;
   color: white;
-  font-size: 18px;
-  padding: 12px 30px;
+  font-size: clamp(14px, 3vw, 18px);
+  padding: clamp(8px, 2vw, 12px) clamp(20px, 5vw, 30px);
   border-radius: 50px;
   cursor: pointer;
   border: none;
