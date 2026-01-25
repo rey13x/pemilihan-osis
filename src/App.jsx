@@ -6,11 +6,13 @@ import Register from "./pages/Register";
 import Simulasi from "./pages/Simulasi";
 import Voting from "./pages/Voting";
 import ProtectedRoute from "./components/ProtectedRoute";
-import PilihPaslon from "./pages/PilihPaslon"; // Import PilihPaslon.jsx
+import PilihPaslon from "./pages/PilihPaslon";
+import AdvertisementPopup from "./components/AdvertisementPopup";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <AdvertisementPopup />
       <Routes>
         {/* ================= HOME / LANDING ================= */}
         <Route element={<MainLayout />}>

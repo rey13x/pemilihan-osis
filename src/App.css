@@ -27,6 +27,102 @@ html * {
 }
 
 /* ==================================================
+   ADVERTISEMENT POPUP
+================================================== */
+.ad-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ad-popup {
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: popupSlideIn 0.4s ease-out;
+}
+
+.ad-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.ad-close:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.ad-image-container {
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.ad-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
+.ad-button {
+  width: 100%;
+  padding: 14px 24px;
+  background: #ef6a4b;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ad-button:hover {
+  background: #e85a3b;
+  transform: translateY(-2px);
+}
+
+.ad-button:active {
+  transform: translateY(0);
+}
+
+@keyframes popupSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==================================================
    CONTAINER GLOBAL
 ================================================== */
 .container {
@@ -196,8 +292,8 @@ html * {
 
 .counter-small {
   font-size: clamp(18px, 3vw, 32px);
-  font-weight: 800;
-  margin-bottom: 8px;
+  font-weight: 400;
+  margin-bottom: 0px;
   color: #ef6a4b;
 }
 
@@ -207,6 +303,10 @@ html * {
     align-items: center;
     text-align: center;
     gap: 4px;
+  }
+
+  .counter-small {
+    font-weight: 400;
   }
 }
 
@@ -242,14 +342,17 @@ html * {
   gap: 0;
   animation: smoothSlideWords 6.6s ease-in-out infinite;
   will-change: transform;
+  justify-content: center;
+  text-align: center;
 }
 
 .word {
   height: 1.15em;
-  font-weight: 800;
+  font-weight: 600;
   color: #ef6a4b;
   display: flex;
   align-items: center;
+  justify-content: center;
   line-height: 1.15;
   white-space: nowrap;
 }
@@ -325,11 +428,11 @@ html * {
   --marquee-width-desktop: 92%;
   --marquee-width-mobile: 94%;
 
-  --marquee-logo-desktop: 86px;
-  --marquee-logo-mobile: 48px;
+  --marquee-logo-desktop: 68px;
+  --marquee-logo-mobile: 36px;
 
-  --marquee-gap: 20px;
-  --marquee-speed: 42s;
+  --marquee-gap: 12px;
+  --marquee-speed: 30s;
 }
 
 /* ===== WRAPPER ===== */

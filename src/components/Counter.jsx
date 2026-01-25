@@ -8,15 +8,15 @@ export default function Counter() {
   useEffect(() => {
     let current = 0;
 
-    // ===== PHASE 1: 0 → 100 (PELANN) =====
+    // ===== PHASE 1: 0 → 100 (SLOW - 2s) =====
     const slowInterval = setInterval(() => {
-      current += 4;
+      current += 2;
       setValue(current);
 
       if (current >= 100) {
         clearInterval(slowInterval);
 
-        // ===== PHASE 2: 100 → 2000 (NGEBUT + GETER) =====
+        // ===== PHASE 2: 100 → 2000 (FAST - 7.5s) =====
         controls.start({
           x: [-4, 4, -4, 4],
           rotate: [-1, 1, -1, 1],
@@ -27,7 +27,7 @@ export default function Counter() {
         });
 
         const fastInterval = setInterval(() => {
-          current += 60;
+          current += 25;
           setValue(current);
 
           if (current >= 2000) {
@@ -47,9 +47,9 @@ export default function Counter() {
               },
             });
           }
-        }, 20);
+        }, 100);
       }
-    }, 30);
+    }, 50);
 
     return () => {
       clearInterval(slowInterval);
