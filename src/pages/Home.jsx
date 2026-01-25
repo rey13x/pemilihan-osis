@@ -17,21 +17,21 @@ export default function Home() {
         <div className="steps-card-grid">
           <div className="steps-card">
             <div className="steps-number">1</div>
-            <img src="/steps/step-1.png" className="steps-image" />
+            <img src="/steps/step-1.png" className="steps-image" alt="Kenali Paslon" />
             <h3>Kenali Paslon</h3>
             <p>Cermati visi, misi, dan program kerja Paslon OSIS.</p>
           </div>
 
           <div className="steps-card">
             <div className="steps-number">2</div>
-            <img src="/steps/step-2.png" className="steps-image" />
+            <img src="/steps/step-2.png" className="steps-image" alt="Pilih OSIS" />
             <h3>Pilih OSIS</h3>
             <p>Gunakan akses NIS kamu untuk memilih.</p>
           </div>
 
           <div className="steps-card">
             <div className="steps-number">3</div>
-            <img src="/steps/step-3.png" className="steps-image" />
+            <img src="/steps/step-3.png" className="steps-image" alt="Terpilih" />
             <h3>Terpilih</h3>
             <p>Pilihanmu tersimpan hingga pengumuman.</p>
           </div>
@@ -54,7 +54,7 @@ export default function Home() {
           </div>
 
           <div className="simulasi-image-single">
-            <img src="/simulasi/foto-2.png" />
+            <img src="/simulasi/foto-2.png" alt="Simulasi OSIS" />
           </div>
         </div>
       </div>

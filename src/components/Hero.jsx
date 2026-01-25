@@ -2,11 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import illustration from "../assets/illustration.png";
 import smk2Logo from "../assets/smk2.png";
 import Counter from "./Counter";
-import { useNavigate } from "react-router-dom";
 
 
 export default function Hero() {
-  const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const autoFlipRef = useRef(null);
