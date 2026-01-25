@@ -244,6 +244,10 @@ html * {
   width: clamp(220px, 30vw, 320px);
   perspective: 1200px;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .logo-flip-inner {
