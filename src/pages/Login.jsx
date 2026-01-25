@@ -11,7 +11,6 @@ export default function Login() {
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
   const [token, setToken] = useState("");
-  const [error, setError] = useState("");
   const [notification, setNotification] = useState({
     isOpen: false,
     message: "",
