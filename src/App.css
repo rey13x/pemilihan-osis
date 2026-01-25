@@ -199,23 +199,6 @@ html * {
   margin-bottom: 8px;
 }
 
-@media (max-width: 768px) {
-  .counter {
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .counter-big {
-    font-size: clamp(48px, 8vw, 80px);
-  }
-
-  .counter-small {
-    margin-bottom: 4px;
-  }
-}
-
 /* ==================================================
    HERO TITLE
 ================================================== */
@@ -225,12 +208,6 @@ html * {
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -1.2px;
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    text-align: center;
-  }
 }
 
 .word-slider {
@@ -320,11 +297,11 @@ html * {
   --marquee-width-desktop: 92%;
   --marquee-width-mobile: 94%;
 
-  --marquee-logo-desktop: 68px;
-  --marquee-logo-mobile: 40px;
+  --marquee-logo-desktop: 86px;
+  --marquee-logo-mobile: 48px;
 
-  --marquee-gap: 12px;
-  --marquee-speed: 30s;
+  --marquee-gap: 20px;
+  --marquee-speed: 42s;
 }
 
 /* ===== WRAPPER ===== */
@@ -338,13 +315,6 @@ html * {
 
   background: #f4f7f8;
   border-radius: 999px;
-}
-
-@media (max-width: 768px) {
-  .jurusan-strip {
-    width: var(--marquee-width-mobile);
-    padding: 14px 0;
-  }
 }
 
 /* ===== TRACK ===== */
@@ -378,12 +348,6 @@ html * {
   transition: all 0.25s ease;
 }
 
-@media (max-width: 768px) {
-  .jurusan-item img {
-    height: var(--marquee-logo-mobile);
-  }
-}
-
 /* LOGO AKTIF */
 .jurusan-item img:hover {
   filter: grayscale(0%);
@@ -398,8 +362,8 @@ html * {
 
 /* ===== LOOP ===== */
 @keyframes marquee-loop {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - var(--marquee-gap))); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 /* ===== FADE KIRI & KANAN ===== */
@@ -438,18 +402,9 @@ html * {
 .hero-video {
   position: relative;
   width: 100%;
-  max-width: 100vw;
-  margin-left: calc(-50vw + 50%);
   border-radius: 22px;
   overflow: hidden;
   background: #000;
-}
-
-@media (max-width: 768px) {
-  .hero-video {
-    max-width: 100%;
-    margin-left: 0;
-  }
 }
 
 .hero-video-inner {
