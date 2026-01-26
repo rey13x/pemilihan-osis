@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import { collection, query, where, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import "../components/NotificationPopup.css";
 
