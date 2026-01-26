@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ProgressPopup from "../components/ProgressPopup";
 
 export default function Home() {
-  const navigate = useNavigate();
   const [showProgress, setShowProgress] = useState(false);
 
   const handleGaskeun = () => {
