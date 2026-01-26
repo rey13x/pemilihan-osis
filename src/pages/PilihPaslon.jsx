@@ -1,8 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import NotificationPopup from "../components/NotificationPopup";
 import Navbar from "../components/Navbar";
+import ConfusedPopup from "../components/ConfusedPopup";
 import { db } from "../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
@@ -51,11 +52,28 @@ export default function PilihPaslon() {
   const [expandedPaslon, setExpandedPaslon] = useState(null);
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isConfused, setIsConfused] = useState(false);
   const [notification, setNotification] = useState({
     isOpen: false,
     type: "error",
     message: "",
   });
+
+  // Timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          setIsConfused(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const kandidatList = [
     {
@@ -130,7 +148,7 @@ export default function PilihPaslon() {
       });
 
       setTimeout(() => {
-        navigate("/voting-success");
+        navigate("/obrolan");
       }, 1500);
     } catch (err) {
       console.error("Error voting:", err);
@@ -164,6 +182,11 @@ export default function PilihPaslon() {
         selectedName={selectedCandidate?.nama}
       />
 
+      <ConfusedPopup
+        isOpen={isConfused}
+        onClose={() => setIsConfused(false)}
+      />
+
       {/* Header */}
       <motion.div
         className="gallery-header"
@@ -173,6 +196,11 @@ export default function PilihPaslon() {
       >
         <h1>Pilih Paslon Pilihanmu</h1>
         <p>Klik kartu untuk memilih</p>
+        <div className="timer-display">
+          <span className={`time-remaining ${timeLeft <= 10 ? 'warning' : ''}`}>
+            ⏱ {timeLeft} detik
+          </span>
+        </div>
       </motion.div>
 
       {/* Gallery */}

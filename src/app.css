@@ -2614,6 +2614,120 @@ button:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Timer Display */
+.timer-display {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(192, 145, 16, 0.1);
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.time-remaining {
+  font-size: 14px;
+  font-weight: 700;
+  color: #c09110;
+  transition: all 0.3s ease;
+}
+
+.time-remaining.warning {
+  color: #d85c40;
+  animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Confused Popup */
+.confused-overlay {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confused-popup {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 40px 30px;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.confused-popup h2 {
+  font-size: 28px;
+  font-weight: 900;
+  color: #2b2b2b;
+  margin-bottom: 12px;
+}
+
+.confused-desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.confused-countdown {
+  margin: 32px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.countdown-number {
+  font-size: 64px;
+  font-weight: 900;
+  color: #c09110;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(192, 145, 16, 0.1);
+  border: 3px solid #c09110;
+}
+
+.confused-close-btn {
+  background: #c09110;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.confused-close-btn:hover {
+  background: #d85c40;
+  transform: translateY(-2px);
+}
+
+.confused-close-btn:active {
+  transform: translateY(0);
+}
+
 /* Mobile Responsive */
 @media (max-width: 1024px) {
   .pilih-paslon-gallery {
@@ -4116,6 +4230,20 @@ button:hover {
   color: #666;
 }
 
+/* Image Section */
+.simulasi-image-section {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.simulasi-together-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
 /* Steps Section */
 .simulasi-steps {
   display: grid;
@@ -4278,4 +4406,253 @@ button:hover {
     min-width: 180px;
   }
 }
+
+/* ==================================================
+   OBROLAN PAGE
+================================================== */
+.obrolan-page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 20px;
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+.obrolan-header {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
+.obrolan-header .back-button {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #2b2b2b;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s ease;
+}
+
+.obrolan-header .back-button:hover {
+  color: #c09110;
+  transform: translateX(-4px);
+}
+
+.obrolan-header h1 {
+  font-size: clamp(20px, 5vw, 32px);
+  font-weight: 900;
+  color: #2b2b2b;
+  margin-bottom: 8px;
+}
+
+.obrolan-header p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Comments Section */
+.obrolan-comments {
+  max-width: 800px;
+  margin: 0 auto 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.obrolan-comments::-webkit-scrollbar {
+  width: 6px;
+}
+
+.obrolan-comments::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.obrolan-comments::-webkit-scrollbar-thumb {
+  background: #c09110;
+  border-radius: 10px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+}
+
+.comment-item:hover {
+  background: #ffffff;
+  border-color: #c09110;
+  box-shadow: 0 2px 8px rgba(192, 145, 16, 0.1);
+}
+
+.comment-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #c09110 0%, #d85c40 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.comment-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.comment-nama {
+  font-weight: 700;
+  color: #2b2b2b;
+  font-size: 14px;
+}
+
+.comment-kelas {
+  font-size: 12px;
+  color: #999;
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.comment-time {
+  font-size: 12px;
+  color: #999;
+  margin-left: auto;
+}
+
+.comment-message {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin: 0;
+  word-break: break-word;
+}
+
+.loading,
+.no-comments {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Input Section */
+.obrolan-input-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e8e8e8;
+  padding: 16px 20px;
+  z-index: 100;
+}
+
+.obrolan-form {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+}
+
+.obrolan-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 24px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.obrolan-input:focus {
+  outline: none;
+  border-color: #c09110;
+  box-shadow: 0 0 0 3px rgba(192, 145, 16, 0.1);
+}
+
+.obrolan-send-btn {
+  background: #c09110;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.obrolan-send-btn:hover {
+  background: #d85c40;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(192, 145, 16, 0.3);
+}
+
+.obrolan-send-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .obrolan-page {
+    padding: 20px 16px;
+    padding-top: 100px;
+    padding-bottom: 90px;
+  }
+
+  .obrolan-header {
+    margin-bottom: 20px;
+  }
+
+  .obrolan-header h1 {
+    font-size: 22px;
+  }
+
+  .obrolan-comments {
+    gap: 12px;
+  }
+
+  .comment-item {
+    padding: 12px;
+  }
+
+  .comment-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .obrolan-form {
+    gap: 8px;
+  }
+
+  .obrolan-send-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
+
 

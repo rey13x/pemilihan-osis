@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PilihPaslon from "./pages/PilihPaslon";
 import AdvertisementPopup from "./components/AdvertisementPopup";
 import Dashboard from "./pages/Dashboard";
+import Obrolan from "./pages/Obrolan";
 
 export default function App() {
   return (
@@ -46,6 +47,16 @@ export default function App() {
           element={
             <ProtectedRoute>
               <VotingSuccess />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= OBROLAN (CHAT) ================= */}
+        <Route
+          path="/obrolan"
+          element={
+            <ProtectedRoute>
+              <Obrolan />
             </ProtectedRoute>
           }
         />
