@@ -7,7 +7,7 @@ import ConfusedPopup from "../components/ConfusedPopup";
 import { db } from "../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedName }) => {
+const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedCandidate }) => {
   if (!isOpen) return null;
 
   return (
@@ -31,7 +31,13 @@ const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedName }) => {
         </button>
 
         <h2>Sudah yakin dengan pilihanmu?</h2>
-        <p className="selected-name">{selectedName}</p>
+        
+        {selectedCandidate && (
+          <div className="confirmation-candidate">
+            <img src={selectedCandidate.foto} alt={selectedCandidate.nama} className="confirmation-photo" />
+            <p className="selected-name">{selectedCandidate.nama}</p>
+          </div>
+        )}
 
         <div className="confirmation-buttons">
           <button className="btn-cancel" onClick={onCancel}>
@@ -179,7 +185,7 @@ export default function PilihPaslon() {
         isOpen={isConfirmOpen}
         onConfirm={handleConfirm}
         onCancel={() => setIsConfirmOpen(false)}
-        selectedName={selectedCandidate?.nama}
+        selectedCandidate={selectedCandidate}
       />
 
       <ConfusedPopup
@@ -273,13 +279,8 @@ export default function PilihPaslon() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        {selectedPaslon ? (
-          <div className="selected-display">
-            <img src={selectedCandidate?.foto} alt={selectedCandidate?.nama} className="selected-photo" />
-            <p>Pilihan kamu: <strong>{selectedCandidate?.nama}</strong></p>
-          </div>
-        ) : expandedPaslon ? (
-          <p>Klik 2x untuk memilih paslon</p>
+        {expandedPaslon ? (
+          <p>Klik tombol PILIH! untuk melanjutkan</p>
         ) : (
           <p>Klik kartu untuk membuka detail paslon</p>
         )}

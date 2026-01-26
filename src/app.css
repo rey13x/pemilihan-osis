@@ -2169,71 +2169,6 @@ button:hover {
   transform: none;
 }
 
-/* Recent Logins */
-.recent-logins {
-  margin-bottom: clamp(20px, 3vw, 28px);
-  padding-bottom: clamp(16px, 3vw, 24px);
-  border-bottom: 2px solid #e8e8e8;
-  margin: 0 0 clamp(16px, 2vw, 24px) 0;
-}
-
-.recent-label {
-  font-size: clamp(11px, 2vw, 12px);
-  font-weight: 700;
-  color: #999;
-  margin-bottom: clamp(12px, 2vw, 16px);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.recent-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: clamp(10px, 2vw, 14px);
-}
-
-.recent-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(6px, 1.5vw, 10px);
-  padding: clamp(10px, 2vw, 14px);
-  background: linear-gradient(135deg, rgba(192, 145, 16, 0.1), rgba(216, 92, 64, 0.1));
-  border: 1.5px solid rgba(192, 145, 16, 0.3);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 80px;
-  width: 100%;
-  word-break: break-word;
-}
-
-.recent-item:hover {
-  background: linear-gradient(135deg, rgba(192, 145, 16, 0.15), rgba(216, 92, 64, 0.15));
-  border-color: #c09110;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(192, 145, 16, 0.2);
-}
-
-.recent-item:active {
-  transform: translateY(0);
-}
-
-.recent-nis {
-  font-weight: 700;
-  color: #2b2b2b;
-  font-size: clamp(12px, 2.5vw, 14px);
-  text-align: center;
-}
-
-.recent-class {
-  font-size: clamp(10px, 2vw, 12px);
-  color: #666;
-  font-weight: 600;
-  text-align: center;
-}
-
 /* ===== TABLET ===== */
 @media (max-width: 1024px) and (min-width: 769px) {
   .login-form-section {
@@ -2243,10 +2178,6 @@ button:hover {
   .login-card {
     max-width: 450px;
     padding: clamp(24px, 5vw, 36px);
-  }
-
-  .recent-list {
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   }
 }
 
@@ -2273,14 +2204,6 @@ button:hover {
     min-height: 52px;
     font-size: clamp(15px, 3vw, 16px);
   }
-
-  .recent-list {
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  }
-
-  .recent-item {
-    min-height: 75px;
-  }
 }
 
 /* ===== SMALL MOBILE ===== */
@@ -2304,16 +2227,6 @@ button:hover {
   .login-btn {
     min-height: 48px;
     border-radius: 12px;
-  }
-
-  .recent-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .recent-item {
-    min-height: 70px;
-    border-radius: 10px;
   }
 }
 /* ================= PILIH PASLON ================= */
@@ -2486,14 +2399,30 @@ button:hover {
   font-size: 18px;
   font-weight: 800;
   color: #2b2b2b;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
+}
+
+.confirmation-candidate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.confirmation-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .selected-name {
   font-size: 16px;
   font-weight: 700;
   color: #c09110;
-  margin: 0 0 24px 0;
+  margin: 0;
 }
 
 .confirmation-buttons {
@@ -2579,6 +2508,7 @@ button:hover {
 
 .gallery-nav {
   display: flex;
+  flex-direction: row;
   align-items: flex-end;
   justify-content: center;
   height: 100%;
@@ -2981,25 +2911,37 @@ button:hover {
     font-size: 12px;
   }
 
+  .gallery-container {
+    max-height: none;
+  }
+
   .gallery-nav {
-    max-height: 300px;
-    gap: 3px;
+    flex-direction: column;
+    max-height: none;
+    gap: 12px;
+    align-items: stretch;
+    justify-content: flex-start;
   }
 
   .gallery-card {
+    width: 100%;
     min-height: 160px;
     max-height: 300px;
     border-radius: 8px;
+    flex-direction: row;
   }
 
   .card-image {
-    height: 55%;
+    width: 40%;
+    height: 100%;
+    min-height: 160px;
   }
 
   .card-info {
-    padding: 10px;
+    width: 60%;
+    padding: 12px;
     gap: 4px;
-    min-height: 200px;
+    min-height: 160px;
   }
 
   .card-number {
@@ -3064,20 +3006,26 @@ button:hover {
   }
 
   .gallery-nav {
-    max-height: 280px;
-    gap: 3px;
+    flex-direction: column;
+    max-height: none;
+    gap: 12px;
+    align-items: stretch;
   }
 
   .gallery-card {
-    min-height: 150px;
-    max-height: 280px;
+    width: 100%;
+    min-height: 140px;
+    max-height: none;
+    flex-direction: row;
   }
 
   .card-image {
-    height: 60%;
+    width: 35%;
+    height: 140px;
   }
 
   .card-info {
+    width: 65%;
     padding: 9px;
     gap: 3px;
   }

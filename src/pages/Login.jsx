@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,6 @@ export default function Login() {
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
   const [token, setToken] = useState("");
-  const [recentLogins, setRecentLogins] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [notification, setNotification] = useState({
@@ -21,24 +20,8 @@ export default function Login() {
     message: "",
   });
 
-  useEffect(() => {
-    // Load recent logins from localStorage
-    const recent = JSON.parse(localStorage.getItem("recentLogins")) || [];
-    setRecentLogins(recent.slice(0, 3)); // Show only last 3
-  }, []);
-
   const closeNotification = () => {
     setNotification({ ...notification, isOpen: false });
-  };
-
-  const handleQuickLogin = (loginData) => {
-    setNis(loginData.nis);
-    setKelas(loginData.kelas);
-    setJurusan(loginData.jurusan);
-    // Scroll to token input
-    setTimeout(() => {
-      document.querySelector('.login-select')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
   };
 
   const validateInputs = () => {
@@ -128,13 +111,6 @@ export default function Login() {
         return;
       }
 
-      // Add to recent logins
-      const loginData = { nis: nis.trim(), kelas, jurusan, timestamp: new Date().toISOString() };
-      const recent = JSON.parse(localStorage.getItem("recentLogins")) || [];
-      const filtered = recent.filter(r => r.nis !== nis.trim()); // Remove if already exists
-      const updated = [loginData, ...filtered].slice(0, 5); // Keep only 5 recent
-      localStorage.setItem("recentLogins", JSON.stringify(updated));
-
       // Simpan user info di localStorage
       localStorage.setItem(
         "currentUser",
@@ -196,26 +172,6 @@ export default function Login() {
 
       <section className="login-form-section">
         <div className="login-card">
-          {recentLogins.length > 0 && (
-            <div className="recent-logins">
-              <p className="recent-label">Login Terakhir:</p>
-              <div className="recent-list">
-                {recentLogins.map((login, index) => (
-                  <button
-                    key={index}
-                    className="recent-item"
-                    onClick={() => handleQuickLogin(login)}
-                    type="button"
-                    title={`${login.nis} - ${login.kelas}`}
-                  >
-                    <span className="recent-nis">{login.nis}</span>
-                    <span className="recent-class">{login.kelas}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           <form onSubmit={handleLogin}>
             <input
               type="text"
