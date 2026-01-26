@@ -2399,29 +2399,27 @@ button:hover {
   font-size: 18px;
   font-weight: 800;
   color: #2b2b2b;
-  margin: 0 0 16px 0;
+  margin: 0 0 24px 0;
 }
 
-.confirmation-candidate {
+.confirmation-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 16px;
+  padding: 20px 0;
 }
 
-.confirmation-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.loading-icon {
+  font-size: 48px;
+  font-weight: 900;
+  color: #4caf50;
 }
 
-.selected-name {
-  font-size: 16px;
+.confirmation-loading p {
+  font-size: 20px;
   font-weight: 700;
-  color: #c09110;
+  color: #4caf50;
   margin: 0;
 }
 
@@ -2447,19 +2445,29 @@ button:hover {
   color: #666;
 }
 
-.btn-cancel:hover {
+.btn-cancel:hover:not(:disabled) {
   background: #e0e0e0;
 }
 
+.btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .btn-confirm {
-  background: #c09110;
+  background: #4caf50;
   color: white;
 }
 
-.btn-confirm:hover {
-  background: #d85c40;
+.btn-confirm:hover:not(:disabled) {
+  background: #45a049;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 106, 75, 0.3);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* ==================================================
@@ -2670,11 +2678,11 @@ button:hover {
 }
 
 .card-button {
-  background: #c09110;
+  background: #4a4a4a;
   color: white;
   border: none;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 50px;
   font-weight: 700;
   font-size: 11px;
   cursor: pointer;
@@ -2685,9 +2693,9 @@ button:hover {
 }
 
 .card-button:hover {
-  background: #d85c40;
+  background: #333333;
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(239, 106, 75, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .card-button:active {
@@ -3066,182 +3074,102 @@ button:hover {
   background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
+  gap: 40px;
 }
 
-.success-container {
-  flex: 1;
+.success-photo-section {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(32px, 8vw, 48px);
-  padding: clamp(20px, 5vw, 40px);
+  padding: 40px 20px;
 }
 
-/* 3D Flip Card */
-.flip-card-wrapper {
-  position: relative;
-  perspective: 1000px;
-}
-
-.flip-card {
-  position: relative;
-  width: clamp(220px, 40vw, 380px);
-  height: clamp(280px, 50vw, 480px);
-  border-radius: 24px;
-  overflow: hidden;
+.bouncy-photo {
+  width: clamp(240px, 50vw, 360px);
+  height: auto;
+  border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 24px;
-  top: 0;
-  left: 0;
-}
-
-.flip-card-front {
-  background: white;
-}
-
-.osis-logo-display {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.osis-logo-large {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  text-align: center;
-}
-
-.osis-top,
-.osis-bottom {
-  font-size: clamp(32px, 8vw, 64px);
-  font-weight: 900;
-  color: #8B6F47;
-  letter-spacing: -2px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.flip-card-back {
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
-}
-
-.success-image-wrapper {
-  position: relative;
-}
-
-.success-image-frame {
-  position: relative;
-  width: clamp(220px, 40vw, 380px);
-  height: clamp(280px, 50vw, 480px);
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  border: 4px solid #8B6F47;
-}
-
-.success-image {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 }
 
-.paslon-number-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  font-weight: 900;
-  color: white;
-  box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
-}
-
-.success-message {
+.success-message-section {
   text-align: center;
-}
-
-.success-message h2 {
-  font-size: clamp(28px, 6vw, 48px);
-  font-weight: 900;
-  color: #2b2b2b;
-  margin-bottom: 12px;
-  line-height: 1.2;
-}
-
-.selected-candidate {
-  font-size: clamp(16px, 3vw, 20px);
-  font-weight: 700;
-  color: #666;
-  line-height: 1.4;
-}
-
-.success-countdown {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+  max-width: 500px;
+  padding: 40px 20px;
   background: rgba(240, 240, 240, 0.8);
-  padding: clamp(24px, 5vw, 36px);
   border-radius: 20px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  max-width: 400px;
-  width: 100%;
+}
+
+.success-message-section h2 {
+  font-size: clamp(28px, 6vw, 42px);
+  font-weight: 900;
+  color: #2b2b2b;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.candidate-name {
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 700;
+  color: #4caf50;
+  margin: 0 0 12px 0;
+}
+
+.redirect-text {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+  font-weight: 500;
+}
+
+.countdown-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.countdown-number {
+  font-size: clamp(48px, 10vw, 72px);
+  font-weight: 900;
+  color: #4caf50;
+  line-height: 1;
 }
 
 .countdown-text {
-  font-size: clamp(14px, 2.5vw, 16px);
+  font-size: 16px;
   color: #666;
   font-weight: 600;
 }
 
-.countdown-timer {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
+/* Media Queries for Success Page */
+@media (max-width: 768px) {
+  .success-photo-section {
+    padding: 30px 20px;
+  }
 
-.countdown-number {
-  font-size: clamp(56px, 12vw, 96px);
-  font-weight: 900;
-  color: #8B6F47;
-  line-height: 1;
-  display: block;
-}
+  .bouncy-photo {
+    width: clamp(200px, 80vw, 300px);
+  }
 
-.countdown-label {
-  font-size: clamp(14px, 2.5vw, 16px);
-  color: #2b2b2b;
-  font-weight: 700;
+  .success-message-section {
+    padding: 30px 20px;
+  }
+
+  .success-message-section h2 {
+    font-size: 28px;
+  }
+
+  .candidate-name {
+    font-size: 18px;
+  }
 }
 
 .success-back-btn {

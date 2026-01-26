@@ -7,13 +7,13 @@ import ConfusedPopup from "../components/ConfusedPopup";
 import { db } from "../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedCandidate }) => {
+const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedCandidate, isLoading }) => {
   if (!isOpen) return null;
 
   return (
     <motion.div
       className="confirmation-overlay"
-      onClick={onCancel}
+      onClick={!isLoading ? onCancel : null}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -26,27 +26,37 @@ const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedCandidate }) =
         exit={{ scale: 0.8, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <button className="confirmation-close" onClick={onCancel}>
-          ✕
-        </button>
-
-        <h2>Sudah yakin dengan pilihanmu?</h2>
-        
-        {selectedCandidate && (
-          <div className="confirmation-candidate">
-            <img src={selectedCandidate.foto} alt={selectedCandidate.nama} className="confirmation-photo" />
-            <p className="selected-name">{selectedCandidate.nama}</p>
-          </div>
+        {!isLoading && (
+          <button className="confirmation-close" onClick={onCancel}>
+            ✕
+          </button>
         )}
 
-        <div className="confirmation-buttons">
-          <button className="btn-cancel" onClick={onCancel}>
-            Batalkan
-          </button>
-          <button className="btn-confirm" onClick={onConfirm}>
-            YA!
-          </button>
-        </div>
+        {isLoading ? (
+          <div className="confirmation-loading">
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 0.6, repeat: Infinity }}
+              className="loading-icon"
+            >
+              ✓
+            </motion.div>
+            <p>Yeay!</p>
+          </div>
+        ) : (
+          <>
+            <h2>Yakin dengan pilihanmu?</h2>
+            
+            <div className="confirmation-buttons">
+              <button className="btn-cancel" onClick={onCancel} disabled={isLoading}>
+                Batal
+              </button>
+              <button className="btn-confirm" onClick={onConfirm} disabled={isLoading}>
+                Yakin!
+              </button>
+            </div>
+          </>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -58,6 +68,7 @@ export default function PilihPaslon() {
   const [expandedPaslon, setExpandedPaslon] = useState(null);
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(60);
   const [isConfused, setIsConfused] = useState(false);
   const [notification, setNotification] = useState({
@@ -130,7 +141,7 @@ export default function PilihPaslon() {
       return;
     }
 
-    setIsConfirmOpen(false);
+    setIsLoading(true);
 
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -147,17 +158,15 @@ export default function PilihPaslon() {
       // Simpan selected paslon untuk halaman success
       localStorage.setItem("selectedVote", selectedPaslon);
 
-      setNotification({
-        isOpen: true,
-        type: "success",
-        message: "Vote berhasil!",
-      });
-
+      // Show loading for 2 seconds
       setTimeout(() => {
-        navigate("/obrolan");
-      }, 1500);
+        setIsConfirmOpen(false);
+        setIsLoading(false);
+        navigate("/voting-success");
+      }, 2000);
     } catch (err) {
       console.error("Error voting:", err);
+      setIsLoading(false);
       setNotification({
         isOpen: true,
         type: "error",
@@ -186,6 +195,7 @@ export default function PilihPaslon() {
         onConfirm={handleConfirm}
         onCancel={() => setIsConfirmOpen(false)}
         selectedCandidate={selectedCandidate}
+        isLoading={isLoading}
       />
 
       <ConfusedPopup
@@ -262,7 +272,7 @@ export default function PilihPaslon() {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.2, delay: 0.1 }}
                     >
-                      PILIH!
+                      Gaskeun!
                     </motion.button>
                   </motion.div>
                 )}
