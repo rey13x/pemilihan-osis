@@ -667,6 +667,14 @@ html * {
   background: #000;
 }
 
+.hero-video-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
 .hero-video-inner {
   position: relative;
   padding-top: 56.25%; /* 16:9 */

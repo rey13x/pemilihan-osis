@@ -113,17 +113,13 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* ===== VIDEO ===== */}
+            {/* ===== VIDEO/PHOTO ===== */}
             <div className="hero-video">
-              <div className="hero-video-inner">
-                <iframe
-                  src="https://www.youtube.com/embed/TgIUYdV1TkY?autoplay=1&mute=1&controls=0&loop=1&playlist=TgIUYdV1TkY&playsinline=1&rel=0"
-                  title="Video OSIS"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                />
-              </div>
-              <div className="video-hint">Tap untuk aktifkan suara</div>
+              <img 
+                src="/paslon/formal-osis.jpg" 
+                alt="Formal OSIS" 
+                className="hero-video-image"
+              />
             </div>
 
             {/* ===== TEXT ===== */}
