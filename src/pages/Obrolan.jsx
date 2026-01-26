@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import { collection, query, onSnapshot, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import "../components/NotificationPopup.css";
 
@@ -11,6 +11,9 @@ export default function Obrolan() {
   const [message, setMessage] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userComment, setUserComment] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editingText, setEditingText] = useState("");
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -26,15 +29,25 @@ export default function Obrolan() {
     
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const commentsList = [];
+      let userCommentData = null;
+      
       snapshot.docs.forEach((doc) => {
-        commentsList.push({
+        const data = {
           id: doc.id,
           ...doc.data(),
-        });
+        };
+        commentsList.push(data);
+        
+        // Check if this comment belongs to current user
+        if (data.nis === user.nis) {
+          userCommentData = data;
+        }
       });
+      
       // Sort by timestamp, newest first
       commentsList.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
       setComments(commentsList);
+      setUserComment(userCommentData);
       setLoading(false);
     });
 
@@ -44,6 +57,10 @@ export default function Obrolan() {
   const handleSendComment = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
+    if (userComment) {
+      alert("Kamu hanya bisa mengirim 1 pesan. Edit atau hapus pesan kamu yang lama untuk mengirim pesan baru.");
+      return;
+    }
 
     try {
       const commentsRef = collection(db, "comments");
@@ -57,6 +74,33 @@ export default function Obrolan() {
       setMessage("");
     } catch (err) {
       console.error("Error sending comment:", err);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (window.confirm("Hapus pesan ini?")) {
+      try {
+        await deleteDoc(doc(db, "comments", commentId));
+        setUserComment(null);
+      } catch (err) {
+        console.error("Error deleting comment:", err);
+      }
+    }
+  };
+
+  const handleEditComment = async (commentId, newMessage) => {
+    if (!newMessage.trim()) return;
+    
+    try {
+      await updateDoc(doc(db, "comments", commentId), {
+        message: newMessage,
+        edited: true,
+        editedAt: serverTimestamp(),
+      });
+      setEditingId(null);
+      setEditingText("");
+    } catch (err) {
+      console.error("Error editing comment:", err);
     }
   };
 
@@ -94,17 +138,67 @@ export default function Obrolan() {
             </div>
           ) : (
             comments.map((comment) => (
-              <div key={comment.id} className="comment-item">
+              <div key={comment.id} className={`comment-item ${comment.nis === currentUser?.nis ? 'user-comment' : ''}`}>
                 <div className="comment-avatar">
-                  {comment.nama?.charAt(0).toUpperCase() || "?"}
+                  {comment.nis?.substring(0, 2).toUpperCase() || "?"}
                 </div>
                 <div className="comment-content">
                   <div className="comment-header">
-                    <span className="comment-nama">{comment.nama}</span>
+                    <span className="comment-nama">{comment.nis}</span>
                     <span className="comment-kelas">{comment.kelas}</span>
                     <span className="comment-time">{formatTime(comment.timestamp)}</span>
+                    {comment.edited && <span className="comment-edited">(diedit)</span>}
                   </div>
-                  <p className="comment-message">{comment.message}</p>
+                  
+                  {editingId === comment.id ? (
+                    <div className="edit-form">
+                      <textarea
+                        value={editingText}
+                        onChange={(e) => setEditingText(e.target.value)}
+                        className="edit-input"
+                      />
+                      <div className="edit-buttons">
+                        <button 
+                          className="edit-save-btn"
+                          onClick={() => handleEditComment(comment.id, editingText)}
+                        >
+                          Simpan
+                        </button>
+                        <button 
+                          className="edit-cancel-btn"
+                          onClick={() => {
+                            setEditingId(null);
+                            setEditingText("");
+                          }}
+                        >
+                          Batal
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="comment-message">{comment.message}</p>
+                      {comment.nis === currentUser?.nis && (
+                        <div className="comment-actions">
+                          <button 
+                            className="action-btn edit-btn"
+                            onClick={() => {
+                              setEditingId(comment.id);
+                              setEditingText(comment.message);
+                            }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            className="action-btn delete-btn"
+                            onClick={() => handleDeleteComment(comment.id)}
+                          >
+                            Hapus
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             ))
@@ -112,20 +206,28 @@ export default function Obrolan() {
         </div>
 
         {/* Input Comment */}
-        <div className="obrolan-input-section">
-          <form onSubmit={handleSendComment} className="obrolan-form">
-            <input
-              type="text"
-              placeholder="Tulis komentarmu..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="obrolan-input"
-            />
-            <button type="submit" className="obrolan-send-btn">
-              Kirim
-            </button>
-          </form>
-        </div>
+        {!userComment && (
+          <div className="obrolan-input-section">
+            <form onSubmit={handleSendComment} className="obrolan-form">
+              <input
+                type="text"
+                placeholder="Tulis komentarmu..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="obrolan-input"
+              />
+              <button type="submit" className="obrolan-send-btn">
+                Kirim
+              </button>
+            </form>
+          </div>
+        )}
+        
+        {userComment && (
+          <div className="obrolan-locked">
+            <p>✓ Pesan kamu sudah terkirim. Edit atau hapus untuk mengirim pesan baru.</p>
+          </div>
+        )}
       </div>
     </>
   );
