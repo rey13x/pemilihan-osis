@@ -245,7 +245,12 @@ export default function PilihPaslon() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        {expandedPaslon ? (
+        {selectedPaslon ? (
+          <div className="selected-display">
+            <img src={selectedCandidate?.foto} alt={selectedCandidate?.nama} className="selected-photo" />
+            <p>Pilihan kamu: <strong>{selectedCandidate?.nama}</strong></p>
+          </div>
+        ) : expandedPaslon ? (
           <p>Klik 2x untuk memilih paslon</p>
         ) : (
           <p>Klik kartu untuk membuka detail paslon</p>
