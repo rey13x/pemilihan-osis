@@ -15,7 +15,6 @@ export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
-  const [totalVotes, setTotalVotes] = useState(0);
 
   const kandidatList = [
     {
@@ -113,7 +112,6 @@ export default function Home() {
 
       setVotes(voteCount);
       setVotesByJurusan(votesByJurusanData);
-      setTotalVotes(Object.values(voteCount).reduce((a, b) => a + b, 0));
       
       // Set jurusan list
       const jurusans = ["all", ...Array.from(jurusanSet).sort()];

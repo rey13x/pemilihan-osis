@@ -51,8 +51,6 @@ export default function PilihPaslon() {
   const [expandedPaslon, setExpandedPaslon] = useState(null);
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [notification, setNotification] = useState({
     isOpen: false,
     type: "error",
@@ -109,7 +107,6 @@ export default function PilihPaslon() {
     }
 
     setIsConfirmOpen(false);
-    setIsLoading(true);
 
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -142,8 +139,6 @@ export default function PilihPaslon() {
         type: "error",
         message: "Gagal menyimpan vote",
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -187,8 +182,6 @@ export default function PilihPaslon() {
             <motion.div
               key={kandidat.id}
               className={`gallery-card ${expandedPaslon === kandidat.id ? "expanded" : ""} ${selectedPaslon === kandidat.id ? "selected" : ""}`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
               onClick={() => {
                 if (expandedPaslon === kandidat.id) {
                   // Second click: confirm selection
