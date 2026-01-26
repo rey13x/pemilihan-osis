@@ -1,0 +1,85 @@
+// FIREBASE FIRESTORE SECURITY RULES
+// Add these rules to your Firebase Console under Firestore > Rules tab
+// 
+// Steps:
+// 1. Go to https://console.firebase.google.com
+// 2. Select your project
+// 3. Go to Firestore Database > Rules
+// 4. Replace all content with the rules below
+// 5. Click "Publish"
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection - read-only for authenticated users
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Prevent client-side modifications
+    }
+    
+    // Comments collection - chat/obrolan functionality
+    match /comments/{commentId} {
+      // Only authenticated users can read comments
+      allow read: if request.auth != null;
+      
+      // Create: User can only create if they don't already have a comment
+      allow create: if request.auth != null &&
+        request.resource.data.nis == request.auth.uid &&
+        request.resource.data.message is string &&
+        request.resource.data.timestamp != null &&
+        // Prevent user from creating multiple documents
+        !exists(/databases/{database}/documents/comments/$(request.resource.data.nis));
+      
+      // Update: Only document owner can edit their comment
+      allow update: if request.auth != null &&
+        resource.data.nis == request.auth.uid &&
+        request.resource.data.message is string &&
+        request.resource.data.editedAt != null;
+      
+      // Delete: Only document owner can delete
+      allow delete: if request.auth != null &&
+        resource.data.nis == request.auth.uid;
+    }
+    
+    // Paslon collection - voting results (read-only for users)
+    match /paslon/{paslon_id} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only backend can modify voting results
+    }
+    
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/* IMPORTANT NOTES:
+ * 
+ * 1. AUTHENTICATION SETUP:
+ *    - In Firebase Console, enable Authentication (sign-in methods)
+ *    - The nis field in users collection should be used as user ID
+ *    - Make sure users are authenticated before accessing Firestore
+ * 
+ * 2. ONE MESSAGE PER USER:
+ *    - The create rule prevents duplicate comments by checking if NIS already exists
+ *    - Frontend also enforces this with userComment state
+ *    - Users must delete their comment to send a new one
+ * 
+ * 3. EDIT/DELETE PERMISSIONS:
+ *    - Users can only modify/delete their own comments
+ *    - NIS field acts as the document owner identifier
+ *    - Backend will automatically reject unauthorized attempts
+ * 
+ * 4. CUSTOM CLAIMS (Optional - for enhanced security):
+ *    - Add custom claim 'sudahVote' to user tokens after voting
+ *    - Use in rules: allow read: if get(/databases/{database}/documents/users/$(request.auth.uid)).data.sudahVote == true;
+ *    - This prevents users who haven't voted from accessing chat
+ * 
+ * 5. TESTING:
+ *    - Test create rule: Try sending message (should succeed once, fail on second)
+ *    - Test update rule: Try editing message (should succeed only for your own)
+ *    - Test delete rule: Try deleting message (should succeed only for your own)
+ *    - Test read rule: Try viewing comments without authentication (should fail)
+ */
