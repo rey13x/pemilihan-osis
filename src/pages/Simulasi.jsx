@@ -25,14 +25,19 @@ export default function Simulasi() {
         </div>
       </motion.section>
 
-      {/* Image Section */}
+      {/* Image & Info Section */}
       <motion.div
-        className="simulasi-image-section"
+        className="simulasi-image-info-section"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <img src="/paslon/together-paslon.png" alt="Together" className="simulasi-together-image" />
+        <div className="simulasi-image-wrapper">
+          <img src="/paslon/together-paslon.png" alt="Together" className="simulasi-together-image" />
+        </div>
+        <div className="simulasi-info-wrapper">
+          <img src="/info/smk2.png" alt="SMK Info" className="simulasi-info-image" />
+        </div>
       </motion.div>
 
       {/* Content */}

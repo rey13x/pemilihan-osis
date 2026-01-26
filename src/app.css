@@ -4361,11 +4361,21 @@ button:hover {
   color: #666;
 }
 
-/* Image Section */
-.simulasi-image-section {
-  max-width: 600px;
+/* Image & Info Section */
+.simulasi-image-info-section {
+  display: flex;
+  gap: 24px;
+  max-width: 800px;
   margin: 40px auto;
   padding: 0 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.simulasi-image-wrapper {
+  flex: 1;
+  min-width: 200px;
 }
 
 .simulasi-together-image {
@@ -4373,6 +4383,22 @@ button:hover {
   height: auto;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.simulasi-info-wrapper {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.simulasi-info-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  object-fit: cover;
 }
 
 /* Steps Section */
@@ -4504,6 +4530,18 @@ button:hover {
 
   .simulasi-hero h1 {
     font-size: 36px;
+  }
+
+  .simulasi-image-info-section {
+    flex-direction: column;
+    gap: 20px;
+    margin: 30px auto;
+  }
+
+  .simulasi-image-wrapper,
+  .simulasi-info-wrapper {
+    width: 100%;
+    min-width: unset;
   }
 
   .simulasi-steps,
