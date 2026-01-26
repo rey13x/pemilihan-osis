@@ -5,9 +5,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Simulasi from "./pages/Simulasi";
 import Voting from "./pages/Voting";
+import VotingSuccess from "./pages/VotingSuccess";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PilihPaslon from "./pages/PilihPaslon";
 import AdvertisementPopup from "./components/AdvertisementPopup";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
   return (
@@ -38,6 +40,16 @@ export default function App() {
           }
         />
 
+        {/* ================= VOTING SUCCESS ================= */}
+        <Route
+          path="/voting-success"
+          element={
+            <ProtectedRoute>
+              <VotingSuccess />
+            </ProtectedRoute>
+          }
+        />
+
         {/* ================= VOTING (PROTECTED) ================= */}
         <Route
           path="/voting"
@@ -47,6 +59,10 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* ================= DASHBOARD (ADMIN ONLY) ================= */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard-login" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

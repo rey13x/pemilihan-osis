@@ -1,112 +1,97 @@
-import { useState } from "react";
-import { db } from "../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
-export default function Login() {
+export default function Simulasi() {
   const navigate = useNavigate();
-
-  const [nis, setNis] = useState("");
-  const [kelas, setKelas] = useState("");
-  const [jurusan, setJurusan] = useState("");
-  const [token, setToken] = useState("");
-  const [error, setError] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      if (!nis || !kelas || !jurusan || !token) {
-        setError("Semua data wajib diisi");
-        return;
-      }
-
-      const userRef = doc(db, "users", nis);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        setError("Data tidak ditemukan");
-        return;
-      }
-
-      const user = userSnap.data();
-
-      if (
-        user.kelas !== kelas ||
-        user.jurusan !== jurusan ||
-        user.token !== token
-      ) {
-        setError("Data tidak cocok");
-        return;
-      }
-
-      if (user.sudahVote) {
-        setError("Kamu sudah melakukan voting");
-        return;
-      }
-
-      navigate("/simulasi");
-    } catch (err) {
-      console.error(err);
-      setError("Terjadi kesalahan");
-    }
-  };
 
   return (
     <>
-      {/* ================= HERO ================= */}
-      <section className="login-hero">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          ← Pemilu 101
+      <Navbar />
+      <div className="simulasi-page">
+      {/* Header */}
+      <motion.section
+        className="simulasi-hero"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <button className="back-btn" onClick={() => navigate("/")}>
+          ← Kembali
         </button>
 
-        <div className="login-hero-text">
-          <div className="badge">SAAT HARI</div>
-          <h1>PEMILU</h1>
-          <p>
-            Aku harus ngapain aja sih <span>🤔</span> ?
-          </p>
+        <div className="simulasi-hero-text">
+          <h1>Cara Memilih</h1>
+          <p>Ikuti langkah-langkah berikut untuk melakukan voting</p>
         </div>
-      </section>
+      </motion.section>
 
-      {/* ================= FORM ================= */}
-      <section className="login-form-section">
-        <div className="login-card">
-          <h2>Yuk isi Data Kamu</h2>
-
-          <input
-            type="text"
-            placeholder="NIS"
-            value={nis}
-            onChange={(e) => setNis(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Kelas (contoh: XII)"
-            value={kelas}
-            onChange={(e) => setKelas(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Jurusan (contoh: RPL 2)"
-            value={jurusan}
-            onChange={(e) => setJurusan(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Token"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
-
-          {error && <p className="error-text">{error}</p>}
-
-          <button className="login-btn" onClick={handleLogin}>
-            Masuk!
-          </button>
+      {/* Steps */}
+      <motion.section
+        className="simulasi-steps"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <div className="step-item">
+          <div className="step-number">1</div>
+          <h3>Baca dengan Seksama</h3>
+          <p>Perhatikan visi dan misi setiap paslon dengan baik</p>
         </div>
-      </section>
+
+        <div className="step-item">
+          <div className="step-number">2</div>
+          <h3>Pilih Paslon</h3>
+          <p>Tentukan pilihan kamu sesuai dengan hati nurani</p>
+        </div>
+
+        <div className="step-item">
+          <div className="step-number">3</div>
+          <h3>Konfirmasi</h3>
+          <p>Pastikan pilihan kamu sebelum menyerahkan suara</p>
+        </div>
+      </motion.section>
+
+      {/* Content */}
+      <motion.section
+        className="simulasi-content"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <div className="content-card">
+          <h2>Persyaratan Pemilih</h2>
+          <ul>
+            <li>Pelajar SMKN 2 Kota Bekasi</li>
+            <li>Terdaftar dalam daftar pemilih</li>
+            <li>Belum pernah melakukan voting sebelumnya</li>
+            <li>Memiliki token yang valid</li>
+          </ul>
+        </div>
+
+        <div className="content-card">
+          <h2>Catatan Penting</h2>
+          <ul>
+            <li>Setiap pemilih hanya dapat memilih satu kali</li>
+            <li>Pilihan kamu bersifat rahasia dan aman</li>
+            <li>Jangan bagikan token kamu kepada siapapun</li>
+            <li>Hasil voting akan ditampilkan secara real-time</li>
+          </ul>
+        </div>
+      </motion.section>
+
+      {/* Button */}
+      <motion.div
+        className="simulasi-footer"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <button className="simulasi-btn" onClick={() => navigate("/pilih-paslon")}>
+          Mulai Voting!
+        </button>
+      </motion.div>
+      </div>
     </>
   );
 }
