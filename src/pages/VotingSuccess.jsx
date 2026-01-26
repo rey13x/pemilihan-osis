@@ -8,6 +8,7 @@ export default function VotingSuccess() {
   const [showMessage, setShowMessage] = useState(false);
   const [timeLeft, setTimeLeft] = useState(10);
   const containerRef = useRef(null);
+  const audioContextRef = useRef(null);
 
   const kandidatList = [
     {
@@ -43,10 +44,38 @@ export default function VotingSuccess() {
   const selectedPaslon = localStorage.getItem("selectedVote");
   const candidate = kandidatList.find((k) => k.id === selectedPaslon);
 
+  // Play sound effects
+  const playBeep = (frequency = 800, duration = 100) => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    const ctx = audioContextRef.current;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.frequency.value = frequency;
+    osc.type = "sine";
+    
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
+    
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration / 1000);
+  };
+
+  // Jreg sound on mount
+  useEffect(() => {
+    playBeep(600, 80); // jreg sound
+  }, []);
+
   // After 5 seconds, show message and auto scroll
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMessage(true);
+      playBeep(1000, 150); // kring sound
       setTimeout(() => {
         if (containerRef.current) {
           containerRef.current.scrollIntoView({ behavior: "smooth" });
@@ -81,17 +110,41 @@ export default function VotingSuccess() {
       
       <motion.div
         className="success-photo-section"
-        initial={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0, scale: 2 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       >
-        <motion.img
-          src={candidate?.foto}
-          alt={candidate?.nama}
-          className="bouncy-photo"
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <div className="photo-container">
+          {/* Wanted-style animation: bouncy zoom in/out */}
+          <motion.img
+            src={candidate?.foto}
+            alt={candidate?.nama}
+            className="success-photo"
+            animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity,
+              repeatDelay: 2,
+              times: [0, 0.3, 0.5, 0.7, 0.85, 1],
+              ease: "easeInOut"
+            }}
+          />
+          
+          {/* Number badge with bouncy animation */}
+          <motion.div
+            className="paslon-number"
+            animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity,
+              repeatDelay: 2,
+              times: [0, 0.3, 0.5, 0.7, 0.85, 1],
+              ease: "easeInOut"
+            }}
+          >
+            {candidate?.nomor}+
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Message Section */}
@@ -100,7 +153,7 @@ export default function VotingSuccess() {
         className="success-message-section"
         initial={{ opacity: 0, y: 20 }}
         animate={showMessage ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       >
         <h2>Pilihanmu Tersimpan!</h2>
         <p className="candidate-name">{candidate?.nama}</p>

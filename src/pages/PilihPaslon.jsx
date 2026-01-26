@@ -77,8 +77,27 @@ export default function PilihPaslon() {
     message: "",
   });
 
-  // Timer effect
+  // Timer effect - persist across refreshes
   useEffect(() => {
+    // Initialize from sessionStorage
+    const savedStartTime = sessionStorage.getItem("pilihStartTime");
+    const now = Date.now();
+    
+    if (!savedStartTime) {
+      // First visit to this page in this session
+      sessionStorage.setItem("pilihStartTime", now);
+      setTimeLeft(60);
+    } else {
+      // Calculate elapsed time
+      const elapsed = Math.floor((now - parseInt(savedStartTime)) / 1000);
+      const remaining = Math.max(0, 60 - elapsed);
+      setTimeLeft(remaining);
+      
+      if (remaining === 0) {
+        setIsConfused(true);
+      }
+    }
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {

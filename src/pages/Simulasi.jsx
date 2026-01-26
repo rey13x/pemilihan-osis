@@ -21,7 +21,7 @@ export default function Simulasi() {
         </button>
 
         <div className="simulasi-hero-text">
-          <h1>WAIT!!</h1>
+          <h1>Catatan</h1>
         </div>
       </motion.section>
 
@@ -32,9 +32,6 @@ export default function Simulasi() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <div className="simulasi-image-wrapper">
-          <img src="/paslon/together-paslon.png" alt="Together" className="simulasi-together-image" />
-        </div>
         <div className="simulasi-info-wrapper">
           <img src="/info/smk2.png" alt="SMK Info" className="simulasi-info-image" />
         </div>
@@ -48,7 +45,6 @@ export default function Simulasi() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="content-card">
-          <h2>Catatan Penting</h2>
           <ul>
             <li>Setiap pemilih hanya dapat memilih satu kali</li>
             <li>Pilihan kamu bersifat rahasia dan aman</li>

@@ -11,10 +11,12 @@ import PilihPaslon from "./pages/PilihPaslon";
 import AdvertisementPopup from "./components/AdvertisementPopup";
 import Dashboard from "./pages/Dashboard";
 import Obrolan from "./pages/Obrolan";
+import PageTransition from "./components/PageTransition";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <PageTransition />
       <AdvertisementPopup />
       <Routes>
         {/* ================= HOME / LANDING ================= */}
