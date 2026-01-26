@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import NotificationPopup from "../components/NotificationPopup";
@@ -48,11 +48,9 @@ const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedName }) => {
 export default function PilihPaslon() {
   const navigate = useNavigate();
   const containerRef = useRef(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [expandedPaslon, setExpandedPaslon] = useState(null);
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState({
     isOpen: false,
     type: "error",

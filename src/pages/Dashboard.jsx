@@ -3,17 +3,13 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { db } from "../firebase/firebase";
-import { collection, query, where, getDocs, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import NotificationPopup from "../components/NotificationPopup";
-import { addTestVotingData } from "../utils/addTestData";
 
 const PieChart = ({ data, title }) => {
   const total = Object.values(data).reduce((a, b) => a + b, 0);
 
-  const getPercentage = (value) => {
-    if (total === 0) return 0;
-    return ((value / total) * 100).toFixed(1);
-  };
+
 
   const generatePieChart = () => {
     const kandidats = [
@@ -169,7 +165,7 @@ export default function Dashboard() {
 
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
-  const [showVotingResults, setShowVotingResults] = useState(false);
+
   const [votingResultsVisible, setVotingResultsVisible] = useState(false);
   const [settingsLoading, setSettingsLoading] = useState(false);
 

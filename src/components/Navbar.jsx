@@ -12,9 +12,6 @@ export default function Navbar() {
     return null;
   }
 
-  // Check if on home page
-  const isHomePage = location.pathname === "/";
-
   const handleLogoClick = () => {
     const newCount = clickCount + 1;
     setClickCount(newCount);
