@@ -12,10 +12,12 @@ import AdvertisementPopup from "./components/AdvertisementPopup";
 import Dashboard from "./pages/Dashboard";
 import Obrolan from "./pages/Obrolan";
 import PageTransition from "./components/PageTransition";
+import TopBar from "./components/TopBar";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <TopBar />
       <PageTransition />
       <AdvertisementPopup />
       <Routes>

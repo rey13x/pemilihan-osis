@@ -25,7 +25,7 @@ export default function NotificationPopup({ isOpen, type, message, onClose }) {
               animate={{ opacity: [1, 0.5, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              Aku Cek!
+              Sedang Memproses...
             </motion.div>
             <motion.div
               className="loading-dots"

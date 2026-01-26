@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Countdown from "./Countdown";
 
 export default function Navbar() {
   const [clickCount, setClickCount] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,6 +23,13 @@ export default function Navbar() {
     }
   };
 
+  const navItems = [
+    { label: "Beranda", href: "#home" },
+    { label: "3 Cara", href: "#cara" },
+    { label: "Pilih Osis", href: "#osis" },
+    { label: "Pilih Paslon", href: "#paslon" },
+  ];
+
   return (
     <nav className="navbar">
       <div className="navbar-inner">
@@ -33,10 +40,41 @@ export default function Navbar() {
 
         <div className="navbar-spacer"></div>
 
-        <div className="quiz-btn">
-          <Countdown />
+        {/* Desktop Navigation */}
+        <div className="navbar-menu">
+          {navItems.map((item, idx) => (
+            <a key={idx} href={item.href} className="navbar-item">
+              {item.label}
+            </a>
+          ))}
         </div>
+
+        {/* Hamburger Button for Mobile */}
+        <button 
+          className="hamburger-btn"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="navbar-mobile-menu">
+          {navItems.map((item, idx) => (
+            <a 
+              key={idx} 
+              href={item.href} 
+              className="mobile-menu-item"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      )}
     </nav>
   );
 }

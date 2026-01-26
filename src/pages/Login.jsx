@@ -129,7 +129,7 @@ export default function Login() {
         setNotification({
           isOpen: true,
           type: "success",
-          message: "Login berhasil!",
+          message: "Yeay! Berhasil login",
         });
 
         // Redirect after animation

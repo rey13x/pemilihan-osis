@@ -230,11 +230,45 @@ html * {
 }
 
 /* ==================================================
+   TOPBAR WITH COUNTDOWN
+================================================== */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(135deg, #c09110 0%, #d85c40 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.topbar-countdown {
+  display: flex;
+  align-items: center;
+}
+
+.countdown-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ==================================================
    NAVBAR (DESKTOP + MOBILE AMAN)
 ================================================== */
 .navbar {
     position: fixed;
-    top: 0;
+    top: 50px;
     left: 0;
     right: 0;
     z-index: 9999;
@@ -255,6 +289,98 @@ html * {
   flex: 1;
 }
 
+/* Desktop Navigation Menu */
+.navbar-menu {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.navbar-item {
+  color: #2b2b2b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.navbar-item:hover {
+  color: #c09110;
+  border-bottom-color: #c09110;
+}
+
+/* Hamburger Button */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger-btn span {
+  width: 24px;
+  height: 2px;
+  background: #2b2b2b;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+/* Mobile Menu */
+.navbar-mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 12px 0;
+}
+
+.mobile-menu-item {
+  color: #2b2b2b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.mobile-menu-item:hover {
+  background: #f5f5f5;
+  color: #c09110;
+  border-left-color: #c09110;
+  padding-left: 24px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .navbar-menu {
+    display: none;
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .navbar-mobile-menu {
+    display: flex;
+  }
+
+  .navbar-inner {
+    position: relative;
+  }
+}
+
 /* LOGO PILIH OSIS */
 .logo-stack {
   display: flex;
@@ -269,53 +395,11 @@ html * {
 }
 
 /* ==================================================
-   QUIZ / COUNTDOWN BUTTON
-================================================== */
-.quiz-btn {
-  background: #c09110;
-  color: #ffffff;
-  padding: 6px 18px;
-  font-size: 14px;
-  font-weight: 700;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-
-  animation: subtle-bounce 2s infinite;
-}
-
-.quiz-btn .countdown {
-  display: flex;
-  gap: 10px;
-}
-
-.quiz-btn .countdown-item {
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-}
-
-.quiz-btn .countdown-num {
-  font-size: 16px;
-  font-weight: 900;
-}
-
-.quiz-btn .countdown-label {
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-/* ==================================================
    HERO SECTION
 ================================================== */
 .hero {
   padding: clamp(48px, 10vh, 96px) 0 64px;
-  margin-top: 70px;
+  margin-top: 130px;
 }
 
 .hero-grid {
@@ -2455,14 +2539,14 @@ button:hover {
 }
 
 .btn-confirm {
-  background: #4caf50;
+  background: #8b6914;
   color: white;
 }
 
 .btn-confirm:hover:not(:disabled) {
-  background: #45a049;
+  background: #a0791a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 105, 20, 0.3);
 }
 
 .btn-confirm:disabled {

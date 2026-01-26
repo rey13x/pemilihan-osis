@@ -115,7 +115,7 @@ export default function VotingSuccess() {
         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       >
         <div className="photo-container">
-          {/* Wanted-style animation: bouncy zoom in/out */}
+          {/* Photo animation only on entry */}
           <motion.img
             src={candidate?.foto}
             alt={candidate?.nama}
@@ -123,21 +123,17 @@ export default function VotingSuccess() {
             animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
             transition={{ 
               duration: 3, 
-              repeat: Infinity,
-              repeatDelay: 2,
               times: [0, 0.3, 0.5, 0.7, 0.85, 1],
               ease: "easeInOut"
             }}
           />
           
-          {/* Number badge with bouncy animation */}
+          {/* Number badge with animation only on entry */}
           <motion.div
             className="paslon-number"
             animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
             transition={{ 
               duration: 3, 
-              repeat: Infinity,
-              repeatDelay: 2,
               times: [0, 0.3, 0.5, 0.7, 0.85, 1],
               ease: "easeInOut"
             }}
