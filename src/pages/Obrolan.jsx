@@ -1,19 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import { collection, query, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { 
+  collection, 
+  query, 
+  onSnapshot, 
+  addDoc, 
+  serverTimestamp, 
+  deleteDoc, 
+  doc, 
+  updateDoc,
+  orderBy,
+  limit
+} from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import "../components/NotificationPopup.css";
 
 export default function Obrolan() {
   const navigate = useNavigate();
-  const [comments, setComments] = useState([]);
+  const messagesEndRef = useRef(null);
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userComment, setUserComment] = useState(null);
+  const [userMessage, setUserMessage] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [totalMessages, setTotalMessages] = useState(0);
+  const [isRoomLocked, setIsRoomLocked] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -23,84 +46,103 @@ export default function Obrolan() {
     }
     setCurrentUser(user);
 
-    // Fetch comments from Firestore
-    const commentsRef = collection(db, "comments");
-    const q = query(commentsRef);
+    // Fetch messages from global chat room
+    const messagesRef = collection(db, "chats", "obrolan", "messages");
+    const q = query(
+      messagesRef,
+      orderBy("timestamp", "asc"),
+      limit(100)
+    );
     
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const commentsList = [];
-      let userCommentData = null;
+      const messagesList = [];
+      let userMessageData = null;
       
       snapshot.docs.forEach((doc) => {
         const data = {
           id: doc.id,
           ...doc.data(),
         };
-        commentsList.push(data);
+        messagesList.push(data);
         
-        // Check if this comment belongs to current user
-        if (data.nis === user.nis) {
-          userCommentData = data;
+        // Check if this message belongs to current user
+        if (data.userId === user.nis) {
+          userMessageData = data;
         }
       });
       
-      // Sort by timestamp, newest first
-      commentsList.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
-      setComments(commentsList);
-      setUserComment(userCommentData);
+      setMessages(messagesList);
+      setUserMessage(userMessageData);
+      setTotalMessages(messagesList.length);
+      
+      // Lock room if 100 messages reached
+      setIsRoomLocked(messagesList.length >= 100);
       setLoading(false);
     });
 
     return unsubscribe;
   }, [navigate]);
 
-  const handleSendComment = async (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
-    if (userComment) {
-      alert("Kamu hanya bisa mengirim 1 pesan. Edit atau hapus pesan kamu yang lama untuk mengirim pesan baru.");
+    if (userMessage) {
+      alert("Kamu hanya bisa mengirim 1 pesan. Edit atau hapus pesan kamu untuk mengirim pesan baru.");
+      return;
+    }
+    if (isRoomLocked && !userMessage) {
+      alert("Chat sudah penuh (100 pesan). Tidak bisa mengirim pesan baru.");
       return;
     }
 
+    setSending(true);
     try {
-      const commentsRef = collection(db, "comments");
-      await addDoc(commentsRef, {
-        nis: currentUser?.nis,
-        nama: currentUser?.nama,
+      const messagesRef = collection(db, "chats", "obrolan", "messages");
+      await addDoc(messagesRef, {
+        userId: currentUser?.nis,
+        userName: currentUser?.nama,
         kelas: currentUser?.kelas,
-        message: message,
+        jurusan: currentUser?.jurusan,
+        message: message.trim(),
         timestamp: serverTimestamp(),
+        edited: false,
+        editedAt: null,
       });
       setMessage("");
     } catch (err) {
-      console.error("Error sending comment:", err);
+      console.error("Error sending message:", err);
+      alert("Gagal mengirim pesan");
+    } finally {
+      setSending(false);
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
+  const handleDeleteMessage = async (messageId) => {
     if (window.confirm("Hapus pesan ini?")) {
       try {
-        await deleteDoc(doc(db, "comments", commentId));
-        setUserComment(null);
+        await deleteDoc(doc(db, "chats", "obrolan", "messages", messageId));
+        setUserMessage(null);
       } catch (err) {
-        console.error("Error deleting comment:", err);
+        console.error("Error deleting message:", err);
+        alert("Gagal menghapus pesan");
       }
     }
   };
 
-  const handleEditComment = async (commentId, newMessage) => {
+  const handleEditMessage = async (messageId, newMessage) => {
     if (!newMessage.trim()) return;
     
     try {
-      await updateDoc(doc(db, "comments", commentId), {
-        message: newMessage,
+      await updateDoc(doc(db, "chats", "obrolan", "messages", messageId), {
+        message: newMessage.trim(),
         edited: true,
         editedAt: serverTimestamp(),
       });
       setEditingId(null);
       setEditingText("");
     } catch (err) {
-      console.error("Error editing comment:", err);
+      console.error("Error editing message:", err);
+      alert("Gagal mengedit pesan");
     }
   };
 
@@ -124,108 +166,132 @@ export default function Obrolan() {
           <button className="back-button" onClick={() => navigate("/")}>
             ← Kembali
           </button>
-          <h1>Yukk! Ceritakan pengalamanmu di Pilih Osis</h1>
-          <p>Bagikan pendapatmu dengan teman-teman</p>
-        </div>
-
-        {/* Comments List */}
-        <div className="obrolan-comments">
-          {loading ? (
-            <div className="loading">Memuat komentar...</div>
-          ) : comments.length === 0 ? (
-            <div className="no-comments">
-              <p>Belum ada komentar. Jadilah yang pertama!</p>
+          <h1>Obrolan Pemilih OSIS</h1>
+          <p>Bagikan pengalamanmu dengan teman-teman</p>
+          <div className="message-counter">
+            {totalMessages}/100 pesan
+          </div>
+          {isRoomLocked && (
+            <div className="room-locked-banner">
+              🔒 Chat penuh - semua pesan terkunci
             </div>
-          ) : (
-            comments.map((comment) => (
-              <div key={comment.id} className={`comment-item ${comment.nis === currentUser?.nis ? 'user-comment' : ''}`}>
-                <div className="comment-avatar">
-                  {comment.nis?.substring(0, 2).toUpperCase() || "?"}
-                </div>
-                <div className="comment-content">
-                  <div className="comment-header">
-                    <span className="comment-nama">{comment.nis}</span>
-                    <span className="comment-kelas">{comment.kelas}</span>
-                    <span className="comment-time">{formatTime(comment.timestamp)}</span>
-                    {comment.edited && <span className="comment-edited">(diedit)</span>}
-                  </div>
-                  
-                  {editingId === comment.id ? (
-                    <div className="edit-form">
-                      <textarea
-                        value={editingText}
-                        onChange={(e) => setEditingText(e.target.value)}
-                        className="edit-input"
-                      />
-                      <div className="edit-buttons">
-                        <button 
-                          className="edit-save-btn"
-                          onClick={() => handleEditComment(comment.id, editingText)}
-                        >
-                          Simpan
-                        </button>
-                        <button 
-                          className="edit-cancel-btn"
-                          onClick={() => {
-                            setEditingId(null);
-                            setEditingText("");
-                          }}
-                        >
-                          Batal
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <p className="comment-message">{comment.message}</p>
-                      {comment.nis === currentUser?.nis && (
-                        <div className="comment-actions">
-                          <button 
-                            className="action-btn edit-btn"
-                            onClick={() => {
-                              setEditingId(comment.id);
-                              setEditingText(comment.message);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            className="action-btn delete-btn"
-                            onClick={() => handleDeleteComment(comment.id)}
-                          >
-                            Hapus
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-            ))
           )}
         </div>
 
-        {/* Input Comment */}
-        {!userComment && (
+        {/* Messages List */}
+        <div className="obrolan-messages">
+          {loading ? (
+            <div className="loading">Memuat pesan...</div>
+          ) : messages.length === 0 ? (
+            <div className="no-messages">
+              <p>Jadilah yang pertama mengirim pesan!</p>
+            </div>
+          ) : (
+            <>
+              {messages.map((msg) => (
+                <div 
+                  key={msg.id} 
+                  className={`message-item ${msg.userId === currentUser?.nis ? 'user-message' : ''} ${isRoomLocked ? 'locked' : ''}`}
+                >
+                  <div className="message-avatar">
+                    {msg.userId?.substring(0, 2).toUpperCase() || "?"}
+                  </div>
+                  <div className="message-content">
+                    <div className="message-header">
+                      <span className="message-name">{msg.userName}</span>
+                      <span className="message-class">{msg.kelas}</span>
+                      <span className="message-time">{formatTime(msg.timestamp)}</span>
+                      {msg.edited && <span className="message-edited">(diedit)</span>}
+                    </div>
+                    
+                    {editingId === msg.id ? (
+                      <div className="edit-form">
+                        <textarea
+                          value={editingText}
+                          onChange={(e) => setEditingText(e.target.value)}
+                          className="edit-input"
+                          disabled={isRoomLocked}
+                        />
+                        <div className="edit-buttons">
+                          <button 
+                            className="edit-save-btn"
+                            onClick={() => handleEditMessage(msg.id, editingText)}
+                            disabled={isRoomLocked}
+                          >
+                            Simpan
+                          </button>
+                          <button 
+                            className="edit-cancel-btn"
+                            onClick={() => {
+                              setEditingId(null);
+                              setEditingText("");
+                            }}
+                          >
+                            Batal
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="message-text">{msg.message}</p>
+                        {msg.userId === currentUser?.nis && (
+                          <div className="message-actions">
+                            <button 
+                              className="action-btn edit-btn"
+                              onClick={() => {
+                                setEditingId(msg.id);
+                                setEditingText(msg.message);
+                              }}
+                              disabled={isRoomLocked}
+                            >
+                              Edit
+                            </button>
+                            <button 
+                              className="action-btn delete-btn"
+                              onClick={() => handleDeleteMessage(msg.id)}
+                            >
+                              Hapus
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </>
+          )}
+        </div>
+
+        {/* Input Message */}
+        {!userMessage && !isRoomLocked && (
           <div className="obrolan-input-section">
-            <form onSubmit={handleSendComment} className="obrolan-form">
+            <form onSubmit={handleSendMessage} className="obrolan-form">
               <input
                 type="text"
-                placeholder="Tulis komentarmu..."
+                placeholder="Tulis pesanmu..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="obrolan-input"
+                disabled={sending}
               />
-              <button type="submit" className="obrolan-send-btn">
-                Kirim
+              <button type="submit" className="obrolan-send-btn" disabled={sending || !message.trim()}>
+                {sending ? "Kirim..." : "Kirim"}
               </button>
             </form>
           </div>
         )}
         
-        {userComment && (
+        {userMessage && (
           <div className="obrolan-locked">
             <p>✓ Pesan kamu sudah terkirim. Edit atau hapus untuk mengirim pesan baru.</p>
+          </div>
+        )}
+
+        {isRoomLocked && !userMessage && (
+          <div className="obrolan-full">
+            <p>🔒 Chat sudah penuh. Semua pesan terkunci.</p>
           </div>
         )}
       </div>

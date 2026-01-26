@@ -4513,18 +4513,21 @@ button:hover {
   padding: 20px;
   padding-top: 100px;
   padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
 }
 
 .obrolan-header {
   max-width: 800px;
   margin: 0 auto 30px;
   text-align: center;
+  position: relative;
 }
 
 .obrolan-header .back-button {
   position: absolute;
-  top: 80px;
-  left: 20px;
+  top: -50px;
+  left: 0;
   background: none;
   border: none;
   font-size: 16px;
@@ -4535,7 +4538,7 @@ button:hover {
 }
 
 .obrolan-header .back-button:hover {
-  color: #c09110;
+  color: #4caf50;
   transform: translateX(-4px);
 }
 
@@ -4549,35 +4552,54 @@ button:hover {
 .obrolan-header p {
   font-size: 14px;
   color: #666;
+  margin-bottom: 12px;
 }
 
-/* Comments Section */
-.obrolan-comments {
+.message-counter {
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+}
+
+.room-locked-banner {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* Messages Section */
+.obrolan-messages {
   max-width: 800px;
   margin: 0 auto 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 350px);
   overflow-y: auto;
   padding-right: 8px;
+  flex: 1;
 }
 
-.obrolan-comments::-webkit-scrollbar {
+.obrolan-messages::-webkit-scrollbar {
   width: 6px;
 }
 
-.obrolan-comments::-webkit-scrollbar-track {
+.obrolan-messages::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 10px;
 }
 
-.obrolan-comments::-webkit-scrollbar-thumb {
-  background: #c09110;
+.obrolan-messages::-webkit-scrollbar-thumb {
+  background: #4caf50;
   border-radius: 10px;
 }
 
-.comment-item {
+.message-item {
   display: flex;
   gap: 12px;
   padding: 16px;
@@ -4587,19 +4609,23 @@ button:hover {
   transition: all 0.2s ease;
 }
 
-.comment-item:hover {
+.message-item:hover {
   background: #ffffff;
-  border-color: #c09110;
-  box-shadow: 0 2px 8px rgba(192, 145, 16, 0.1);
+  border-color: #4caf50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
 }
 
-.comment-avatar {
+.message-item.locked {
+  opacity: 0.7;
+}
+
+.message-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #c09110 0%, #d85c40 100%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
   border-radius: 50%;
   font-weight: 700;
@@ -4607,12 +4633,12 @@ button:hover {
   font-size: 18px;
 }
 
-.comment-content {
+.message-content {
   flex: 1;
   min-width: 0;
 }
 
-.comment-header {
+.message-header {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -4620,13 +4646,13 @@ button:hover {
   flex-wrap: wrap;
 }
 
-.comment-nama {
+.message-name {
   font-weight: 700;
   color: #2b2b2b;
   font-size: 14px;
 }
 
-.comment-kelas {
+.message-class {
   font-size: 12px;
   color: #999;
   background: #f0f0f0;
@@ -4634,13 +4660,13 @@ button:hover {
   border-radius: 4px;
 }
 
-.comment-time {
+.message-time {
   font-size: 12px;
   color: #999;
   margin-left: auto;
 }
 
-.comment-message {
+.message-text {
   font-size: 14px;
   color: #555;
   line-height: 1.5;
@@ -4648,13 +4674,13 @@ button:hover {
   word-break: break-word;
 }
 
-.comment-edited {
+.message-edited {
   font-size: 11px;
   color: #999;
   font-style: italic;
 }
 
-.comment-actions {
+.message-actions {
   display: flex;
   gap: 8px;
   margin-top: 8px;
@@ -4670,12 +4696,17 @@ button:hover {
   transition: all 0.2s ease;
 }
 
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .edit-btn {
   background: #e8f0ff;
   color: #0066cc;
 }
 
-.edit-btn:hover {
+.edit-btn:hover:not(:disabled) {
   background: #d0e0ff;
 }
 
@@ -4695,7 +4726,7 @@ button:hover {
 .edit-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #c09110;
+  border: 1px solid #4caf50;
   border-radius: 8px;
   font-family: inherit;
   font-size: 14px;
@@ -4703,9 +4734,14 @@ button:hover {
   min-height: 80px;
 }
 
+.edit-input:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
+}
+
 .edit-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(192, 145, 16, 0.1);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
 .edit-buttons {
@@ -4727,12 +4763,17 @@ button:hover {
 }
 
 .edit-save-btn {
-  background: #c09110;
+  background: #4caf50;
   color: white;
 }
 
-.edit-save-btn:hover {
-  background: #d85c40;
+.edit-save-btn:hover:not(:disabled) {
+  background: #45a049;
+}
+
+.edit-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .edit-cancel-btn {
@@ -4744,33 +4785,20 @@ button:hover {
   background: #d0d0d0;
 }
 
-.user-comment {
-  background: linear-gradient(135deg, rgba(192, 145, 16, 0.08), rgba(216, 92, 64, 0.08));
-  border: 1.5px solid rgba(192, 145, 16, 0.2);
+.user-message {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08), rgba(69, 160, 73, 0.08));
+  border: 1.5px solid rgba(76, 175, 80, 0.2);
 }
 
-.obrolan-locked {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #c09110 0%, #d85c40 100%);
-  color: white;
-  padding: 14px 24px;
-  border-radius: 12px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-  max-width: 90%;
-  box-shadow: 0 4px 12px rgba(192, 145, 16, 0.3);
-}
-
-.loading,
-.no-comments {
+.no-messages {
   text-align: center;
   padding: 40px 20px;
   color: #999;
-  font-size: 14px;
+}
+
+.no-messages p {
+  font-size: 16px;
+  margin: 0;
 }
 
 /* Input Section */
@@ -4804,12 +4832,17 @@ button:hover {
 
 .obrolan-input:focus {
   outline: none;
-  border-color: #c09110;
-  box-shadow: 0 0 0 3px rgba(192, 145, 16, 0.1);
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.obrolan-input:disabled {
+  background: #f0f0f0;
+  cursor: not-allowed;
 }
 
 .obrolan-send-btn {
-  background: #c09110;
+  background: #4caf50;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -4820,14 +4853,66 @@ button:hover {
   font-size: 14px;
 }
 
-.obrolan-send-btn:hover {
-  background: #d85c40;
+.obrolan-send-btn:hover:not(:disabled) {
+  background: #45a049;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(192, 145, 16, 0.3);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-.obrolan-send-btn:active {
+.obrolan-send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.obrolan-send-btn:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.obrolan-locked {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.obrolan-full {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.obrolan-full p {
+  margin: 0;
+}
+
+.obrolan-locked p {
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
