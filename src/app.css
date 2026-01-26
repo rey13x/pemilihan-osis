@@ -2036,34 +2036,46 @@ button:hover {
 
 .login-form-section {
   background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
-  padding: 0 clamp(12px, 3vw, 16px) clamp(60px, 12vh, 120px);
+  padding: 0 clamp(16px, 4vw, 24px) clamp(60px, 12vh, 120px);
   margin-top: clamp(-60px, -10vh, -80px);
   border-radius: -85px;
   position: relative;
   z-index: 10;
+  display: flex;
+  justify-content: center;
 }
 
 .login-card {
   background: white;
-  max-width: 520px;
-  margin: auto;
-  padding: clamp(24px, 5vw, 36px);
-  border-radius: 28px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0;
+  padding: clamp(28px, 6vw, 40px);
+  border-radius: 24px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
 }
 
 .login-card h2 {
   text-align: center;
-  margin-bottom: clamp(16px, 3vw, 28px);
+  margin: 0 0 clamp(16px, 3vw, 28px) 0;
   font-size: clamp(18px, 4vw, 22px);
   font-weight: 800;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+  width: 100%;
 }
 
 .login-card input,
 .login-select {
   width: 100%;
   padding: clamp(14px, 3vw, 16px);
-  margin-bottom: clamp(14px, 3vw, 18px);
   border-radius: 14px;
   border: 2px solid #8B6F47;
   background: #fafafa;
@@ -2078,6 +2090,8 @@ button:hover {
   min-height: 48px;
   -webkit-appearance: none;
   appearance: none;
+  margin: 0;
+  font-family: inherit;
 }
 
 .login-card input::placeholder {
@@ -2136,6 +2150,8 @@ button:hover {
   box-shadow: 0 4px 15px rgba(139, 111, 71, 0.2);
   min-height: 50px;
   letter-spacing: 0.5px;
+  margin: 0;
+  font-family: inherit;
 }
 
 .login-btn:hover {
@@ -2158,6 +2174,7 @@ button:hover {
   margin-bottom: clamp(20px, 3vw, 28px);
   padding-bottom: clamp(16px, 3vw, 24px);
   border-bottom: 2px solid #e8e8e8;
+  margin: 0 0 clamp(16px, 2vw, 24px) 0;
 }
 
 .recent-label {
@@ -2219,8 +2236,13 @@ button:hover {
 
 /* ===== TABLET ===== */
 @media (max-width: 1024px) and (min-width: 769px) {
+  .login-form-section {
+    padding: 0 clamp(20px, 5vw, 28px) clamp(40px, 8vh, 80px);
+  }
+
   .login-card {
-    max-width: 480px;
+    max-width: 450px;
+    padding: clamp(24px, 5vw, 36px);
   }
 
   .recent-list {
@@ -2230,21 +2252,8 @@ button:hover {
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
-  .login-hero {
-    padding: clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px) clamp(100px, 20vh, 150px);
-  }
-
-  .login-hero-text {
-    margin-top: clamp(60px, 12vw, 100px);
-  }
-
-  .login-hero-text h1 {
-    font-size: clamp(40px, 12vw, 80px);
-  }
-
   .login-form-section {
-    padding: 0 clamp(12px, 4vw, 16px) clamp(40px, 8vh, 80px);
-    margin-top: clamp(-50px, -8vh, -60px);
+    padding: clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px) clamp(40px, 8vh, 80px);
   }
 
   .login-card {
@@ -2257,7 +2266,6 @@ button:hover {
   .login-select {
     min-height: 52px;
     padding: clamp(14px, 4vw, 16px);
-    margin-bottom: clamp(12px, 3vw, 16px);
     font-size: clamp(15px, 3vw, 16px);
   }
 
@@ -2277,34 +2285,25 @@ button:hover {
 
 /* ===== SMALL MOBILE ===== */
 @media (max-width: 480px) {
-  .login-hero {
-    padding: clamp(40px, 10vw, 60px) 12px clamp(80px, 15vh, 120px);
-  }
-
-  .login-hero-text h1 {
-    font-size: clamp(32px, 10vw, 60px);
-  }
-
-  .login-hero-text p {
-    font-size: clamp(14px, 2.5vw, 16px);
-  }
-
   .login-form-section {
-    padding: 0 12px clamp(30px, 6vh, 60px);
+    padding: clamp(40px, 10vw, 60px) 12px clamp(30px, 6vh, 60px);
   }
 
   .login-card {
     padding: 20px;
+    border-radius: 18px;
   }
 
   .login-card input,
   .login-select {
     min-height: 48px;
     font-size: 16px;
+    border-radius: 12px;
   }
 
   .login-btn {
     min-height: 48px;
+    border-radius: 12px;
   }
 
   .recent-list {
@@ -2314,6 +2313,7 @@ button:hover {
 
   .recent-item {
     min-height: 70px;
+    border-radius: 10px;
   }
 }
 /* ================= PILIH PASLON ================= */
