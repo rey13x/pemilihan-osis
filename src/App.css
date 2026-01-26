@@ -239,7 +239,7 @@ html * {
     right: 0;
     z-index: 9999;
     /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%); */
-    /* backdrop-filter: blur(10px); */
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     padding: 12px 20px;
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); */
@@ -2054,50 +2054,35 @@ button:hover {
   font-weight: 800;
 }
 
-.login-card input {
-  width: 100%;
-  padding: clamp(12px, 2vw, 16px);
-  margin-bottom: clamp(12px, 2vw, 16px);
-  border-radius: 12px;
-  border: 2px solid #8B6F47;
-  background: white;
-  font-size: clamp(14px, 2.5vw, 15px);
-  box-sizing: border-box;
-  color: #2b2b2b;
-  transition: all 0.3s ease;
-}
-
-.login-card input:focus {
-  outline: none;
-  border-color: #704d2c;
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
-  background: #fffbf8;
-}
-
+.login-card input,
 .login-select {
   width: 100%;
   padding: clamp(12px, 2vw, 16px);
   margin-bottom: clamp(12px, 2vw, 16px);
   border-radius: 12px;
   border: 2px solid #8B6F47;
+  background: white;
   font-size: clamp(14px, 2.5vw, 15px);
   box-sizing: border-box;
-  background: white;
   color: #2b2b2b;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   font-weight: 500;
+  height: auto;
+  line-height: 1.5;
 }
 
-.login-select:hover {
-  border-color: #704d2c;
-  background: #fffbf8;
-}
-
+.login-card input:focus,
 .login-select:focus {
   outline: none;
   border-color: #704d2c;
   box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
+  background: #fffbf8;
+}
+
+.login-card input:hover,
+.login-select:hover {
+  border-color: #704d2c;
   background: #fffbf8;
 }
 
