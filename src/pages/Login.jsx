@@ -13,6 +13,7 @@ export default function Login() {
   const [jurusan, setJurusan] = useState("");
   const [token, setToken] = useState("");
   const [recentLogins, setRecentLogins] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [notification, setNotification] = useState({
     isOpen: false,
@@ -40,24 +41,63 @@ export default function Login() {
     }, 100);
   };
 
-  const handleLogin = async () => {
-    if (!nis || !kelas || !jurusan || !token) {
+  const validateInputs = () => {
+    if (!nis || !nis.trim()) {
       setNotification({
         isOpen: true,
         type: "error",
-        message: "Semua data wajib diisi",
+        message: "NIS tidak boleh kosong",
       });
-      return;
+      return false;
     }
 
+    if (!kelas) {
+      setNotification({
+        isOpen: true,
+        type: "error",
+        message: "Pilih kelas terlebih dahulu",
+      });
+      return false;
+    }
+
+    if (!jurusan) {
+      setNotification({
+        isOpen: true,
+        type: "error",
+        message: "Pilih jurusan terlebih dahulu",
+      });
+      return false;
+    }
+
+    if (!token || !token.trim()) {
+      setNotification({
+        isOpen: true,
+        type: "error",
+        message: "Token tidak boleh kosong",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    if (!validateInputs()) return;
+    if (isLoading) return;
+
+    setIsLoading(true);
+
     try {
-      const snap = await getDoc(doc(db, "users", nis));
+      const snap = await getDoc(doc(db, "users", nis.trim()));
       if (!snap.exists()) {
         setNotification({
           isOpen: true,
           type: "error",
           message: "Data tidak ditemukan",
         });
+        setIsLoading(false);
         return;
       }
 
@@ -66,13 +106,14 @@ export default function Login() {
       if (
         user.kelas !== kelas ||
         user.jurusan !== jurusan ||
-        user.token !== token
+        user.token !== token.trim()
       ) {
         setNotification({
           isOpen: true,
           type: "error",
           message: "Data tidak cocok",
         });
+        setIsLoading(false);
         return;
       }
 
@@ -83,20 +124,21 @@ export default function Login() {
           type: "error",
           message: "Kamu sudah voting",
         });
+        setIsLoading(false);
         return;
       }
 
       // Add to recent logins
-      const loginData = { nis, kelas, jurusan, timestamp: new Date().toISOString() };
+      const loginData = { nis: nis.trim(), kelas, jurusan, timestamp: new Date().toISOString() };
       const recent = JSON.parse(localStorage.getItem("recentLogins")) || [];
-      const filtered = recent.filter(r => r.nis !== nis); // Remove if already exists
+      const filtered = recent.filter(r => r.nis !== nis.trim()); // Remove if already exists
       const updated = [loginData, ...filtered].slice(0, 5); // Keep only 5 recent
       localStorage.setItem("recentLogins", JSON.stringify(updated));
 
       // Simpan user info di localStorage
       localStorage.setItem(
         "currentUser",
-        JSON.stringify({ nis, kelas, jurusan, nama: user.nama })
+        JSON.stringify({ nis: nis.trim(), kelas, jurusan, nama: user.nama })
       );
 
       // Show loading popup
@@ -116,16 +158,18 @@ export default function Login() {
 
         // Redirect after animation
         setTimeout(() => {
+          setIsLoading(false);
           navigate("/simulasi");
         }, 1000);
       }, 1500);
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
       setNotification({
         isOpen: true,
         type: "error",
-        message: "Terjadi kesalahan",
+        message: "Terjadi kesalahan. Coba lagi!",
       });
+      setIsLoading(false);
     }
   };
 
@@ -140,12 +184,11 @@ export default function Login() {
       />
 
       <section className="login-hero">
-        <button className="back-btn" onClick={() => navigate("/")}>
+        <button className="back-btn" onClick={() => navigate("/")} type="button">
           ← Kembali
         </button>
 
         <div className="login-hero-text">
-          {/* <div className="badge">SAAT HARI</div> */}
           <h1>LoGin</h1>
           <p>isi sesuai format yap!</p>
         </div>
@@ -153,8 +196,6 @@ export default function Login() {
 
       <section className="login-form-section">
         <div className="login-card">
-          {/* <h2>Yuk isi Data Kamu</h2> */}
-
           {recentLogins.length > 0 && (
             <div className="recent-logins">
               <p className="recent-label">Login Terakhir:</p>
@@ -165,6 +206,7 @@ export default function Login() {
                     className="recent-item"
                     onClick={() => handleQuickLogin(login)}
                     type="button"
+                    title={`${login.nis} - ${login.kelas}`}
                   >
                     <span className="recent-nis">{login.nis}</span>
                     <span className="recent-class">{login.kelas}</span>
@@ -174,44 +216,59 @@ export default function Login() {
             </div>
           )}
 
-          <input
-            placeholder="NIS"
-            value={nis}
-            onChange={(e) => setNis(e.target.value)}
-          />
-          <select
-            value={kelas}
-            onChange={(e) => setKelas(e.target.value)}
-            className="login-select"
-          >
-            <option value="">Pilih Kelas</option>
-            <option value="X">X</option>
-            <option value="XI">XI</option>
-            <option value="XII">XII</option>
-          </select>
-          <select
-            value={jurusan}
-            onChange={(e) => setJurusan(e.target.value)}
-            className="login-select"
-          >
-            <option value="">Pilih Jurusan</option>
-            <option value="RPL">RPL</option>
-            <option value="TKJ">TKJ</option>
-            <option value="TEI">TEI</option>
-            <option value="TBSM">TBSM</option>
-            <option value="AKL">AKL</option>
-            <option value="TET">TET</option>
-          </select>
-          <input
-            type="password"
-            placeholder="Token"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
+          <form onSubmit={handleLogin}>
+            <input
+              type="text"
+              placeholder="NIS"
+              value={nis}
+              onChange={(e) => setNis(e.target.value)}
+              disabled={isLoading}
+              inputMode="numeric"
+              maxLength="10"
+            />
+            <select
+              value={kelas}
+              onChange={(e) => setKelas(e.target.value)}
+              className="login-select"
+              disabled={isLoading}
+            >
+              <option value="">Pilih Kelas</option>
+              <option value="X">X</option>
+              <option value="XI">XI</option>
+              <option value="XII">XII</option>
+            </select>
+            <select
+              value={jurusan}
+              onChange={(e) => setJurusan(e.target.value)}
+              className="login-select"
+              disabled={isLoading}
+            >
+              <option value="">Pilih Jurusan</option>
+              <option value="RPL">RPL</option>
+              <option value="TKJ">TKJ</option>
+              <option value="TEI">TEI</option>
+              <option value="TBSM">TBSM</option>
+              <option value="AKL">AKL</option>
+              <option value="TET">TET</option>
+            </select>
+            <input
+              type="password"
+              placeholder="Token"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              disabled={isLoading}
+              maxLength="20"
+              autoComplete="off"
+            />
 
-          <button className="login-btn" onClick={handleLogin}>
-            Masuk!
-          </button>
+            <button 
+              className="login-btn" 
+              type="submit"
+              disabled={isLoading || !nis || !kelas || !jurusan || !token}
+            >
+              {isLoading ? "Loading..." : "Masuk!"}
+            </button>
+          </form>
         </div>
       </section>
     </>

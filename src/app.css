@@ -2062,38 +2062,57 @@ button:hover {
 .login-card input,
 .login-select {
   width: 100%;
-  padding: clamp(12px, 2vw, 16px);
-  margin-bottom: clamp(12px, 2vw, 16px);
-  border-radius: 12px;
+  padding: clamp(14px, 3vw, 16px);
+  margin-bottom: clamp(14px, 3vw, 18px);
+  border-radius: 14px;
   border: 2px solid #8B6F47;
-  background: white;
-  font-size: clamp(14px, 2.5vw, 15px);
+  background: #fafafa;
+  font-size: clamp(15px, 2.5vw, 16px);
   box-sizing: border-box;
   color: #2b2b2b;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
   height: auto;
-  line-height: 1.5;
+  line-height: 1.6;
+  min-height: 48px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.login-card input::placeholder {
+  color: #999;
+  font-weight: 500;
 }
 
 .login-card input:focus,
 .login-select:focus {
   outline: none;
+  border-color: #d85c40;
+  box-shadow: 0 0 0 4px rgba(139, 111, 71, 0.15);
+  background: white;
+}
+
+.login-card input:hover:not(:focus),
+.login-select:hover:not(:focus) {
   border-color: #704d2c;
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
   background: #fffbf8;
 }
 
-.login-card input:hover,
-.login-select:hover {
-  border-color: #704d2c;
-  background: #fffbf8;
+.login-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B6F47' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 42px;
 }
 
 .login-select option {
   background: white;
   color: #2b2b2b;
+  padding: 12px;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .error-text {
@@ -2105,16 +2124,18 @@ button:hover {
 
 .login-btn {
   width: 100%;
-  padding: clamp(12px, 2vw, 16px);
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
+  padding: clamp(15px, 3vw, 18px);
+  background: linear-gradient(135deg, #c09110 0%, #8B6F47 100%);
   color: white;
   border: none;
   border-radius: 14px;
   font-weight: 800;
-  font-size: clamp(14px, 2.5vw, 16px);
+  font-size: clamp(15px, 2.5vw, 16px);
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(139, 111, 71, 0.2);
+  min-height: 50px;
+  letter-spacing: 0.5px;
 }
 
 .login-btn:hover {
@@ -2126,39 +2147,49 @@ button:hover {
   transform: translateY(0);
 }
 
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* Recent Logins */
 .recent-logins {
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  margin-bottom: clamp(20px, 3vw, 28px);
+  padding-bottom: clamp(16px, 3vw, 24px);
   border-bottom: 2px solid #e8e8e8;
 }
 
 .recent-label {
-  font-size: 12px;
+  font-size: clamp(11px, 2vw, 12px);
   font-weight: 700;
   color: #999;
-  margin-bottom: 10px;
+  margin-bottom: clamp(12px, 2vw, 16px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .recent-list {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: clamp(10px, 2vw, 14px);
 }
 
 .recent-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 10px 12px;
+  justify-content: center;
+  gap: clamp(6px, 1.5vw, 10px);
+  padding: clamp(10px, 2vw, 14px);
   background: linear-gradient(135deg, rgba(192, 145, 16, 0.1), rgba(216, 92, 64, 0.1));
   border: 1.5px solid rgba(192, 145, 16, 0.3);
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  min-height: 80px;
+  width: 100%;
+  word-break: break-word;
 }
 
 .recent-item:hover {
@@ -2168,31 +2199,121 @@ button:hover {
   box-shadow: 0 4px 12px rgba(192, 145, 16, 0.2);
 }
 
+.recent-item:active {
+  transform: translateY(0);
+}
+
 .recent-nis {
   font-weight: 700;
   color: #2b2b2b;
-  font-size: 13px;
+  font-size: clamp(12px, 2.5vw, 14px);
+  text-align: center;
 }
 
 .recent-class {
-  font-size: 11px;
+  font-size: clamp(10px, 2vw, 12px);
   color: #666;
   font-weight: 600;
+  text-align: center;
+}
+
+/* ===== TABLET ===== */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .login-card {
+    max-width: 480px;
+  }
+
+  .recent-list {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  }
 }
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .login-hero {
-    padding: 60px 20px 120px;
+    padding: clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px) clamp(100px, 20vh, 150px);
   }
 
   .login-hero-text {
-    margin-top: 80px;
+    margin-top: clamp(60px, 12vw, 100px);
+  }
+
+  .login-hero-text h1 {
+    font-size: clamp(40px, 12vw, 80px);
+  }
+
+  .login-form-section {
+    padding: 0 clamp(12px, 4vw, 16px) clamp(40px, 8vh, 80px);
+    margin-top: clamp(-50px, -8vh, -60px);
   }
 
   .login-card {
-    padding: 28px 22px;
-    border-radius: 22px;
+    max-width: 100%;
+    padding: clamp(22px, 6vw, 30px);
+    border-radius: 20px;
+  }
+
+  .login-card input,
+  .login-select {
+    min-height: 52px;
+    padding: clamp(14px, 4vw, 16px);
+    margin-bottom: clamp(12px, 3vw, 16px);
+    font-size: clamp(15px, 3vw, 16px);
+  }
+
+  .login-btn {
+    min-height: 52px;
+    font-size: clamp(15px, 3vw, 16px);
+  }
+
+  .recent-list {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  }
+
+  .recent-item {
+    min-height: 75px;
+  }
+}
+
+/* ===== SMALL MOBILE ===== */
+@media (max-width: 480px) {
+  .login-hero {
+    padding: clamp(40px, 10vw, 60px) 12px clamp(80px, 15vh, 120px);
+  }
+
+  .login-hero-text h1 {
+    font-size: clamp(32px, 10vw, 60px);
+  }
+
+  .login-hero-text p {
+    font-size: clamp(14px, 2.5vw, 16px);
+  }
+
+  .login-form-section {
+    padding: 0 12px clamp(30px, 6vh, 60px);
+  }
+
+  .login-card {
+    padding: 20px;
+  }
+
+  .login-card input,
+  .login-select {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .login-btn {
+    min-height: 48px;
+  }
+
+  .recent-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .recent-item {
+    min-height: 70px;
   }
 }
 /* ================= PILIH PASLON ================= */
