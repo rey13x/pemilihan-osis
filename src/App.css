@@ -32,14 +32,19 @@ html * {
 .ad-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999999 !important;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  pointer-events: auto !important;
 }
 
 .ad-popup {
@@ -48,9 +53,13 @@ html * {
   border-radius: 24px;
   padding: 20px;
   max-width: 320px;
-  width: 100%;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: popupSlideIn 0.4s ease-out;
+  pointer-events: auto;
+  z-index: 9999999 !important;
 }
 
 .ad-close {
@@ -129,12 +138,16 @@ html * {
 @media (max-width: 768px) {
   .ad-overlay {
     display: flex !important;
-    z-index: 99999 !important;
+    z-index: 9999999 !important;
+    position: fixed !important;
+    inset: 0 !important;
   }
 
   .ad-popup {
-    max-width: 90%;
+    max-width: 85%;
+    width: 85%;
     padding: 16px;
+    z-index: 9999999 !important;
   }
 
   .ad-close {
