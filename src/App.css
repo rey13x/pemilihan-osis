@@ -804,7 +804,7 @@ html * {
 /* WRAPPER UTAMA */
 .steps-section {
   position: relative;
-  margin-top: 80px;
+  margin-top: 0px;
   margin-bottom: 24px;
   text-align: center;
   width: 100%;
@@ -1079,7 +1079,7 @@ html * {
 /* WRAPPER UTAMA */
 .steps-section {
   position: relative;
-  margin-top: 80px;
+  margin-top: 0px;
   margin-bottom: 24px;
   text-align: center;
   width: 100%;
