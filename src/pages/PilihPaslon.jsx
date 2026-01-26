@@ -51,6 +51,8 @@ export default function PilihPaslon() {
   const [expandedPaslon, setExpandedPaslon] = useState(null);
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [notification, setNotification] = useState({
     isOpen: false,
     type: "error",

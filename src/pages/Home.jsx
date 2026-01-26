@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [votes, setVotes] = useState({
     paslon1: 0,
     paslon2: 0,
@@ -13,6 +15,7 @@ export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
+  const [totalVotes, setTotalVotes] = useState(0);
 
   const kandidatList = [
     {
