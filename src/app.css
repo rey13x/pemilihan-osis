@@ -2139,7 +2139,7 @@ button:hover {
 }
 
 .back-btn {
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
+  background: linear-gradient(135deg, #479133 0%, #3a7028 100%);
   color: white;
   border: none;
   padding: clamp(10px, 2vw, 12px) clamp(16px, 4vw, 22px);
@@ -2148,13 +2148,13 @@ button:hover {
   font-size: clamp(12px, 2vw, 14px);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.2);
+  box-shadow: 0 4px 12px rgba(71, 145, 51, 0.2);
 }
 
 .back-btn:hover {
-  background: linear-gradient(135deg, #704d2c 0%, #5a3820 100%);
+  background: linear-gradient(135deg, #3a7028 0%, #2e5820 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(139, 111, 71, 0.3);
+  box-shadow: 0 6px 16px rgba(71, 145, 51, 0.3);
 }
 
 .login-hero-text {
@@ -2167,7 +2167,7 @@ button:hover {
 }
 
 .login-hero-text .badge {
-  background: rgba(139, 111, 71, 0.3);
+  background: rgba(71, 145, 51, 0.3);
   display: inline-block;
   padding: clamp(10px, 2vw, 12px) clamp(24px, 5vw, 36px);
   border-radius: 18px;
@@ -2260,8 +2260,8 @@ button:hover {
 .login-card input:focus,
 .login-select:focus {
   outline: none;
-  border-color: #8B6F47;
-  box-shadow: 0 2px 8px rgba(139, 111, 71, 0.1);
+  border-color: #479133;
+  box-shadow: 0 2px 8px rgba(71, 145, 51, 0.1);
   background: #ffffff;
 }
 
@@ -2272,7 +2272,7 @@ button:hover {
 }
 
 .login-select {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B6F47' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23479133' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 20px;
@@ -2297,7 +2297,7 @@ button:hover {
 .login-btn {
   width: 100%;
   padding: clamp(15px, 3vw, 18px);
-  background: #8B6F47;
+  background: #479133;
   color: white;
   border: none;
   border-radius: 14px;
@@ -2314,7 +2314,7 @@ button:hover {
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 111, 71, 0.3);
+  box-shadow: 0 6px 20px rgba(71, 145, 51, 0.3);
 }
 
 .login-btn:active {
@@ -2589,13 +2589,13 @@ button:hover {
 .loading-icon {
   font-size: 48px;
   font-weight: 900;
-  color: #4caf50;
+  color: #479133;
 }
 
 .confirmation-loading p {
   font-size: 20px;
   font-weight: 700;
-  color: #4caf50;
+  color: #479133;
   margin: 0;
 }
 
@@ -2631,21 +2631,57 @@ button:hover {
 }
 
 .btn-confirm {
-  background: #8B6F47;
+  background: #479133;
   color: white;
-  border: 2px solid #8B6F47;
+  border: 2px solid #479133;
 }
 
 .btn-confirm:hover:not(:disabled) {
-  background: #704d2c;
-  border-color: #704d2c;
+  background: #3a7028;
+  border-color: #3a7028;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
+  box-shadow: 0 4px 12px rgba(71, 145, 51, 0.3);
 }
 
 .btn-confirm:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* 3 Dot Loading Animation */
+.dot-loader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #479133;
+  animation: dotBounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ==================================================
@@ -3317,6 +3353,62 @@ button:hover {
   overflow-x: hidden;
 }
 
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+/* Desktop: Side by side layout */
+@media (min-width: 1024px) {
+  .success-container {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 60px;
+  }
+
+  .success-photo-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-message-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left !important;
+  }
+
+  .success-message-section h2 {
+    font-size: 48px !important;
+    margin-bottom: 24px;
+  }
+
+  .candidate-name {
+    font-size: 32px !important;
+  }
+
+  .candidate-paslon {
+    font-size: 20px;
+    color: #666;
+  }
+
+  .countdown-display {
+    justify-content: flex-start;
+  }
+
+  .btn-back-home {
+    align-self: flex-start;
+  }
+}
+
 .success-photo-section {
   display: flex;
   align-items: center;
@@ -3334,6 +3426,24 @@ button:hover {
   max-width: 100%;
 }
 
+.fire-emoji-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.fire-emoji {
+  position: absolute;
+  font-size: 48px;
+  opacity: 0;
+  transform-origin: center;
+}
+
 .success-photo {
   width: 100%;
   height: 100%;
@@ -3342,21 +3452,21 @@ button:hover {
   object-fit: cover;
 }
 
-.paslon-number {
+.paslon-checkmark {
   position: absolute;
   top: 16px;
   right: 16px;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #8B6F47 0%, #d85c40 100%);
+  background: linear-gradient(135deg, #479133 0%, #3a7028 100%);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 900;
-  box-shadow: 0 8px 24px rgba(192, 145, 16, 0.4);
+  box-shadow: 0 8px 24px rgba(71, 145, 51, 0.4);
   border: 4px solid white;
 }
 
@@ -3387,15 +3497,15 @@ button:hover {
 .candidate-name {
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 700;
-  color: #8B6F47;
-  margin: 0 0 12px 0;
+  color: #479133;
+  margin: 0 0 8px 0;
 }
 
-.redirect-text {
-  font-size: 14px;
+.candidate-paslon {
+  font-size: clamp(14px, 3vw, 18px);
   color: #666;
-  margin: 0 0 24px 0;
   font-weight: 500;
+  margin: 0 0 24px 0;
 }
 
 .countdown-display {
@@ -3404,12 +3514,13 @@ button:hover {
   justify-content: center;
   gap: 12px;
   margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 .countdown-number {
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 900;
-  color: #8B6F47;
+  color: #479133;
   line-height: 1;
 }
 
@@ -3422,9 +3533,9 @@ button:hover {
 .btn-back-home {
   margin-top: 32px;
   padding: 14px 32px;
-  background: #8B6F47;
+  background: #479133;
   color: #ffffff;
-  border: 2px solid #8B6F47;
+  border: 2px solid #479133;
   border-radius: 12px;
   font-size: 16px;
   font-weight: 700;
@@ -3433,8 +3544,8 @@ button:hover {
 }
 
 .btn-back-home:hover {
-  background: #6B5635;
-  border-color: #6B5635;
+  background: #3a7028;
+  border-color: #3a7028;
   transform: translateY(-2px);
 }
 

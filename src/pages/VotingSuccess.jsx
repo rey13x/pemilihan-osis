@@ -6,79 +6,19 @@ import Navbar from "../components/Navbar";
 export default function VotingSuccess() {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60);
-  const containerRef = useRef(null);
-  const audioContextRef = useRef(null);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const messageRef = useRef(null);
 
-  const kandidatList = [
-    {
-      id: "paslon1",
-      nomor: "1",
-      nama: "Anies Baswedan",
-      wakil: "Muhaimin Iskandar",
-      foto: "/paslon/paslon-1.png",
-    },
-    {
-      id: "paslon2",
-      nomor: "2",
-      nama: "Prabowo Subianto",
-      wakil: "Gibran Rakabuming",
-      foto: "/paslon/paslon-2.png",
-    },
-    {
-      id: "paslon3",
-      nomor: "3",
-      nama: "Ganjar Pranowo",
-      wakil: "Mahfud MD",
-      foto: "/paslon/paslon-3.png",
-    },
-    {
-      id: "paslon4",
-      nomor: "4",
-      nama: "Hari Poernomo",
-      wakil: "Sjaiful Bahri",
-      foto: "/paslon/paslon-4.png",
-    },
-  ];
-
-  const selectedPaslon = localStorage.getItem("selectedVote");
-  const candidate = kandidatList.find((k) => k.id === selectedPaslon);
-
-  // Play sound effects
-  const playBeep = (frequency = 800, duration = 100) => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    const ctx = audioContextRef.current;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    osc.frequency.value = frequency;
-    osc.type = "sine";
-    
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration / 1000);
-    
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + duration / 1000);
-  };
-
-  // Jreg sound on mount
-  useEffect(() => {
-    playBeep(600, 80); // jreg sound
-  }, []);
+  const selectedCandidateStr = localStorage.getItem("selectedCandidate");
+  const candidate = selectedCandidateStr ? JSON.parse(selectedCandidateStr) : null;
 
   // After 5 seconds, show message and auto scroll
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMessage(true);
-      playBeep(1000, 150); // kring sound
       setTimeout(() => {
-        if (containerRef.current) {
-          containerRef.current.scrollIntoView({ behavior: "smooth" });
+        if (messageRef.current) {
+          messageRef.current.scrollIntoView({ behavior: "smooth" });
         }
       }, 300);
     }, 5000);
@@ -108,64 +48,95 @@ export default function VotingSuccess() {
     <div className="voting-success-page">
       <Navbar />
       
-      <motion.div
-        className="success-photo-section"
-        initial={{ opacity: 0, scale: 2 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-      >
-        <div className="photo-container">
-          {/* Photo animation only on entry */}
-          <motion.img
-            src={candidate?.foto}
-            alt={candidate?.nama}
-            className="success-photo"
-            animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
-            transition={{ 
-              duration: 5, 
-              times: [0, 0.3, 0.5, 0.7, 0.85, 1],
-              ease: "easeInOut"
-            }}
-          />
-          
-          {/* Number badge with animation only on entry */}
-          <motion.div
-            className="paslon-number"
-            animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
-            transition={{ 
-              duration: 5, 
-              times: [0, 0.3, 0.5, 0.7, 0.85, 1],
-              ease: "easeInOut"
-            }}
-          >
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Message Section */}
-      <motion.div
-        ref={containerRef}
-        className="success-message-section"
-        initial={{ opacity: 0, y: 20 }}
-        animate={showMessage ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-      >
-        <h2>Yeay! Pilihanmu Tersimpan</h2>
-        <p className="candidate-name">{candidate?.nama}</p>
-        <p className="redirect-text">Pilihanmu berhasil dicatat</p>
-
-        <div className="countdown-display">
-          <span className="countdown-number">{timeLeft}</span>
-          <span className="countdown-text">detik</span>
-        </div>
-
-        <button
-          className="btn-back-home"
-          onClick={() => navigate("/")}
+      <div className="success-container">
+        {/* Photo Section - Left on Desktop */}
+        <motion.div
+          className="success-photo-section"
+          initial={{ opacity: 0, scale: 2 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
         >
-          ← Kembali ke Beranda
-        </button>
-      </motion.div>
+          <div className="photo-container">
+            {/* Photo animation - bouncy effect with fire emojis behind */}
+            <div className="fire-emoji-container">
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="fire-emoji"
+                  animate={{
+                    y: [0, -100, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: i * 0.2,
+                    repeat: Infinity,
+                  }}
+                  style={{
+                    left: `${(i * 360) / 8}deg`,
+                  }}
+                >
+                  🔥
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Photo with bouncy animation */}
+            <motion.img
+              src={candidate?.foto}
+              alt={candidate?.nama}
+              className="success-photo"
+              animate={{ 
+                scale: [1, 1.1, 0.95, 1.05, 1],
+                y: [0, -20, 10, -5, 0]
+              }}
+              transition={{ 
+                duration: 5, 
+                times: [0, 0.2, 0.4, 0.7, 1],
+                ease: "easeInOut"
+              }}
+            />
+            
+            {/* Checkmark badge */}
+            <motion.div
+              className="paslon-checkmark"
+              animate={{ scale: [1, 1.1, 0.95, 1.05, 1] }}
+              transition={{ 
+                duration: 5, 
+                times: [0, 0.2, 0.4, 0.7, 1],
+                ease: "easeInOut"
+              }}
+            >
+              ✓
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Message Section - Right on Desktop */}
+        <motion.div
+          ref={messageRef}
+          className="success-message-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={showMessage ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+        >
+          <h2>Pilihanmu Disimpan</h2>
+          <p className="candidate-name">{candidate?.nama}</p>
+          <p className="candidate-paslon">Paslon #{candidate?.nomor}</p>
+
+          <div className="countdown-display">
+            <span className="countdown-number">{timeLeft}</span>
+            <span className="countdown-text">detik</span>
+          </div>
+
+          <button
+            className="btn-back-home"
+            onClick={() => navigate("/")}
+          >
+            ← Kembali ke Beranda
+          </button>
+        </motion.div>
+      </div>
     </div>
   );
 }

@@ -33,14 +33,11 @@ const ConfirmationPopup = ({ isOpen, onConfirm, onCancel, selectedCandidate, isL
 
         {isLoading ? (
           <div className="confirmation-loading">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 0.6, repeat: Infinity }}
-              className="loading-icon"
-            >
-              ✓
-            </motion.div>
-            <p>Yeay!</p>
+            <div className="dot-loader">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
           </div>
         ) : (
           <>
@@ -138,8 +135,10 @@ export default function PilihPaslon() {
         votedAt: new Date(),
       });
 
-      // Simpan selected paslon untuk halaman success
+      // Simpan selected paslon dan data lengkap untuk halaman success
       localStorage.setItem("selectedVote", selectedPaslon);
+      const candidateData = kandidatList.find(k => k.id === selectedPaslon);
+      localStorage.setItem("selectedCandidate", JSON.stringify(candidateData));
       
       // Update currentUser dengan sudahVote = true
       const currentUserStr = localStorage.getItem("currentUser");
