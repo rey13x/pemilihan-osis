@@ -140,6 +140,14 @@ export default function PilihPaslon() {
 
       // Simpan selected paslon untuk halaman success
       localStorage.setItem("selectedVote", selectedPaslon);
+      
+      // Update currentUser dengan sudahVote = true
+      const currentUserStr = localStorage.getItem("currentUser");
+      if (currentUserStr) {
+        const updatedUser = JSON.parse(currentUserStr);
+        updatedUser.sudahVote = true;
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      }
 
       // Show loading for 2 seconds
       setTimeout(() => {

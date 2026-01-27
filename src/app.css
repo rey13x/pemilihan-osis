@@ -3576,7 +3576,7 @@ button:hover {
 }
 
 .voting-btn {
-  background: #c09110;
+  background: #8B6F47;
   color: white;
   border: none;
   padding: 16px 40px;
@@ -3589,9 +3589,9 @@ button:hover {
 }
 
 .voting-btn:hover {
-  background: #d85c40;
+  background: #704d2c;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 106, 75, 0.3);
+  box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
 }
 
 .voting-btn:active {
@@ -4987,7 +4987,7 @@ button:hover {
 }
 
 .obrolan-send-btn {
-  background: #4caf50;
+  background: #8B6F47;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -4999,9 +4999,9 @@ button:hover {
 }
 
 .obrolan-send-btn:hover:not(:disabled) {
-  background: #45a049;
+  background: #704d2c;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
 }
 
 .obrolan-send-btn:disabled {
@@ -5018,7 +5018,7 @@ button:hover {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
   color: white;
   padding: 14px 24px;
   border-radius: 12px;
@@ -5026,7 +5026,7 @@ button:hover {
   font-size: 14px;
   font-weight: 600;
   max-width: 90%;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
 }
 
 .obrolan-full {

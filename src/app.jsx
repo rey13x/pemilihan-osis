@@ -139,8 +139,8 @@ export default function App() {
         <Route
           path="/pilih-paslon"
           element={
-            <ProtectedRoute>
-              <PilihPaslon /> {/* Halaman PilihPaslon */}
+            <ProtectedRoute allowIfVoted={false}>
+              <PilihPaslon /> {/* Halaman PilihPaslon - tidak bisa diakses setelah voting */}
             </ProtectedRoute>
           }
         />

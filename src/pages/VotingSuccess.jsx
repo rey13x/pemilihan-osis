@@ -138,7 +138,6 @@ export default function VotingSuccess() {
               ease: "easeInOut"
             }}
           >
-            {candidate?.nomor}+
           </motion.div>
         </div>
       </motion.div>
