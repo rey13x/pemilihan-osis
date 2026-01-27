@@ -636,7 +636,7 @@ html * {
   --marquee-logo-mobile: 36px;
 
   --marquee-gap: 12px;
-  --marquee-speed: 30s;
+  --marquee-speed: 15s;
 }
 
 /* ===== WRAPPER ===== */
