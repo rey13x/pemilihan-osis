@@ -145,10 +145,23 @@ export default function Login() {
       }, 1500);
     } catch (err) {
       console.error("Login error:", err);
+      console.error("Error code:", err.code);
+      console.error("Error message:", err.message);
+      console.error("Full error:", err);
+      
+      let errorMessage = "Terjadi kesalahan. Coba lagi!";
+      if (err.code === "permission-denied") {
+        errorMessage = "Akses ditolak - cek Firebase rules";
+      } else if (err.code === "unavailable") {
+        errorMessage = "Firebase tidak terhubung";
+      } else if (err.code === "unauthenticated") {
+        errorMessage = "Autentikasi diperlukan";
+      }
+      
       setNotification({
         isOpen: true,
         type: "error",
-        message: "Terjadi kesalahan. Coba lagi!",
+        message: errorMessage,
       });
       setIsLoading(false);
     }

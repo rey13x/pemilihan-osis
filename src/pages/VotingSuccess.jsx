@@ -72,30 +72,6 @@ export default function VotingSuccess() {
             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             <div className="photo-container">
-              {/* Photo animation - bouncy effect with fire emojis behind */}
-              <div className="fire-emoji-container">
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="fire-emoji"
-                    animate={{
-                      y: [0, -100, 0],
-                      opacity: [0, 1, 0],
-                    }}
-                    transition={{
-                      duration: 2,
-                      delay: i * 0.2,
-                      repeat: Infinity,
-                    }}
-                    style={{
-                      left: `${(i * 360) / 8}deg`,
-                    }}
-                  >
-                    🔥
-                  </motion.div>
-                ))}
-              </div>
-
               {/* Photo with bouncy animation */}
               <motion.img
                 src={candidate?.foto}

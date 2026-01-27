@@ -1,4 +1,4 @@
-﻿/* ==================================================
+/* ==================================================
    RESET & BASE (WAJIB DI PALING ATAS)
 ================================================== */
 * {
@@ -65,17 +65,17 @@ html * {
   width: 200px;
   height: 6px;
   background: #f0f0f0;
-  border-radius: 999px;
+  border-radius: 50px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .loading-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #8B6F47, #6B5635);
+  background: linear-gradient(90deg, #BF841D, #8B5C1F);
   width: 0%;
   transition: width 0.3s ease;
-  border-radius: 999px;
+  border-radius: 50px;
 }
 
 .loading-text {
@@ -110,7 +110,7 @@ html * {
 .ad-popup {
   position: relative;
   background: transparent;
-  border-radius: 24px;
+  border-radius: 50px;
   padding: 20px;
   max-width: 320px;
   width: 90%;
@@ -128,7 +128,7 @@ html * {
   right: 12px;
   width: 44px;
   height: 44px;
-  border: 2px solid #8B6F47;
+  border: 2px solid #BF841D;
   background: rgba(139, 111, 71, 0.2);
   border-radius: 50%;
   font-size: 20px;
@@ -150,20 +150,20 @@ html * {
 .ad-image-container {
   margin-bottom: 16px;
   overflow: hidden;
-  border-radius: 30px;
+  border-radius: 50px;
 }
 
 .ad-image {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 30px;
+  border-radius: 50px;
 }
 
 .ad-button {
   width: 100%;
   padding: 14px 24px;
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   border: none;
   border-radius: 50px;
@@ -177,7 +177,7 @@ html * {
 }
 
 .ad-button:hover {
-  background: #704d2c;
+  background: #8B5C1F;
   transform: translateY(-2px);
 }
 
@@ -242,7 +242,7 @@ html * {
 
 .progress-popup {
   background: #ffffff;
-  border-radius: 24px;
+  border-radius: 50px;
   padding: 40px 32px;
   max-width: 360px;
   width: 100%;
@@ -262,10 +262,10 @@ html * {
 .progress-button {
   width: 100%;
   padding: 14px 24px;
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: 50px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -273,7 +273,7 @@ html * {
 }
 
 .progress-button:hover {
-  background: #e85a3b;
+  background: #BF841D;
   transform: translateY(-2px);
 }
 
@@ -317,124 +317,197 @@ html * {
   flex: 1;
 }
 
-/* Desktop Navigation Menu */
-.navbar-menu {
+/* Visi & Misi Buttons */
+.navbar-buttons {
   display: flex;
-  gap: 24px;
+  gap: 12px;
   align-items: center;
 }
 
-.navbar-item {
-  color: #2b2b2b;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 8px 0;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.navbar-item:hover {
-  color: #8B6F47;
-  border-bottom-color: #8B6F47;
-}
-
-/* Hamburger Button */
-.hamburger-btn {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
+.navbar-btn {
+  background: linear-gradient(135deg, #BF841D 0%, #D4A574 100%);
+  color: white;
   border: none;
-  cursor: pointer;
-  padding: 8px;
-  position: relative;
-  width: 30px;
-  height: 24px;
-}
-
-.hamburger-btn span {
-  width: 24px;
-  height: 2px;
-  background: #2b2b2b;
-  transition: all 0.3s ease;
-  display: block;
-  position: absolute;
-}
-
-.hamburger-btn span:nth-child(1) {
-  top: 0;
-}
-
-.hamburger-btn span:nth-child(2) {
-  top: 11px;
-}
-
-.hamburger-btn span:nth-child(3) {
-  bottom: 0;
-}
-
-.hamburger-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
-}
-
-.hamburger-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
-}
-
-/* Mobile Menu */
-.navbar-mobile-menu {
-  display: none;
-  position: fixed;
-  top: 60px;
-  right: 0;
-  width: 100%;
-  background: white;
-  flex-direction: column;
-  gap: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 12px 0;
-  z-index: 9998;
-}
-
-.mobile-menu-item {
-  color: #2b2b2b;
-  text-decoration: none;
-  font-weight: 600;
+  border-radius: 50px;
+  padding: 10px 24px;
   font-size: 14px;
-  padding: 12px 20px;
-  border-left: 4px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
   transition: all 0.3s ease;
-  display: block;
+  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  letter-spacing: 0.5px;
+  animation: goldenGlow 4s ease-in-out infinite;
 }
 
-.mobile-menu-item:hover {
-  background: #f5f5f5;
-  color: #8B6F47;
-  border-left-color: #8B6F47;
-  padding-left: 24px;
+.navbar-btn:hover {
+  transform: scale(1.05);
+}
+
+.navbar-btn:active {
+  transform: scale(0.98);
+}
+
+/* Golden glow animation - elegan & mahal */
+@keyframes goldenGlow {
+  0% {
+    box-shadow: 0 0 0px rgba(212, 168, 116, 0),
+                0 0 0px rgba(255, 215, 0, 0);
+  }
+  25% {
+    box-shadow: 0 0 10px rgba(212, 168, 116, 0.3),
+                0 0 15px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(212, 168, 116, 0.6),
+                0 0 30px rgba(255, 215, 0, 0.3),
+                0 0 40px rgba(191, 132, 29, 0.2);
+  }
+  75% {
+    box-shadow: 0 0 10px rgba(212, 168, 116, 0.3),
+                0 0 15px rgba(255, 215, 0, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(212, 168, 116, 0),
+                0 0 0px rgba(255, 215, 0, 0);
+  }
+}
+
+/* Logo blink animation - kiri (illustration.png) miring ke kanan */
+.visi-misi-btn::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  width: 20px;
+  height: 20px;
+  background-image: url('./assets/illustration.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: blinkLogo 3s ease-in-out infinite, tiltRight 3s ease-in-out infinite;
+}
+
+/* Logo blink animation - kanan (smk2.png) miring ke kiri */
+.visi-misi-btn::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  width: 20px;
+  height: 20px;
+  background-image: url('./assets/smk2.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: blinkLogo 3s ease-in-out infinite 1.5s, tiltLeft 3s ease-in-out infinite 1.5s;
+}
+
+/* Logo scale animation - besar kecil */
+@keyframes blinkLogo {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* Tilt ke kanan untuk illustration.png */
+@keyframes tiltRight {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.3) rotate(15deg);
+  }
+  50% {
+    transform: scale(1) rotate(15deg);
+  }
+  75% {
+    transform: scale(1.2) rotate(15deg);
+  }
+  100% {
+    transform: scale(0) rotate(0deg);
+  }
+}
+
+/* Tilt ke kiri untuk smk2.png */
+@keyframes tiltLeft {
+  0% {
+    transform: scale(0) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.3) rotate(-15deg);
+  }
+  50% {
+    transform: scale(1) rotate(-15deg);
+  }
+  75% {
+    transform: scale(1.2) rotate(-15deg);
+  }
+  100% {
+    transform: scale(0) rotate(0deg);
+  }
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .navbar-menu {
-    display: none;
+  .navbar-buttons {
+    gap: 8px;
   }
 
-  .hamburger-btn {
-    display: flex;
+  .navbar-btn {
+    padding: 8px 20px;
+    font-size: 13px;
   }
 
-  .navbar-mobile-menu {
-    display: flex;
+  .visi-misi-btn::before {
+    left: -16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .visi-misi-btn::after {
+    right: -16px;
+    width: 16px;
+    height: 16px;
   }
 
   .navbar-inner {
     position: relative;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .visi-misi-btn::before {
+    left: -12px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .visi-misi-btn::after {
+    right: -12px;
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -474,7 +547,7 @@ html * {
 }
 
 /* ==================================================
-   HERO LEFT â€” LOGO OSIS
+   HERO LEFT — LOGO OSIS
 ================================================== */
 .hero-left {
   display: flex;
@@ -519,7 +592,7 @@ html * {
 }
 
 /* ==================================================
-   HERO RIGHT â€” COUNTER
+   HERO RIGHT — COUNTER
 ================================================== */
 .hero-right {
   display: flex;
@@ -536,7 +609,7 @@ html * {
   font-size: clamp(64px, 9vw, 120px);
   font-weight: 900;
   line-height: 0.9;
-  color: #8B6F47;
+  color: #BF841D;
 }
 
 .counter-small {
@@ -544,7 +617,7 @@ html * {
   font-weight: 900;
   margin-bottom: -4px;
   margin-left: 8px;
-  color: #8B6F47;
+  color: #BF841D;
   align-self: flex-end;
 }
 
@@ -613,7 +686,7 @@ html * {
 .word {
   height: 1.15em;
   font-weight: 800;
-  color: #8B6F47;
+  color: #BF841D;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -643,12 +716,12 @@ html * {
   100% { transform: translateY(0); }
 }
 /* ==================================================
-   HERO CARD â€” TEKS DESKRIPSI (CENTER & AMAN)
+   HERO CARD — TEKS DESKRIPSI (CENTER & AMAN)
 ================================================== */
 .hero-card {
   margin-top: 28px;
   background: #ffffff;
-  border-radius: 40px;
+  border-radius: 50px;
   padding: clamp(24px, 5vw, 48px);
   animation: fadeUp 0.6s ease forwards;
 }
@@ -690,7 +763,7 @@ html * {
 }
 
 /* ==================================================
-   MARQUEE OSIS â€” FINAL CENTER VERSION
+   MARQUEE OSIS — FINAL CENTER VERSION
 ================================================== */
 
 /* ===== CONTROL PANEL ===== */
@@ -715,7 +788,7 @@ html * {
   padding: 18px 0;
 
   background: #f4f7f8;
-  border-radius: 999px;
+  border-radius: 50px;
   touch-action: none;
 }
 
@@ -810,12 +883,12 @@ html * {
 }
 
 /* ==================================================
-   HERO VIDEO â€” CLEAN & PREMIUM
+   HERO VIDEO — CLEAN & PREMIUM
 ================================================== */
 .hero-video {
   position: relative;
   width: 100%;
-  border-radius: 22px;
+  border-radius: 50px;
   overflow: hidden;
   background: #000;
 }
@@ -824,7 +897,7 @@ html * {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 22px;
+  border-radius: 50px;
   object-fit: cover;
 }
 
@@ -852,12 +925,12 @@ html * {
   color: #fff;
   font-size: 12px;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 50px;
   backdrop-filter: blur(6px);
   pointer-events: none;
 }
 /* ==================================================
-   POPUP INSTAGRAM â€” FINAL & ISOLATED
+   POPUP INSTAGRAM — FINAL & ISOLATED
 ================================================== */
 
 /* ===== OVERLAY ===== */
@@ -883,7 +956,7 @@ html * {
   max-width: 295px;
 
   background: #ffffff;
-  border-radius: 22px;
+  border-radius: 50px;
   padding: 26px 22px;
 
   text-align: center;
@@ -916,13 +989,13 @@ html * {
   width: 100%;
   padding: 14px 12px;
 
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-weight: 800;
   font-size: 15px;
   text-decoration: none;
 
-  border-radius: 16px;
+  border-radius: 50px;
   margin-bottom: 12px;
 
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -956,7 +1029,7 @@ html * {
 }
 
 /* ==================================================
-   STEPS SECTION â€” FORCE SHOW (FINAL FIX)
+   STEPS SECTION — FORCE SHOW (FINAL FIX)
 ================================================== */
 
 /* WRAPPER UTAMA */
@@ -984,11 +1057,11 @@ html * {
   margin-top: 6px;
   display: inline-block;
   padding: 6px 26px;
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
-  border-radius: 999px;
+  border-radius: 50px;
 }
 
 /* ==================================================
@@ -1011,12 +1084,12 @@ html * {
 }
 
 /* ==================================================
-   STEPS CARD â€” MIRING TANPA SHADOW
+   STEPS CARD — MIRING TANPA SHADOW
 ================================================== */
 
 .steps-card {
   background: #ffffff;
-  border-radius: 28px;
+  border-radius: 50px;
   padding: 34px 30px;
   border: 1px solid #f0f0f0;
   text-align: center;
@@ -1041,7 +1114,7 @@ html * {
   height: 46px;
   margin: 0 auto 18px;
 
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-weight: 900;
   font-size: 18px;
@@ -1074,7 +1147,7 @@ html * {
 }
 
 /* ==================================================
-   RESPONSIVE â€” TABLET
+   RESPONSIVE — TABLET
 ================================================== */
 @media (max-width: 1024px) {
   .steps-card-grid {
@@ -1084,7 +1157,7 @@ html * {
 }
 
 /* ==================================================
-   RESPONSIVE â€” MOBILE (PORTRAIT)
+   RESPONSIVE — MOBILE (PORTRAIT)
 ================================================== */
 @media (max-width: 768px) {
 
@@ -1104,7 +1177,7 @@ html * {
 
   .steps-card {
     padding: 26px 22px;
-    border-radius: 22px;
+    border-radius: 50px;
   }
 
   .steps-image {
@@ -1121,7 +1194,7 @@ html * {
 }
 
 /* ==================================================
-   SAFETY â€” ANTI HILANG / ANTI KETIMPA
+   SAFETY — ANTI HILANG / ANTI KETIMPA
 ================================================== */
 .steps-section,
 .steps-card-section,
@@ -1132,7 +1205,7 @@ html * {
   transform: none;
 }
 /* ==================================================
-   POPUP INSTAGRAM â€” FINAL & ISOLATED
+   POPUP INSTAGRAM — FINAL & ISOLATED
 ================================================== */
 
 /* ===== OVERLAY ===== */
@@ -1158,7 +1231,7 @@ html * {
   max-width: 295px;
 
   background: #ffffff;
-  border-radius: 22px;
+  border-radius: 50px;
   padding: 26px 22px;
 
   text-align: center;
@@ -1191,13 +1264,13 @@ html * {
   width: 100%;
   padding: 14px 12px;
 
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-weight: 800;
   font-size: 15px;
   text-decoration: none;
 
-  border-radius: 16px;
+  border-radius: 50px;
   margin-bottom: 12px;
 
   transition: transform 0.2s ease, opacity 0.2s ease;
@@ -1231,7 +1304,7 @@ html * {
 }
 
 /* ==================================================
-   STEPS SECTION â€” FORCE SHOW (FINAL FIX)
+   STEPS SECTION — FORCE SHOW (FINAL FIX)
 ================================================== */
 
 /* WRAPPER UTAMA */
@@ -1259,11 +1332,11 @@ html * {
   margin-top: 6px;
   display: inline-block;
   padding: 6px 26px;
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 800;
-  border-radius: 999px;
+  border-radius: 50px;
 }
 
 /* ==================================================
@@ -1286,12 +1359,12 @@ html * {
 }
 
 /* ==================================================
-   STEPS CARD â€” MIRING TANPA SHADOW
+   STEPS CARD — MIRING TANPA SHADOW
 ================================================== */
 
 .steps-card {
   background: #ffffff;
-  border-radius: 28px;
+  border-radius: 50px;
   padding: 34px 30px;
   border: 1px solid #f0f0f0;
   text-align: center;
@@ -1316,7 +1389,7 @@ html * {
   height: 46px;
   margin: 0 auto 18px;
 
-  background: #8B6F47;
+  background: #BF841D;
   color: #ffffff;
   font-weight: 900;
   font-size: 18px;
@@ -1349,7 +1422,7 @@ html * {
 }
 
 /* ==================================================
-   RESPONSIVE â€” TABLET
+   RESPONSIVE — TABLET
 ================================================== */
 @media (max-width: 1024px) {
   .steps-card-grid {
@@ -1359,7 +1432,7 @@ html * {
 }
 
 /* ==================================================
-   RESPONSIVE â€” MOBILE (PORTRAIT)
+   RESPONSIVE — MOBILE (PORTRAIT)
 ================================================== */
 @media (max-width: 768px) {
 
@@ -1379,7 +1452,7 @@ html * {
 
   .steps-card {
     padding: 26px 22px;
-    border-radius: 22px;
+    border-radius: 50px;
   }
 
   .steps-image {
@@ -1396,7 +1469,7 @@ html * {
 }
 
 /* ==================================================
-   SAFETY â€” ANTI HILANG / ANTI KETIMPA
+   SAFETY — ANTI HILANG / ANTI KETIMPA
 ================================================== */
 .steps-section,
 .steps-card-section,
@@ -1415,7 +1488,7 @@ html * {
 }
 
 .simulasi-card {
-  background: #8B6F47;
+  background: #BF841D;
   border-radius: clamp(24px, 5vw, 40px);
   padding: clamp(24px, 5vw, 48px);
   display: grid;
@@ -1444,25 +1517,53 @@ html * {
 
 /* BUTTON */
 .simulasi-btn {
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: #fff;
   border: none;
   padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 30px);
   font-size: clamp(14px, 3vw, 16px);
   font-weight: 700;
-  border-radius: 999px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(139, 111, 71, 0.3);
+  position: relative;
+  animation: goldenGlow 4s ease-in-out infinite;
 }
 
 .simulasi-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(139, 111, 71, 0.4);
 }
 
 .simulasi-btn:active {
   transform: translateY(-1px);
+}
+
+/* Logo blink animation - kiri (illustration.png) miring ke kanan */
+.simulasi-btn::before {
+  content: "";
+  position: absolute;
+  left: -24px;
+  width: 20px;
+  height: 20px;
+  background-image: url('./assets/illustration.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: blinkLogo 3s ease-in-out infinite, tiltRight 3s ease-in-out infinite;
+}
+
+/* Logo blink animation - kanan (smk2.png) miring ke kiri */
+.simulasi-btn::after {
+  content: "";
+  position: absolute;
+  right: -24px;
+  width: 20px;
+  height: 20px;
+  background-image: url('./assets/smk2.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: blinkLogo 3s ease-in-out infinite 1.5s, tiltLeft 3s ease-in-out infinite 1.5s;
 }
 
 /* IMAGE */
@@ -1512,7 +1613,7 @@ html * {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #8B6F47;
+  accent-color: #BF841D;
 }
 
 .results-display {
@@ -1540,7 +1641,7 @@ html * {
 }
 
 .results-info strong {
-  color: #8B6F47;
+  color: #BF841D;
   font-weight: 800;
 }
 
@@ -1566,10 +1667,10 @@ html * {
 }
 
 .bar-count {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: 50px;
   font-weight: 800;
   font-size: 13px;
 }
@@ -1578,18 +1679,18 @@ html * {
   width: 100%;
   height: 24px;
   background: #f0f0f0;
-  border-radius: 12px;
+  border-radius: 50px;
   overflow: hidden;
 }
 
 .bar-fill {
   height: 100%;
-  border-radius: 12px;
+  border-radius: 50px;
   transition: width 0.5s ease;
 }
 
 .bar-fill.paslon1 {
-  background: linear-gradient(90deg, #8B6F47 0%, #704d2c 100%);
+  background: linear-gradient(90deg, #BF841D 0%, #8B5C1F 100%);
 }
 
 .bar-fill.paslon2 {
@@ -1605,7 +1706,7 @@ html * {
   text-align: right;
   font-weight: 700;
   font-size: clamp(12px, 2vw, 14px);
-  color: #8B6F47;
+  color: #BF841D;
 }
 
 .no-results {
@@ -1632,143 +1733,6 @@ html * {
   margin-bottom: 40px;
 }
 
-.carousel-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-}
-
-.carousel-container {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding: 20px 0;
-  flex: 1;
-}
-
-.carousel-container::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-arrow {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #8B6F47;
-  background: white;
-  color: #8B6F47;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-arrow:hover {
-  background: #8B6F47;
-  color: white;
-  transform: scale(1.1);
-}
-
-.carousel-arrow.left {
-  position: absolute;
-  left: 0;
-  z-index: 10;
-}
-
-.carousel-arrow.right {
-  position: absolute;
-  right: 0;
-  z-index: 10;
-}
-
-.carousel-card {
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  min-width: 280px;
-  transition: all 0.3s ease;
-}
-
-.carousel-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-}
-
-.carousel-card-header {
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  position: relative;
-}
-
-.carousel-number {
-  font-size: 48px;
-  font-weight: 900;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.carousel-card-body {
-  padding: 24px 16px;
-  text-align: center;
-}
-
-.carousel-card-body h3 {
-  font-size: 14px;
-  font-weight: 800;
-  color: #2b2b2b;
-  margin-bottom: 20px;
-  line-height: 1.3;
-}
-
-.carousel-vote-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-.vote-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 900;
-  font-size: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.vote-percentage {
-  font-size: 18px;
-  font-weight: 800;
-  color: #8B6F47;
-}
-
-.carousel-total {
-  text-align: center;
-  margin-top: 32px;
-  font-size: 16px;
-  color: #666;
-  font-weight: 600;
-}
-
-.total-votes {
-  color: #8B6F47;
-  font-weight: 800;
-}
-
 /* ================================================
    VOTING RESULTS FILTER & BARS
 ================================================== */
@@ -1789,7 +1753,7 @@ html * {
 
 .filter-select {
   padding: 10px 16px;
-  border: 2px solid #8B6F47;
+  border: 2px solid #BF841D;
   border-radius: 8px;
   font-size: clamp(13px, 2.5vw, 15px);
   font-weight: 600;
@@ -1825,10 +1789,10 @@ html * {
 }
 
 .stat-box {
-  background: linear-gradient(135deg, #8B6F47 0%, #d4a81f 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #d4a81f 100%);
   color: white;
   padding: 16px 32px;
-  border-radius: 12px;
+  border-radius: 50px;
   text-align: center;
   min-width: 200px;
   box-shadow: 0 4px 12px rgba(192, 145, 16, 0.2);
@@ -1879,7 +1843,7 @@ html * {
 .result-nomor {
   font-size: 24px;
   font-weight: 900;
-  color: #8B6F47;
+  color: #BF841D;
   min-width: 32px;
   text-align: center;
 }
@@ -1901,7 +1865,7 @@ html * {
 .result-votes {
   font-size: clamp(16px, 3vw, 18px);
   font-weight: 900;
-  color: #8B6F47;
+  color: #BF841D;
   min-width: 32px;
 }
 
@@ -2040,31 +2004,6 @@ html * {
 
 
 @media (max-width: 768px) {
-  .carousel-arrow {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .carousel-card {
-    min-width: 240px;
-  }
-
-  .carousel-number {
-    font-size: 36px;
-  }
-
-  .carousel-card-body h3 {
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-
-  .vote-circle {
-    width: 50px;
-    height: 50px;
-    font-size: 18px;
-  }
-
   .voting-results-carousel-section {
     margin-top: 60px;
     margin-bottom: 60px;
@@ -2104,21 +2043,21 @@ html * {
 input {
   padding: 10px;
   margin: 10px;
-  border-radius: 5px;
+  border-radius: 50px;
   border: none;
 }
 
 button {
   padding: 10px 20px;
-  background-color: #8B6F47;
+  background-color: #BF841D;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #e06c4e;
+  background-color: #BF841D;
 }
 
 .error {
@@ -2139,22 +2078,22 @@ button:hover {
 }
 
 .back-btn {
-  background: linear-gradient(135deg, #479133 0%, #3a7028 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #3a7028 100%);
   color: white;
   border: none;
   padding: clamp(10px, 2vw, 12px) clamp(16px, 4vw, 22px);
-  border-radius: 999px;
+  border-radius: 50px;
   font-weight: 700;
   font-size: clamp(12px, 2vw, 14px);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(71, 145, 51, 0.2);
+  box-shadow: 0 4px 12px rgba(191, 132, 29, 0.2);
 }
 
 .back-btn:hover {
   background: linear-gradient(135deg, #3a7028 0%, #2e5820 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(71, 145, 51, 0.3);
+  box-shadow: 0 6px 16px rgba(191, 132, 29, 0.3);
 }
 
 .login-hero-text {
@@ -2167,7 +2106,7 @@ button:hover {
 }
 
 .login-hero-text .badge {
-  background: rgba(71, 145, 51, 0.3);
+  background: rgba(191, 132, 29, 0.3);
   display: inline-block;
   padding: clamp(10px, 2vw, 12px) clamp(24px, 5vw, 36px);
   border-radius: 18px;
@@ -2208,7 +2147,7 @@ button:hover {
   max-width: 480px;
   margin: 0;
   padding: clamp(28px, 6vw, 40px);
-  border-radius: 24px;
+  border-radius: 50px;
   box-shadow: none;
   display: flex;
   flex-direction: column;
@@ -2233,7 +2172,7 @@ button:hover {
 .login-select {
   width: 100%;
   padding: clamp(14px, 3vw, 16px);
-  border-radius: 14px;
+  border-radius: 50px;
   border: 1px solid #e0e0e0;
   background: #ffffff;
   font-size: clamp(15px, 2.5vw, 16px);
@@ -2260,8 +2199,8 @@ button:hover {
 .login-card input:focus,
 .login-select:focus {
   outline: none;
-  border-color: #479133;
-  box-shadow: 0 2px 8px rgba(71, 145, 51, 0.1);
+  border-color: #BF841D;
+  box-shadow: 0 2px 8px rgba(191, 132, 29, 0.1);
   background: #ffffff;
 }
 
@@ -2297,7 +2236,7 @@ button:hover {
 .login-btn {
   width: 100%;
   padding: clamp(15px, 3vw, 18px);
-  background: #479133;
+  background: #BF841D;
   color: white;
   border: none;
   border-radius: 14px;
@@ -2314,7 +2253,6 @@ button:hover {
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(71, 145, 51, 0.3);
 }
 
 .login-btn:active {
@@ -2359,13 +2297,13 @@ button:hover {
     min-height: 54px;
     padding: clamp(14px, 4vw, 18px);
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 50px;
   }
 
   .login-btn {
     min-height: 54px;
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 50px;
     margin-top: 8px;
   }
 }
@@ -2387,7 +2325,7 @@ button:hover {
 
   .login-card {
     padding: 24px 16px;
-    border-radius: 16px;
+    border-radius: 50px;
     background: #ffffff;
   }
 
@@ -2395,13 +2333,13 @@ button:hover {
   .login-select {
     min-height: 56px;
     font-size: 16px;
-    border-radius: 12px;
+    border-radius: 50px;
     padding: 16px 12px;
   }
 
   .login-btn {
     min-height: 56px;
-    border-radius: 12px;
+    border-radius: 50px;
     font-size: 16px;
   }
 }
@@ -2422,7 +2360,7 @@ button:hover {
 .kandidat-card {
   background-color: #fff;
   padding: clamp(18px, 4vw, 24px);
-  border-radius: 12px;
+  border-radius: 50px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s;
@@ -2457,7 +2395,7 @@ button:hover {
 }
 
 .kandidat-card.selected {
-  border: 2px solid #8B6F47;
+  border: 2px solid #BF841D;
 }
 
 .kandidat-info {
@@ -2479,13 +2417,13 @@ button:hover {
 
 .bullet-point {
   font-size: clamp(24px, 6vw, 30px);
-  color: #8B6F47;
+  color: #BF841D;
   text-align: center;
   margin-top: 10px;
 }
 
 .pilih-btn {
-  background-color: #8B6F47;
+  background-color: #BF841D;
   color: white;
   font-size: clamp(14px, 3vw, 18px);
   padding: clamp(8px, 2vw, 12px) clamp(20px, 5vw, 30px);
@@ -2501,12 +2439,12 @@ button:hover {
 }
 
 .pilih-btn.active:hover {
-  background-color: #e06c4e;
+  background-color: #BF841D;
 }
 
 /* Back Button */
 .back-button {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -2546,7 +2484,7 @@ button:hover {
 
 .confirmation-popup {
   background: white;
-  border-radius: 16px;
+  border-radius: 50px;
   padding: 32px 28px;
   max-width: 380px;
   width: 100%;
@@ -2589,13 +2527,13 @@ button:hover {
 .loading-icon {
   font-size: 48px;
   font-weight: 900;
-  color: #479133;
+  color: #BF841D;
 }
 
 .confirmation-loading p {
   font-size: 20px;
   font-weight: 700;
-  color: #479133;
+  color: #BF841D;
   margin: 0;
 }
 
@@ -2631,16 +2569,16 @@ button:hover {
 }
 
 .btn-confirm {
-  background: #479133;
+  background: #BF841D;
   color: white;
-  border: 2px solid #479133;
+  border: 2px solid #BF841D;
 }
 
 .btn-confirm:hover:not(:disabled) {
-  background: #3a7028;
-  border-color: #3a7028;
+  background: #9b6816;
+  border-color: #9b6816;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(71, 145, 51, 0.3);
+  box-shadow: 0 4px 12px rgba(191, 132, 29, 0.3);
 }
 
 .btn-confirm:disabled {
@@ -2661,7 +2599,7 @@ button:hover {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #479133;
+  background: #BF841D;
   animation: dotBounce 1.4s infinite ease-in-out both;
 }
 
@@ -2771,7 +2709,7 @@ button:hover {
 }
 
 .gallery-card.selected {
-  border: 2px solid #8B6F47;
+  border: 2px solid #BF841D;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
@@ -2799,7 +2737,7 @@ button:hover {
   position: absolute;
   font-size: 24px;
   font-weight: 900;
-  color: #8B6F47;
+  color: #BF841D;
   opacity: 0.15;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   letter-spacing: 2px;
@@ -2830,7 +2768,7 @@ button:hover {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border-radius: 50%;
   font-weight: 900;
@@ -2884,7 +2822,7 @@ button:hover {
 
 .card-partai {
   font-size: 10px;
-  color: #8B6F47;
+  color: #BF841D;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -2893,7 +2831,7 @@ button:hover {
 }
 
 .card-button {
-  background: #4a4a4a;
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: white;
   border: none;
   padding: 8px 12px;
@@ -2905,12 +2843,13 @@ button:hover {
   width: 100%;
   margin-top: 4px;
   flex-shrink: 0;
+  position: relative;
+  animation: goldenGlow 4s ease-in-out infinite;
 }
 
 .card-button:hover {
-  background: #333333;
+  background: linear-gradient(135deg, #D4A574 0%, #BF841D 100%);
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .card-button:active {
@@ -2930,7 +2869,7 @@ button:hover {
 }
 
 .gallery-footer strong {
-  color: #8B6F47;
+  color: #BF841D;
   font-weight: 700;
 }
 
@@ -2944,9 +2883,9 @@ button:hover {
 .selected-photo {
   width: 120px;
   height: 120px;
-  border-radius: 12px;
+  border-radius: 50px;
   object-fit: cover;
-  border: 3px solid #8B6F47;
+  border: 3px solid #BF841D;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -2962,7 +2901,7 @@ button:hover {
 .time-remaining {
   font-size: 14px;
   font-weight: 700;
-  color: #8B6F47;
+  color: #BF841D;
   transition: all 0.3s ease;
 }
 
@@ -3031,7 +2970,7 @@ button:hover {
 .countdown-number {
   font-size: 64px;
   font-weight: 900;
-  color: #8B6F47;
+  color: #BF841D;
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -3039,11 +2978,11 @@ button:hover {
   align-items: center;
   justify-content: center;
   background: rgba(192, 145, 16, 0.1);
-  border: 3px solid #8B6F47;
+  border: 3px solid #BF841D;
 }
 
 .confused-close-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 14px 32px;
@@ -3427,47 +3366,37 @@ button:hover {
 }
 
 .fire-emoji-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  display: none;
 }
 
 .fire-emoji {
-  position: absolute;
-  font-size: 48px;
-  opacity: 0;
-  transform-origin: center;
+  display: none;
 }
 
-.success-photo {
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  object-fit: cover;
+.fire-emoji-left {
+  display: none;
+}
+
+.fire-emoji-right {
+  display: none;
 }
 
 .paslon-checkmark {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #479133 0%, #3a7028 100%);
+  top: 12px;
+  right: 12px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 56px;
+  font-size: 24px;
   font-weight: 900;
-  box-shadow: 0 8px 24px rgba(71, 145, 51, 0.4);
-  border: 4px solid white;
+  box-shadow: 0 8px 24px rgba(191, 132, 29, 0.4);
+  border: 2px solid white;
 }
 
 .bouncy-photo {
@@ -3497,7 +3426,7 @@ button:hover {
 .candidate-name {
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 700;
-  color: #479133;
+  color: #BF841D;
   margin: 0 0 8px 0;
 }
 
@@ -3520,7 +3449,7 @@ button:hover {
 .countdown-number {
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 900;
-  color: #479133;
+  color: #BF841D;
   line-height: 1;
 }
 
@@ -3533,10 +3462,10 @@ button:hover {
 .btn-back-home {
   margin-top: 32px;
   padding: 14px 32px;
-  background: #479133;
+  background: #BF841D;
   color: #ffffff;
-  border: 2px solid #479133;
-  border-radius: 12px;
+  border: 2px solid #BF841D;
+  border-radius: 50px;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -3544,8 +3473,8 @@ button:hover {
 }
 
 .btn-back-home:hover {
-  background: #3a7028;
-  border-color: #3a7028;
+  background: #9b6816;
+  border-color: #9b6816;
   transform: translateY(-2px);
 }
 
@@ -3577,11 +3506,11 @@ button:hover {
 }
 
 .success-back-btn {
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: white;
   padding: 14px 32px;
   border: none;
-  border-radius: 12px;
+  border-radius: 50px;
   font-size: clamp(14px, 2.5vw, 16px);
   font-weight: 700;
   cursor: pointer;
@@ -3715,7 +3644,7 @@ button:hover {
 .result-item {
   background: white;
   padding: clamp(16px, 4vw, 24px);
-  border-radius: 12px;
+  border-radius: 50px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -3739,7 +3668,7 @@ button:hover {
   justify-content: center;
   width: 48px;
   height: 48px;
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   font-size: 20px;
   font-weight: 800;
@@ -3763,7 +3692,7 @@ button:hover {
 .votes {
   font-size: 20px;
   font-weight: 800;
-  color: #8B6F47;
+  color: #BF841D;
 }
 
 .percentage {
@@ -3793,8 +3722,8 @@ button:hover {
 .winner-banner {
   margin-top: 40px;
   padding: 32px;
-  background: linear-gradient(135deg, #8B6F47 0%, #e05a3b 100%);
-  border-radius: 16px;
+  background: linear-gradient(135deg, #BF841D 0%, #BF841D 100%);
+  border-radius: 50px;
   color: white;
   text-align: center;
   box-shadow: 0 12px 40px rgba(239, 106, 75, 0.3);
@@ -3834,20 +3763,20 @@ button:hover {
 }
 
 .voting-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 16px 40px;
   font-size: 16px;
   font-weight: 700;
-  border-radius: 12px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 200px;
 }
 
 .voting-btn:hover {
-  background: #704d2c;
+  background: #8B5C1F;
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
 }
@@ -3910,7 +3839,7 @@ button:hover {
 
   .winner-banner {
     padding: clamp(16px, 4vw, 24px);
-    border-radius: 12px;
+    border-radius: 50px;
   }
 
   .winner-banner h2 {
@@ -4016,12 +3945,12 @@ button:hover {
 
 .dashboard-login-card input:focus {
   outline: none;
-  border-color: #8B6F47;
+  border-color: #BF841D;
   box-shadow: 0 0 0 3px rgba(239, 106, 75, 0.1);
 }
 
 .dashboard-login-card button[type="submit"] {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 14px 20px;
@@ -4085,7 +4014,7 @@ button:hover {
 }
 
 .logout-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -4136,7 +4065,7 @@ button:hover {
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #8B6F47;
+  accent-color: #BF841D;
 }
 
 .dashboard-filter label {
@@ -4157,7 +4086,7 @@ button:hover {
 
 .dashboard-filter select:focus {
   outline: none;
-  border-color: #8B6F47;
+  border-color: #BF841D;
 }
 
 /* Stats */
@@ -4167,6 +4096,316 @@ button:hover {
   gap: 20px;
   max-width: 900px;
   margin: 0 auto;
+}
+
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 100%;
+  margin: 0 auto 40px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.paslon-card {
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  text-align: center;
+  border: 3px solid #e8e8e8;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.paslon-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Foto Container */
+.paslon-photo-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.paslon-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.paslon-card:hover .paslon-photo {
+  transform: scale(1.05);
+}
+
+/* Header dengan Nomor */
+.paslon-header {
+  padding: 16px;
+  border-top: 4px solid;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  position: relative;
+}
+
+.paslon-nomor {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.paslon-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2b2b2b;
+  margin: 8px 0 0 0;
+}
+
+/* Vote Info */
+.paslon-vote-info {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+}
+
+.vote-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paslon-vote {
+  font-size: 36px;
+  font-weight: 900;
+  margin: 0 0 4px 0;
+  line-height: 1;
+}
+
+.paslon-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.percentage-display {
+  text-align: center;
+}
+
+.paslon-percentage {
+  font-size: 28px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Progress Bar */
+.paslon-progress {
+  height: 6px;
+  background: #e8e8e8;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+/* Color variants */
+.paslon-card.paslon-1 {
+  border-color: #FF6B6B;
+}
+
+.paslon-card.paslon-1 .paslon-header {
+  border-top-color: #FF6B6B;
+  background: rgba(255, 107, 107, 0.03);
+}
+
+.paslon-card.paslon-1 .paslon-nomor {
+  background-color: #FF6B6B;
+}
+
+.paslon-card.paslon-1 .paslon-vote {
+  color: #FF6B6B;
+}
+
+.paslon-card.paslon-2 {
+  border-color: #4ECDC4;
+}
+
+.paslon-card.paslon-2 .paslon-header {
+  border-top-color: #4ECDC4;
+  background: rgba(78, 205, 196, 0.03);
+}
+
+.paslon-card.paslon-2 .paslon-nomor {
+  background-color: #4ECDC4;
+}
+
+.paslon-card.paslon-2 .paslon-vote {
+  color: #4ECDC4;
+}
+
+.paslon-card.paslon-3 {
+  border-color: #FFD93D;
+}
+
+.paslon-card.paslon-3 .paslon-header {
+  border-top-color: #FFD93D;
+  background: rgba(255, 217, 61, 0.03);
+}
+
+.paslon-card.paslon-3 .paslon-nomor {
+  background-color: #FFD93D;
+}
+
+.paslon-card.paslon-3 .paslon-vote {
+  color: #FFD93D;
+}
+
+.paslon-card.paslon-4 {
+  border-color: #A8E6CF;
+}
+
+.paslon-card.paslon-4 .paslon-header {
+  border-top-color: #A8E6CF;
+  background: rgba(168, 230, 207, 0.03);
+}
+
+.paslon-card.paslon-4 .paslon-nomor {
+  background-color: #A8E6CF;
+  color: #333;
+}
+
+.paslon-card.paslon-4 .paslon-vote {
+  color: #A8E6CF;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .paslon-photo-container {
+    height: 160px;
+  }
+
+  .paslon-header {
+    padding: 12px;
+  }
+
+  .paslon-title {
+    font-size: 15px;
+  }
+
+  .paslon-vote {
+    font-size: 28px;
+  }
+
+  .paslon-percentage {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0 12px;
+  }
+
+  .paslon-photo-container {
+    height: 140px;
+  }
+
+  .paslon-header {
+    padding: 10px;
+  }
+
+  .paslon-nomor {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .paslon-title {
+    font-size: 14px;
+  }
+
+  .paslon-vote-info {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .paslon-vote {
+    font-size: 24px;
+  }
+
+  .paslon-percentage {
+    font-size: 20px;
+  }
+
+  .paslon-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 8px;
+  }
+
+  .paslon-photo-container {
+    height: 120px;
+  }
+
+  .paslon-header {
+    padding: 8px;
+  }
+
+  .paslon-nomor {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .paslon-title {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .paslon-vote-info {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .paslon-vote {
+    font-size: 20px;
+  }
+
+  .paslon-percentage {
+    font-size: 18px;
+  }
 }
 
 .stat-card {
@@ -4191,7 +4430,7 @@ button:hover {
 }
 
 .stat-color-1 {
-  color: #8B6F47 !important;
+  color: #BF841D !important;
 }
 
 .stat-color-2 {
@@ -4338,7 +4577,7 @@ button:hover {
 
 .total-cell {
   font-weight: 700;
-  color: #8B6F47;
+  color: #BF841D;
 }
 
 @media (max-width: 768px) {
@@ -4460,7 +4699,7 @@ button:hover {
 
 .vote-paslon1 {
   background: rgba(255, 107, 107, 0.15);
-  color: #8B6F47;
+  color: #BF841D;
 }
 
 .vote-paslon2 {
@@ -4508,7 +4747,7 @@ button:hover {
 
 /* Dashboard Top Bar */
 .dashboard-topbar {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   padding: 24px 40px;
   border-radius: 8px;
@@ -4596,12 +4835,12 @@ button:hover {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #8B6F47;
+  accent-color: #BF841D;
 }
 
 .dashboard-voting-results .results-display {
   background: white;
-  border-radius: 12px;
+  border-radius: 50px;
   padding: 24px;
   border: 1px solid #e8e8e8;
 }
@@ -4650,7 +4889,7 @@ button:hover {
   position: relative;
   height: 24px;
   background: #f0f0f0;
-  border-radius: 12px;
+  border-radius: 50px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -4658,12 +4897,12 @@ button:hover {
 
 .dashboard-voting-results .bar-fill {
   height: 100%;
-  border-radius: 12px;
+  border-radius: 50px;
   transition: width 0.4s ease;
 }
 
 .dashboard-voting-results .bar-fill.paslon1 {
-  background: linear-gradient(90deg, #8B6F47 0%, #A0835B 100%);
+  background: linear-gradient(90deg, #BF841D 0%, #A0835B 100%);
 }
 
 .dashboard-voting-results .bar-fill.paslon2 {
@@ -4696,10 +4935,10 @@ button:hover {
 .simulasi-page {
   min-height: 100vh;
   background: #ffffff;
-  padding: clamp(24px, 6vw, 40px) clamp(16px, 4vw, 20px);
+  padding: clamp(20px, 4vw, 30px) clamp(16px, 4vw, 20px);
   display: flex;
   flex-direction: column;
-  gap: clamp(24px, 6vw, 40px);
+  gap: clamp(16px, 4vw, 24px);
   width: 100%;
   overflow-x: hidden;
 }
@@ -4709,7 +4948,7 @@ button:hover {
 }
 
 .simulasi-hero .back-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -4730,7 +4969,8 @@ button:hover {
 }
 
 .simulasi-hero h1 {
-  font-size: clamp(32px, 6vw, 48px);
+  font-size: 0;
+  display: none;
   font-weight: 900;
   color: #2b2b2b;
   margin-bottom: 12px;
@@ -4763,7 +5003,7 @@ button:hover {
 .simulasi-together-image {
   width: 100%;
   height: auto;
-  border-radius: 16px;
+  border-radius: 50px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
@@ -4777,10 +5017,12 @@ button:hover {
 
 .simulasi-info-image {
   width: 100%;
+  max-width: 450px;
   height: auto;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  object-fit: cover;
+  border-radius: 50px;
+  object-fit: scale-down;
+  margin: 0 auto;
+  display: block;
 }
 
 /* Steps Section */
@@ -4795,7 +5037,7 @@ button:hover {
 .step-item {
   background: white;
   padding: 32px 24px;
-  border-radius: 16px;
+  border-radius: 50px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: all 0.3s ease;
@@ -4837,7 +5079,7 @@ button:hover {
 .content-card {
   background: transparent;
   padding: 32px;
-  border-radius: 16px;
+  border-radius: 50px;
 }
 
 .content-card h2 {
@@ -4854,18 +5096,18 @@ button:hover {
 }
 
 .content-card li {
-  font-size: 15px;
+  font-size: 18px;
   color: #666;
-  padding-left: 28px;
+  padding-left: 32px;
   position: relative;
   line-height: 1.6;
 }
 
 .content-card li::before {
-  content: "âœ“";
+  content: "✓";
   position: absolute;
   left: 0;
-  color: #8B6F47;
+  color: #BF841D;
   font-weight: 900;
   font-size: 16px;
 }
@@ -4878,16 +5120,18 @@ button:hover {
 }
 
 .simulasi-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 18px 48px;
   font-size: 18px;
   font-weight: 700;
-  border-radius: 12px;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 220px;
+  animation: goldenGlow 4s ease-in-out infinite;
+  position: relative;
 }
 
 .simulasi-btn:hover {
@@ -4944,6 +5188,19 @@ button:hover {
     font-size: 15px;
     min-width: 160px;
     width: auto;
+    animation: goldenGlow 4s ease-in-out infinite;
+  }
+
+  .simulasi-btn::before {
+    left: -18px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .simulasi-btn::after {
+    right: -18px;
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -4981,7 +5238,7 @@ button:hover {
 }
 
 .obrolan-header .back-button:hover {
-  color: #8B6F47;
+  color: #BF841D;
   transform: translateX(-4px);
 }
 
@@ -5038,7 +5295,7 @@ button:hover {
 }
 
 .obrolan-messages::-webkit-scrollbar-thumb {
-  background: #4caf50;
+  background: #BF841D;
   border-radius: 10px;
 }
 
@@ -5047,15 +5304,15 @@ button:hover {
   gap: 12px;
   padding: 16px;
   background: #f9f9f9;
-  border-radius: 12px;
+  border-radius: 50px;
   border: 1px solid #e8e8e8;
   transition: all 0.2s ease;
 }
 
 .message-item:hover {
   background: #ffffff;
-  border-color: #4caf50;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+  border-color: #BF841D;
+  box-shadow: 0 2px 8px rgba(191, 132, 29, 0.1);
 }
 
 .message-item.locked {
@@ -5068,7 +5325,7 @@ button:hover {
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: white;
   border-radius: 50%;
   font-weight: 700;
@@ -5169,7 +5426,7 @@ button:hover {
 .edit-input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #4caf50;
+  border: 1px solid #BF841D;
   border-radius: 8px;
   font-family: inherit;
   font-size: 14px;
@@ -5184,7 +5441,7 @@ button:hover {
 
 .edit-input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  box-shadow: 0 0 0 3px rgba(191, 132, 29, 0.1);
 }
 
 .edit-buttons {
@@ -5206,12 +5463,12 @@ button:hover {
 }
 
 .edit-save-btn {
-  background: #4caf50;
+  background: #BF841D;
   color: white;
 }
 
 .edit-save-btn:hover:not(:disabled) {
-  background: #45a049;
+  background: #8B5C1F;
 }
 
 .edit-save-btn:disabled {
@@ -5229,8 +5486,8 @@ button:hover {
 }
 
 .user-message {
-  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08), rgba(69, 160, 73, 0.08));
-  border: 1.5px solid rgba(76, 175, 80, 0.2);
+  background: linear-gradient(135deg, rgba(191, 132, 29, 0.08), rgba(69, 160, 73, 0.08));
+  border: 1.5px solid rgba(191, 132, 29, 0.2);
 }
 
 .no-messages {
@@ -5267,7 +5524,7 @@ button:hover {
   flex: 1;
   padding: 12px 16px;
   border: 1px solid #e8e8e8;
-  border-radius: 24px;
+  border-radius: 50px;
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -5275,8 +5532,8 @@ button:hover {
 
 .obrolan-input:focus {
   outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  border-color: #BF841D;
+  box-shadow: 0 0 0 3px rgba(191, 132, 29, 0.1);
 }
 
 .obrolan-input:disabled {
@@ -5285,11 +5542,11 @@ button:hover {
 }
 
 .obrolan-send-btn {
-  background: #8B6F47;
+  background: #BF841D;
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 24px;
+  border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -5297,7 +5554,7 @@ button:hover {
 }
 
 .obrolan-send-btn:hover:not(:disabled) {
-  background: #704d2c;
+  background: #8B5C1F;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
 }
@@ -5316,10 +5573,10 @@ button:hover {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg, #8B6F47 0%, #704d2c 100%);
+  background: linear-gradient(135deg, #BF841D 0%, #8B5C1F 100%);
   color: white;
   padding: 14px 24px;
-  border-radius: 12px;
+  border-radius: 50px;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
@@ -5335,7 +5592,7 @@ button:hover {
   background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
   color: white;
   padding: 14px 24px;
-  border-radius: 12px;
+  border-radius: 50px;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
@@ -5508,7 +5765,7 @@ button:hover {
   border-radius: 0;
   background: none;
   border: none;
-  color: #8B6F47;
+  color: #BF841D;
   font-size: 40px;
   cursor: pointer;
   box-shadow: none;

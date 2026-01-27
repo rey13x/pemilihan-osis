@@ -144,18 +144,6 @@ export default function Home() {
     return Math.round((voteCount / displayTotal) * 100);
   };
 
-  const handleScroll = (direction) => {
-    const container = document.getElementById("voting-carousel");
-    if (container) {
-      const scrollAmount = 320;
-      if (direction === "left") {
-        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-      } else {
-        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      }
-    }
-  };
-
   const displayData = getDisplayData();
   const displayTotal = getDisplayTotal();
 
@@ -278,42 +266,6 @@ export default function Home() {
                   </div>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Carousel Alternative View */}
-          <div className="voting-carousel-section">
-            <h3 className="carousel-title">Pratinjau Kartu</h3>
-            
-            <div className="carousel-wrapper">
-              <button className="carousel-arrow left" onClick={() => handleScroll("left")}>
-                ‹
-              </button>
-
-              <div className="carousel-container" id="voting-carousel">
-                {kandidatList.map((kandidat) => (
-                  <div key={kandidat.id} className="carousel-card">
-                    <div className="carousel-card-header" style={{ backgroundColor: kandidat.warna }}>
-                      <span className="carousel-number">{kandidat.nomor}</span>
-                    </div>
-                    <div className="carousel-card-body">
-                      <h3>{kandidat.nama}</h3>
-                      <div className="carousel-vote-info">
-                        <div className="vote-circle" style={{ backgroundColor: kandidat.warna }}>
-                          {displayData[kandidat.id]}
-                        </div>
-                        <div className="vote-percentage">
-                          {getPercentage(displayData[kandidat.id])}%
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <button className="carousel-arrow right" onClick={() => handleScroll("right")}>
-                ›
-              </button>
             </div>
           </div>
         </div>

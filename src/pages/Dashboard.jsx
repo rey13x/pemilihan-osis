@@ -6,16 +6,22 @@ import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import NotificationPopup from "../components/NotificationPopup";
 
+const Paslon = [
+  { id: "paslon1", nomor: "1", nama: "Paslon 1", foto: "/paslon/paslon-1.png", color: "#FF6B6B" },
+  { id: "paslon2", nomor: "2", nama: "Paslon 2", foto: "/paslon/paslon-2.png", color: "#4ECDC4" },
+  { id: "paslon3", nomor: "3", nama: "Paslon 3", foto: "/paslon/paslon-3.png", color: "#FFD93D" },
+  { id: "paslon4", nomor: "4", nama: "Paslon 4", foto: "/paslon/paslon-4.png", color: "#A8E6CF" },
+];
+
 const PieChart = ({ data, title }) => {
   const total = Object.values(data).reduce((a, b) => a + b, 0);
-
-
 
   const generatePieChart = () => {
     const kandidats = [
       { name: "Paslon 1", color: "#FF6B6B", value: data.paslon1 || 0 },
       { name: "Paslon 2", color: "#4ECDC4", value: data.paslon2 || 0 },
       { name: "Paslon 3", color: "#FFD93D", value: data.paslon3 || 0 },
+      { name: "Paslon 4", color: "#A8E6CF", value: data.paslon4 || 0 },
     ];
 
     let offset = 0;
@@ -81,7 +87,7 @@ const PieChart = ({ data, title }) => {
             <div className="legend-text">
               <p className="legend-name">{slice.name}</p>
               <p className="legend-value">
-                {slice.value} ({slice.percentage}%)
+                {slice.value} ({slice.percentage?.toFixed(1) || 0}%)
               </p>
             </div>
           </div>
@@ -171,7 +177,7 @@ export default function Dashboard() {
 
   // Admin credentials
   const ADMIN_USER = "admin";
-  const ADMIN_PASS = "osissmkn2";
+  const ADMIN_PASS = "adminosis26";
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -304,8 +310,8 @@ export default function Dashboard() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <h1>Dashboard Admin</h1>
-          <p>Masukkan kredensial untuk mengakses</p>
+          <h1>Admin</h1>
+          <p>Masukkan Akses Masuk Dashboard Admin</p>
 
           <form onSubmit={handleLogin}>
             <input
@@ -449,35 +455,68 @@ export default function Dashboard() {
 
       {/* Stats */}
       <motion.div
-        className="dashboard-stats"
+        className="dashboard-stats-grid"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="stat-card">
-          <h3>Total Vote</h3>
-          <p className="stat-value">{displayTotal}</p>
-        </div>
+        {/* Paslon Cards dengan Foto */}
+        {Paslon.map((paslon, idx) => {
+          const voteKey = paslon.id;
+          const votes = displayData[voteKey] || 0;
+          const percentage = displayTotal > 0 ? ((votes / displayTotal) * 100).toFixed(2) : 0;
+          
+          return (
+            <motion.div
+              key={paslon.id}
+              className={`paslon-card ${paslon.id}`}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Foto */}
+              <div className="paslon-photo-container">
+                <img 
+                  src={paslon.foto} 
+                  alt={paslon.nama}
+                  className="paslon-photo"
+                  onError={(e) => {
+                    e.target.src = "/paslon/paslon-placeholder.png";
+                  }}
+                />
+              </div>
 
-        <div className="stat-card">
-          <h3>Paslon 1</h3>
-          <p className="stat-value stat-color-1">{displayData.paslon1}</p>
-        </div>
+              {/* Header dengan Nomor */}
+              <div className="paslon-header" style={{ borderTopColor: paslon.color }}>
+                <span className="paslon-nomor" style={{ backgroundColor: paslon.color }}>
+                  {paslon.nomor}
+                </span>
+                <h3 className="paslon-title">{paslon.nama}</h3>
+              </div>
 
-        <div className="stat-card">
-          <h3>Paslon 2</h3>
-          <p className="stat-value stat-color-2">{displayData.paslon2}</p>
-        </div>
+              {/* Vote Info */}
+              <div className="paslon-vote-info">
+                <div className="vote-display">
+                  <p className="paslon-vote">{votes}</p>
+                  <p className="paslon-label">Suara</p>
+                </div>
+                <div className="percentage-display" style={{ color: paslon.color }}>
+                  <p className="paslon-percentage">{percentage}%</p>
+                </div>
+              </div>
 
-        <div className="stat-card">
-          <h3>Paslon 3</h3>
-          <p className="stat-value stat-color-3">{displayData.paslon3}</p>
-        </div>
-
-        <div className="stat-card">
-          <h3>Paslon 4</h3>
-          <p className="stat-value stat-color-4">{displayData.paslon4}</p>
-        </div>
+              {/* Progress Bar */}
+              <div className="paslon-progress">
+                <div 
+                  className="progress-fill" 
+                  style={{ 
+                    width: `${percentage}%`,
+                    backgroundColor: paslon.color
+                  }}
+                />
+              </div>
+            </motion.div>
+          );
+        })}
       </motion.div>
 
       {/* Chart */}

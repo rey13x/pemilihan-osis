@@ -1,0 +1,88 @@
+// FIREBASE FIRESTORE SECURITY RULES (UPDATED)
+// Add these rules to your Firebase Console under Firestore > Rules tab
+// 
+// Steps:
+// 1. Go to https://console.firebase.google.com
+// 2. Select your project: osis2026-ab377
+// 3. Go to Firestore Database > Rules
+// 4. Replace all content with the rules below
+// 5. Click "Publish"
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Users collection - allow read for login, allow write for voting
+    match /users/{userId} {
+      allow read: if true;  // Allow read without auth (for login check)
+      allow write: if true; // Allow write without auth (for voting)
+    }
+    
+    // Chats/Obrolan collection - for messaging
+    match /chats/{chatId}/{document=**} {
+      allow read: if true;    // Allow read messages
+      allow create: if true;  // Allow create messages
+      allow update: if true;  // Allow edit messages
+      allow delete: if true;  // Allow delete messages
+    }
+    
+    // Settings collection - allow read for visibility settings
+    match /settings/{document=**} {
+      allow read: if true;   // Allow read settings (voting visibility)
+      allow write: if true;  // Allow write settings (admin dashboard)
+    }
+    
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+/* IMPORTANT NOTES FOR THIS PROJECT:
+ * 
+ * ⚠️ SECURITY WARNING:
+ *    - These are PERMISSIVE rules for DEVELOPMENT/DEMO only
+ *    - For PRODUCTION, implement proper authentication:
+ *      1. Enable Firebase Authentication in Console
+ *      2. Use signInAnonymously() or custom auth
+ *      3. Add security checks in rules based on request.auth
+ * 
+ * ✅ CURRENT SETUP (NO AUTH - DEV MODE):
+ *    - No Firebase Authentication required
+ *    - Anyone can read/write to Firestore
+ *    - Suitable for school election voting app in closed network
+ * 
+ * 📝 COLLECTIONS USED:
+ *    - /users/{nis}          → Student data & voting status
+ *    - /chats/obrolan/messages/{messageId} → Chat messages
+ *    - /settings/votingVisibility → Admin settings
+ * 
+ * 🔄 DATA STRUCTURE:
+ *    Users:
+ *      {
+ *        nis: string,
+ *        nama: string,
+ *        kelas: string,
+ *        jurusan: string,
+ *        token: string,
+ *        sudahVote: boolean,
+ *        vote: string,
+ *        votedAt: timestamp
+ *      }
+ * 
+ *    Messages:
+ *      {
+ *        nis: string,
+ *        nama: string,
+ *        message: string,
+ *        timestamp: timestamp,
+ *        editedAt: timestamp (if edited)
+ *      }
+ * 
+ * 🚀 TO MAKE PRODUCTION READY:
+ *    1. Enable Auth in Firebase Console
+ *    2. Update firebase.js to use signInAnonymously()
+ *    3. Replace these rules with auth-based rules
+ *    4. Add rate limiting & validation in rules
+ */

@@ -44,7 +44,7 @@
 .loading-text {
   font-size: 32px;
   font-weight: 900;
-  color: #8B6F47;
+  color: #BF841D;
   display: block;
   margin-bottom: 8px;
 }
@@ -52,7 +52,7 @@
 .loading-dots {
   font-size: 28px;
   font-weight: 700;
-  color: #8B6F47;
+  color: #BF841D;
   display: block;
   letter-spacing: 4px;
 }
@@ -60,7 +60,7 @@
 /* Success Checkmark */
 .success-checkmark {
   font-size: 60px;
-  color: #8B6F47;
+  color: #BF841D;
   font-weight: bold;
   display: inline-block;
 }
@@ -68,7 +68,7 @@
 /* Error Icon */
 .error-icon {
   font-size: 48px;
-  color: #ff4444;
+  color: #BF841D;
   display: inline-block;
 }
 
