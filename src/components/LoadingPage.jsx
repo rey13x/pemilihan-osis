@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import illustration from "../assets/illustration.png";
 import smk2Logo from "../assets/smk2.png";
 
 export default function LoadingPage({ onLoadingComplete }) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const autoFlipRef = useRef(null);
 
   /* ===============================
      AUTO FLIP LOGO - 2 SECONDS TOTAL
