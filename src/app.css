@@ -119,12 +119,12 @@ html * {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border: none;
-  background: #f0f0f0;
+  background: rgba(139, 111, 71, 0.2);
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -134,30 +134,30 @@ html * {
 }
 
 .ad-close:hover {
-  background: #e0e0e0;
+  background: rgba(139, 111, 71, 0.3);
   color: #333;
 }
 
 .ad-image-container {
   margin-bottom: 16px;
   overflow: hidden;
-  border-radius: 0px;
+  border-radius: 50px;
 }
 
 .ad-image {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 0px;
+  border-radius: 50px;
 }
 
 .ad-button {
   width: 100%;
   padding: 14px 24px;
-  background: #c09110;
+  background: #8B6F47;
   color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: 50px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -168,7 +168,7 @@ html * {
 }
 
 .ad-button:hover {
-  background: #e85a3b;
+  background: #704d2c;
   transform: translateY(-2px);
 }
 
@@ -2254,7 +2254,7 @@ button:hover {
 .login-btn {
   width: 100%;
   padding: clamp(15px, 3vw, 18px);
-  background: linear-gradient(135deg, #c09110 0%, #8B6F47 100%);
+  background: #8B6F47;
   color: white;
   border: none;
   border-radius: 14px;
@@ -2262,7 +2262,7 @@ button:hover {
   font-size: clamp(15px, 2.5vw, 16px);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(139, 111, 71, 0.2);
+  box-shadow: none;
   min-height: 50px;
   letter-spacing: 0.5px;
   margin: 0;
@@ -2300,6 +2300,8 @@ button:hover {
 @media (max-width: 768px) {
   .login-form-section {
     padding: clamp(50px, 10vw, 80px) clamp(16px, 5vw, 24px) clamp(40px, 8vh, 80px);
+    background: #d4d4d4 !important;
+    min-height: 100vh;
   }
 
   .login-card {
@@ -3245,11 +3247,11 @@ button:hover {
   text-align: center;
   max-width: 500px;
   padding: 40px 20px;
-  background: rgba(240, 240, 240, 0.8);
+  background: transparent;
   border-radius: 20px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
 }
 
 .success-message-section h2 {
@@ -3263,7 +3265,7 @@ button:hover {
 .candidate-name {
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 700;
-  color: #4caf50;
+  color: #8B6F47;
   margin: 0 0 12px 0;
 }
 
@@ -3285,7 +3287,7 @@ button:hover {
 .countdown-number {
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 900;
-  color: #4caf50;
+  color: #8B6F47;
   line-height: 1;
 }
 
