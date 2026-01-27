@@ -11,6 +11,7 @@ export default function Login() {
   const [nis, setNis] = useState("");
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
+  const [industri, setIndustri] = useState("");
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,7 +48,16 @@ export default function Login() {
       setNotification({
         isOpen: true,
         type: "error",
-        message: "Pilih jurusan terlebih dahulu",
+        message: "Pilih jurusan/industri terlebih dahulu",
+      });
+      return false;
+    }
+
+    if (jurusan === "INDUSTRI" && !industri) {
+      setNotification({
+        isOpen: true,
+        type: "error",
+        message: "Pilih industri terlebih dahulu",
       });
       return false;
     }
@@ -86,9 +96,12 @@ export default function Login() {
 
       const user = snap.data();
 
+      // If INDUSTRI is selected, compare industri field. Otherwise compare jurusan
+      const jurusanToCheck = jurusan === "INDUSTRI" ? industri : jurusan;
+      
       if (
         user.kelas !== kelas ||
-        user.jurusan !== jurusan ||
+        user.jurusan !== jurusanToCheck ||
         user.token !== token.trim()
       ) {
         setNotification({
@@ -114,7 +127,13 @@ export default function Login() {
       // Simpan user info di localStorage
       localStorage.setItem(
         "currentUser",
-        JSON.stringify({ nis: nis.trim(), kelas, jurusan, nama: user.nama })
+        JSON.stringify({ 
+          nis: nis.trim(), 
+          kelas, 
+          jurusan: jurusan === "INDUSTRI" ? industri : jurusan, 
+          isIndustri: jurusan === "INDUSTRI",
+          nama: user.nama 
+        })
       );
 
       // Show loading popup
@@ -195,25 +214,32 @@ export default function Login() {
             </select>
             <select
               value={jurusan}
-              onChange={(e) => setJurusan(e.target.value)}
+              onChange={(e) => {
+                setJurusan(e.target.value);
+                setIndustri(""); // Reset industri when changing jurusan
+              }}
               className="login-select"
               disabled={isLoading}
             >
               <option value="">Pilih Jurusan/Industri</option>
               <option value="RPL">RPL</option>
               <option value="TKJ">TKJ</option>
-              <option value="TEI">TEI</option>
-              <option value="TBSM">TBSM</option>
               <option value="AKL">AKL</option>
               <option value="TET">TET</option>
-              <option value="Manufacturing">Manufacturing</option>
-              <option value="Retail">Retail</option>
-              <option value="Services">Services</option>
-              <option value="Technology">Technology</option>
-              <option value="Healthcare">Healthcare</option>
-              <option value="Finance">Finance</option>
-              <option value="Education">Education</option>
+              <option value="TEI">TEI</option>
+              <option value="TBSM">TBSM</option>
+              <option value="INDUSTRI">INDUSTRI</option>
             </select>
+            {jurusan === "INDUSTRI" && (
+              <input
+                type="text"
+                placeholder="Masukkan nama industri"
+                value={industri}
+                onChange={(e) => setIndustri(e.target.value)}
+                disabled={isLoading}
+                maxLength="50"
+              />
+            )}
             <input
               type="password"
               placeholder="Token"
@@ -227,7 +253,7 @@ export default function Login() {
             <button 
               className="login-btn" 
               type="submit"
-              disabled={isLoading || !nis || !kelas || !jurusan || !token}
+              disabled={isLoading || !nis || !kelas || !jurusan || !token || (jurusan === "INDUSTRI" && !industri)}
             >
               {isLoading ? "Loading..." : "Masuk!"}
             </button>
