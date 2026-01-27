@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -12,8 +13,25 @@ import AdvertisementPopup from "./components/AdvertisementPopup";
 import Dashboard from "./pages/Dashboard";
 import Obrolan from "./pages/Obrolan";
 import PageTransition from "./components/PageTransition";
+import LoadingPage from "./components/LoadingPage";
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Pre-load images and data
+    const preloadAssets = async () => {
+      // Simulate loading time or actual asset preloading
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setIsLoading(false);
+    };
+
+    preloadAssets();
+  }, []);
+
+  if (isLoading) {
+    return <LoadingPage onLoadingComplete={() => setIsLoading(false)} />;
+  }
   return (
     <BrowserRouter>
       <PageTransition />
