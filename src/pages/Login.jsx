@@ -11,7 +11,6 @@ export default function Login() {
   const [nis, setNis] = useState("");
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
-  const [industri, setIndustri] = useState("");
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,15 +52,6 @@ export default function Login() {
       return false;
     }
 
-    if (jurusan === "INDUSTRI" && !industri) {
-      setNotification({
-        isOpen: true,
-        type: "error",
-        message: "Pilih industri terlebih dahulu",
-      });
-      return false;
-    }
-
     if (!token || !token.trim()) {
       setNotification({
         isOpen: true,
@@ -96,12 +86,9 @@ export default function Login() {
 
       const user = snap.data();
 
-      // If INDUSTRI is selected, compare industri field. Otherwise compare jurusan
-      const jurusanToCheck = jurusan === "INDUSTRI" ? industri : jurusan;
-      
       if (
         user.kelas !== kelas ||
-        user.jurusan !== jurusanToCheck ||
+        user.jurusan !== jurusan ||
         user.token !== token.trim()
       ) {
         setNotification({
@@ -130,8 +117,7 @@ export default function Login() {
         JSON.stringify({ 
           nis: nis.trim(), 
           kelas, 
-          jurusan: jurusan === "INDUSTRI" ? industri : jurusan, 
-          isIndustri: jurusan === "INDUSTRI",
+          jurusan, 
           nama: user.nama 
         })
       );
@@ -214,10 +200,7 @@ export default function Login() {
             </select>
             <select
               value={jurusan}
-              onChange={(e) => {
-                setJurusan(e.target.value);
-                setIndustri(""); // Reset industri when changing jurusan
-              }}
+              onChange={(e) => setJurusan(e.target.value)}
               className="login-select"
               disabled={isLoading}
             >
@@ -230,16 +213,6 @@ export default function Login() {
               <option value="TBSM">TBSM</option>
               <option value="INDUSTRI">INDUSTRI</option>
             </select>
-            {jurusan === "INDUSTRI" && (
-              <input
-                type="text"
-                placeholder="Masukkan nama industri"
-                value={industri}
-                onChange={(e) => setIndustri(e.target.value)}
-                disabled={isLoading}
-                maxLength="50"
-              />
-            )}
             <input
               type="password"
               placeholder="Token"
@@ -253,7 +226,7 @@ export default function Login() {
             <button 
               className="login-btn" 
               type="submit"
-              disabled={isLoading || !nis || !kelas || !jurusan || !token || (jurusan === "INDUSTRI" && !industri)}
+              disabled={isLoading || !nis || !kelas || !jurusan || !token}
             >
               {isLoading ? "Loading..." : "Masuk!"}
             </button>

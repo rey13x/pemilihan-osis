@@ -135,7 +135,6 @@ export default function PilihPaslon() {
         vote: selectedPaslon,
         kelas: currentUser.kelas,
         jurusan: currentUser.jurusan,
-        isIndustri: currentUser.isIndustri || false,
         votedAt: new Date(),
       });
 
