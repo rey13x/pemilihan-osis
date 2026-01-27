@@ -51,7 +51,7 @@ export default function Navbar() {
 
         {/* Hamburger Button for Mobile */}
         <button 
-          className="hamburger-btn"
+          className={`hamburger-btn ${isMenuOpen ? 'active' : ''}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <span></span>

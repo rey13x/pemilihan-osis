@@ -119,18 +119,20 @@ html * {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 2px solid #8B6F47;
   background: rgba(139, 111, 71, 0.2);
   border-radius: 50%;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   color: #666;
+  padding: 0;
+  line-height: 1;
 }
 
 .ad-close:hover {
@@ -339,6 +341,9 @@ html * {
   border: none;
   cursor: pointer;
   padding: 8px;
+  position: relative;
+  width: 30px;
+  height: 24px;
 }
 
 .hamburger-btn span {
@@ -347,20 +352,46 @@ html * {
   background: #2b2b2b;
   transition: all 0.3s ease;
   display: block;
+  position: absolute;
+}
+
+.hamburger-btn span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger-btn span:nth-child(2) {
+  top: 11px;
+}
+
+.hamburger-btn span:nth-child(3) {
+  bottom: 0;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.hamburger-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
 }
 
 /* Mobile Menu */
 .navbar-mobile-menu {
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
+  top: 60px;
   right: 0;
+  width: 100%;
   background: white;
   flex-direction: column;
   gap: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 12px 0;
+  z-index: 9998;
 }
 
 .mobile-menu-item {
@@ -2573,14 +2604,16 @@ button:hover {
 }
 
 .btn-confirm {
-  background: #8b6914;
+  background: #8B6F47;
   color: white;
+  border: 2px solid #8B6F47;
 }
 
 .btn-confirm:hover:not(:disabled) {
-  background: #a0791a;
+  background: #704d2c;
+  border-color: #704d2c;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 105, 20, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
 }
 
 .btn-confirm:disabled {
