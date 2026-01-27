@@ -22,7 +22,8 @@ export default function App() {
     // Pre-load images and data
     const preloadAssets = async () => {
       // Simulate loading time or actual asset preloading
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // 2 seconds for loading + 5 seconds idle/delay
+      await new Promise(resolve => setTimeout(resolve, 7000));
       setIsLoading(false);
     };
 
