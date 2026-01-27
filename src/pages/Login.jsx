@@ -212,6 +212,10 @@ export default function Login() {
               <option value="TEI">TEI</option>
               <option value="TBSM">TBSM</option>
               <option value="INDUSTRI">INDUSTRI</option>
+              <option value="RPL INDUSTRI">RPL INDUSTRI</option>
+              <option value="TKJ INDUSTRI">TKJ INDUSTRI</option>
+              <option value="TEI INDUSTRI">TEI INDUSTRI</option>
+              <option value="TBSM INDUSTRI">TBSM INDUSTRI</option>
             </select>
             <input
               type="password"
