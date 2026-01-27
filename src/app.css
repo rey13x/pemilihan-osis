@@ -141,14 +141,14 @@ html * {
 .ad-image-container {
   margin-bottom: 16px;
   overflow: hidden;
-  border-radius: 50px;
+  border-radius: 30px;
 }
 
 .ad-image {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 50px;
+  border-radius: 30px;
 }
 
 .ad-button {
