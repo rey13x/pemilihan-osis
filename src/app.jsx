@@ -19,12 +19,42 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Pre-load images and data
+    // Pre-load all images and data
     const preloadAssets = async () => {
-      // Simulate loading time or actual asset preloading
-      // 2 seconds for loading + 5 seconds idle/delay
-      await new Promise(resolve => setTimeout(resolve, 7000));
-      setIsLoading(false);
+      try {
+        // List of images to preload
+        const imageUrls = [
+          require("./assets/illustration.png"),
+          require("./assets/smk2.png"),
+          "/paslon/paslon-1.png",
+          "/paslon/paslon-2.png",
+          "/paslon/paslon-3.png",
+          "/paslon/paslon-4.png",
+        ];
+
+        // Preload all images
+        const imagePromises = imageUrls.map(
+          (url) =>
+            new Promise((resolve, reject) => {
+              const img = new Image();
+              img.onload = resolve;
+              img.onerror = reject;
+              img.src = typeof url === "string" ? url : url;
+            })
+        );
+
+        // Wait for all images to load
+        await Promise.all(imagePromises);
+
+        // Minimum loading time for UX (7 seconds)
+        await new Promise((resolve) => setTimeout(resolve, 7000));
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error preloading assets:", error);
+        // Still proceed to home page even if some assets fail to load
+        setIsLoading(false);
+      }
     };
 
     preloadAssets();
