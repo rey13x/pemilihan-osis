@@ -183,8 +183,8 @@ export default function Login() {
         </button>
 
         <div className="login-hero-text">
-          <h1>LoGin</h1>
-          <p>isi sesuai format yap!</p>
+          <h1>Login</h1>
+          <p>Yuk isi sesuai format!</p>
         </div>
       </section>
 
@@ -244,7 +244,7 @@ export default function Login() {
               type="submit"
               disabled={isLoading || !nis || !kelas || !jurusan || !token}
             >
-              {isLoading ? "Loading..." : "Masuk!"}
+              {isLoading ? "Loading..." : "Gaskeun!"}
             </button>
           </form>
         </div>
