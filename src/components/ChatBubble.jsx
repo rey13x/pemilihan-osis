@@ -12,7 +12,7 @@ export default function ChatBubble() {
         }
 
         const userRef = doc(db, "users", currentUser.nis);
-        const userSnap = await getDoc(userRef);
+        await getDoc(userRef);
         
         // User voting status checked but component is disabled
       } catch (err) {
