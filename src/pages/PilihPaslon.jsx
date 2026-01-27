@@ -69,7 +69,7 @@ export default function PilihPaslon() {
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(300);
   const [isConfused, setIsConfused] = useState(false);
   const [notification, setNotification] = useState({
     isOpen: false,
@@ -77,20 +77,21 @@ export default function PilihPaslon() {
     message: "",
   });
 
-  // Timer effect - persist across refreshes
+  // Timer effect - persist across refreshes (5 minutes = 300 seconds)
   useEffect(() => {
     // Initialize from sessionStorage
     const savedStartTime = sessionStorage.getItem("pilihStartTime");
     const now = Date.now();
+    const TIMER_DURATION = 300; // 5 minutes in seconds
     
     if (!savedStartTime) {
       // First visit to this page in this session
       sessionStorage.setItem("pilihStartTime", now);
-      setTimeLeft(60);
+      setTimeLeft(TIMER_DURATION);
     } else {
       // Calculate elapsed time
       const elapsed = Math.floor((now - parseInt(savedStartTime)) / 1000);
-      const remaining = Math.max(0, 60 - elapsed);
+      const remaining = Math.max(0, TIMER_DURATION - elapsed);
       setTimeLeft(remaining);
       
       if (remaining === 0) {
@@ -176,6 +177,9 @@ export default function PilihPaslon() {
 
       // Simpan selected paslon untuk halaman success
       localStorage.setItem("selectedVote", selectedPaslon);
+      
+      // Clear timer from sessionStorage
+      sessionStorage.removeItem("pilihStartTime");
 
       // Show loading for 2 seconds
       setTimeout(() => {
@@ -232,8 +236,8 @@ export default function PilihPaslon() {
         <h1>Pilih Paslon Pilihanmu</h1>
         <p>Klik kartu untuk memilih</p>
         <div className="timer-display">
-          <span className={`time-remaining ${timeLeft <= 10 ? 'warning' : ''}`}>
-            ⏱ {timeLeft} detik
+          <span className={`time-remaining ${timeLeft <= 60 ? 'warning' : ''}`}>
+            ⏱ {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')} menit
           </span>
         </div>
       </motion.div>
