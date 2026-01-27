@@ -64,7 +64,7 @@ export default function LoadingPage({ onLoadingComplete }) {
           />
         </div>
         
-        <p className="loading-text">Memuat aset...</p>
+        <p className="loading-text">memuat aset...</p>
       </div>
     </div>
   );
