@@ -57,18 +57,42 @@ manusia.`,
       nama: "Paslon 3",
       wakil: "Fitri Ramadhani & Reefly Aprilian",
       foto: "/paslon/paslon-3.png",
-      visi: "",
-      misi: [],
+      visi: `Membentuk OSIS SMKN 2 Kota Bekasi yang dinamis, tertib, dan menjunjung
+nilai kekeluargaan sebagai sarana pembinaan siswa/i yang konstruktif dan
+berkesinambungan.`,
+      misi: [
+        `Menumbuhkan sikap tertib dan rasa tanggung jawab dalam setiap aktivitas
+OSIS maupun kehidupan sekolah.`,
+        `Mempererat rasa kebersamaan, solidaritas, dan sikap saling menghormati
+antar pengurus OSIS dan seluruh warga sekolah.`,
+        `Mengoptimalkan keterlibatan OSIS dalam menyusun serta menjalankan
+kegiatan yang memberikan manfaat nyata bagi siswa/i.`,
+        `Mendorong pengembangan minat, bakat, serta kreativitas siswa/i melalui
+program kerja OSIS yang terarah dan berkelanjutan.`,
+      ],
       proker: [],
-      jargon: "",
+      jargon: `tak banyak kata, tunjukkan aksi nyata, pilih nomor kosong tiga`,
     },
     "4": {
       nama: "Paslon 4",
       wakil: "Rahmat Alfian & Muhamad Yusuf",
       foto: "/paslon/paslon-4.png",
-      visi: "",
-      misi: [],
-      proker: [],
+      visi: `Menjadikan OSIS SMK Negeri 2 Kota Bekasi sebagai organisasi yang aktif,
+adaptif, dan berintegritas, serta mampu menumbuhkan kepemimpinan siswa
+dalam mendukung budaya sekolah yang harmonis, tertib, dan berorientasi pada
+pengembangan prestasi serta karakter.`,
+      misi: [
+        `Mengutamakan nilai keimanan, karakter dan akhlak mulia dalam program
+kerja osis yang positif Dan berkelanjutan`,
+        `Membentuk pengurus OSIS yang berintegritas, komunikatif, dan mampu
+menjadi teladan, serta terbuka dalam menampung dan menyalurkan
+aspirasi siswa.`,
+        `Berperan aktif dalam menciptakan lingkungan sekolah yang bersih, tertib,
+nyaman, serta disiplin dengan melibatkan Pengurus OSIS & Siswa/i`,
+        `Mendorong dan Mengembangkan potensi siswa di bidang akademik dan
+non akademik.`,
+      ],
+      proker: ["PKS (PEKAN KREATIVITAS SISWA)", "FESTIVAL ESTRAKULIKULER"],
       jargon: "",
     },
   };
