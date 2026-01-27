@@ -11,6 +11,7 @@ export default function Login() {
   const [nis, setNis] = useState("");
   const [kelas, setKelas] = useState("");
   const [jurusan, setJurusan] = useState("");
+  const [industri, setIndustri] = useState("");
   const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,6 +53,15 @@ export default function Login() {
       return false;
     }
 
+    if (!industri) {
+      setNotification({
+        isOpen: true,
+        type: "error",
+        message: "Pilih industri terlebih dahulu",
+      });
+      return false;
+    }
+
     if (!token || !token.trim()) {
       setNotification({
         isOpen: true,
@@ -89,6 +99,7 @@ export default function Login() {
       if (
         user.kelas !== kelas ||
         user.jurusan !== jurusan ||
+        user.industri !== industri ||
         user.token !== token.trim()
       ) {
         setNotification({
@@ -114,7 +125,7 @@ export default function Login() {
       // Simpan user info di localStorage
       localStorage.setItem(
         "currentUser",
-        JSON.stringify({ nis: nis.trim(), kelas, jurusan, nama: user.nama })
+        JSON.stringify({ nis: nis.trim(), kelas, jurusan, industri, nama: user.nama })
       );
 
       // Show loading popup
@@ -207,6 +218,22 @@ export default function Login() {
               <option value="AKL">AKL</option>
               <option value="TET">TET</option>
             </select>
+            <select
+              value={industri}
+              onChange={(e) => setIndustri(e.target.value)}
+              className="login-select"
+              disabled={isLoading}
+            >
+              <option value="">Pilih Industri</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Retail">Retail</option>
+              <option value="Services">Services</option>
+              <option value="Technology">Technology</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Finance">Finance</option>
+              <option value="Education">Education</option>
+              <option value="Other">Other</option>
+            </select>
             <input
               type="password"
               placeholder="Token"
@@ -220,7 +247,7 @@ export default function Login() {
             <button 
               className="login-btn" 
               type="submit"
-              disabled={isLoading || !nis || !kelas || !jurusan || !token}
+              disabled={isLoading || !nis || !kelas || !jurusan || !industri || !token}
             >
               {isLoading ? "Loading..." : "Masuk!"}
             </button>
