@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function TopBar() {
   const deadline = new Date("2026-02-01T07:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState(deadline - Date.now());
+  const location = useLocation();
+
+  // Only show on home page
+  if (location.pathname !== "/") {
+    return null;
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
