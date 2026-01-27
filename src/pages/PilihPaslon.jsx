@@ -1,9 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import NotificationPopup from "../components/NotificationPopup";
 import Navbar from "../components/Navbar";
-import ConfusedPopup from "../components/ConfusedPopup";
 import { db } from "../firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 
@@ -69,48 +68,12 @@ export default function PilihPaslon() {
   const [selectedPaslon, setSelectedPaslon] = useState(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300);
-  const [isConfused, setIsConfused] = useState(false);
   const [notification, setNotification] = useState({
     isOpen: false,
     type: "error",
     message: "",
   });
 
-  // Timer effect - persist across refreshes (5 minutes = 300 seconds)
-  useEffect(() => {
-    // Initialize from sessionStorage
-    const savedStartTime = sessionStorage.getItem("pilihStartTime");
-    const now = Date.now();
-    const TIMER_DURATION = 300; // 5 minutes in seconds
-    
-    if (!savedStartTime) {
-      // First visit to this page in this session
-      sessionStorage.setItem("pilihStartTime", now);
-      setTimeLeft(TIMER_DURATION);
-    } else {
-      // Calculate elapsed time
-      const elapsed = Math.floor((now - parseInt(savedStartTime)) / 1000);
-      const remaining = Math.max(0, TIMER_DURATION - elapsed);
-      setTimeLeft(remaining);
-      
-      if (remaining === 0) {
-        setIsConfused(true);
-      }
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setIsConfused(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   const kandidatList = [
     {
@@ -177,9 +140,6 @@ export default function PilihPaslon() {
 
       // Simpan selected paslon untuk halaman success
       localStorage.setItem("selectedVote", selectedPaslon);
-      
-      // Clear timer from sessionStorage
-      sessionStorage.removeItem("pilihStartTime");
 
       // Show loading for 2 seconds
       setTimeout(() => {
@@ -221,11 +181,6 @@ export default function PilihPaslon() {
         isLoading={isLoading}
       />
 
-      <ConfusedPopup
-        isOpen={isConfused}
-        onClose={() => setIsConfused(false)}
-      />
-
       {/* Header */}
       <motion.div
         className="gallery-header"
@@ -235,11 +190,6 @@ export default function PilihPaslon() {
       >
         <h1>Pilih Paslon Pilihanmu</h1>
         <p>Klik kartu untuk memilih</p>
-        <div className="timer-display">
-          <span className={`time-remaining ${timeLeft <= 60 ? 'warning' : ''}`}>
-            ⏱ {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')} menit
-          </span>
-        </div>
       </motion.div>
 
       {/* Gallery */}
