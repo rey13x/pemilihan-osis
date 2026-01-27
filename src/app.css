@@ -5820,6 +5820,29 @@ button:hover {
   width: 100%;
   overflow-x: hidden;
   padding-top: 100px;
+  position: relative;
+}
+
+.back-btn-visi-misi {
+  position: absolute;
+  top: 20px;
+  left: clamp(16px, 4vw, 30px);
+  background: white;
+  border: 2px solid #BF841D;
+  color: #BF841D;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.back-btn-visi-misi:hover {
+  background: #BF841D;
+  color: white;
+  transform: translateY(-2px);
 }
 
 .visi-misi-hero {
@@ -5867,7 +5890,11 @@ button:hover {
 
 .visi-misi-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(191, 132, 29, 0.2);
+}
+
+.visi-misi-card.selected {
+  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+  border: 2px solid #8B5C1F;
 }
 
 .visi-misi-card-image {

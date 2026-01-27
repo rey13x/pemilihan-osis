@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 
 export default function VisiMisi() {
   const navigate = useNavigate();
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const pairData = [
     {
@@ -41,10 +42,20 @@ export default function VisiMisi() {
     },
   ];
 
+  const handleCardClick = (pair) => {
+    setSelectedCard(pair.id);
+    setTimeout(() => {
+      navigate(`/visi-misi/${pair.nomor}`);
+    }, 300);
+  };
+
   return (
     <>
       <Navbar />
       <div className="visi-misi-page">
+        {/* Back Button */}
+        <button className="back-btn-visi-misi" onClick={() => navigate("/")}>← Kembali</button>
+
         {/* Header */}
         <motion.section
           className="visi-misi-hero"
@@ -66,9 +77,9 @@ export default function VisiMisi() {
           {pairData.map((pair) => (
             <motion.div
               key={pair.id}
-              className="visi-misi-card"
+              className={`visi-misi-card ${selectedCard === pair.id ? "selected" : ""}`}
               whileHover={{ y: -8 }}
-              onClick={() => navigate(`/visi-misi/${pair.nomor}`)}
+              onClick={() => handleCardClick(pair)}
             >
               <div className="visi-misi-card-image">
                 <img src={pair.foto} alt={pair.nama} />
