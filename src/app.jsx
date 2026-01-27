@@ -17,6 +17,7 @@ import LoadingPage from "./components/LoadingPage";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     // Pre-load all images and data with retry logic
@@ -33,14 +34,21 @@ export default function App() {
           "/paslon/paslon-2.png",
           "/paslon/paslon-3.png",
           "/paslon/paslon-4.png",
+          "/paslon/formal-osis.jpg",
           
           // Jurusan logos
-          "/jurusan/rpl.png",
-          "/jurusan/tkj.png",
-          "/jurusan/tei.png",
-          "/jurusan/tbsm.png",
-          "/jurusan/akl.png",
-          "/jurusan/tet.png",
+          "/jurusan/RPL.png",
+          "/jurusan/TKJ.png",
+          "/jurusan/TEI.png",
+          "/jurusan/TBSM.png",
+          "/jurusan/AKL.png",
+          "/jurusan/TET.png",
+          
+          // Info and other assets
+          "/info/smk2.png",
+          "/steps/step-1.png",
+          "/steps/step-2.png",
+          "/steps/step-3.png",
         ];
 
         // Function to load image with retry
@@ -51,57 +59,63 @@ export default function App() {
             const attemptLoad = () => {
               attempts++;
               const img = new Image();
+              let timeoutId;
 
               img.onload = () => {
+                clearTimeout(timeoutId);
                 resolve(url);
               };
 
               img.onerror = () => {
+                clearTimeout(timeoutId);
                 if (attempts < retries) {
                   setTimeout(attemptLoad, 500); // Retry after 500ms
                 } else {
+                  console.warn(`Failed to load image after ${retries} attempts: ${url}`);
                   resolve(url); // Proceed anyway after retries
                 }
               };
 
               // Set timeout for slow connections
               img.src = typeof url === "string" ? url : url;
-              setTimeout(() => {
+              timeoutId = setTimeout(() => {
                 if (!img.complete && attempts < retries) {
                   attemptLoad();
                 }
-              }, 3000); // 3 second timeout per attempt
+              }, 5000); // 5 second timeout per attempt
             };
 
             attemptLoad();
           });
         };
 
-        // Load all images with retry logic
-        const loadPromises = imagesToLoad.map((url) =>
-          loadImageWithRetry(url, 3)
+        // Load all images with retry logic and track progress
+        const loadPromises = imagesToLoad.map((url, index) =>
+          loadImageWithRetry(url, 3).then(() => {
+            const progress = Math.floor(((index + 1) / imagesToLoad.length) * 90);
+            setLoadingProgress(progress);
+            return url;
+          })
         );
 
         // Wait for all images to load with a max timeout
-        const raceWithTimeout = Promise.race([
-          Promise.all(loadPromises),
-          new Promise((resolve) =>
-            setTimeout(() => {
-              console.warn("Asset loading timeout - proceeding anyway");
-              resolve();
-            }, 30000) // 30 second max timeout
-          ),
-        ]);
+        await Promise.all(loadPromises);
 
-        await raceWithTimeout;
+        setLoadingProgress(95);
 
-        // Minimum loading time for UX (7 seconds)
-        await new Promise((resolve) => setTimeout(resolve, 7000));
+        // Minimum loading time for UX (8 seconds) - STRICTLY ENFORCED
+        await new Promise((resolve) => setTimeout(resolve, 8000));
+
+        setLoadingProgress(100);
+        
+        // Small delay before hiding loading screen
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         setIsLoading(false);
       } catch (error) {
         console.error("Error preloading assets:", error);
-        // Still proceed to home page even if some assets fail
+        // Still proceed after timeout
+        setLoadingProgress(100);
         setIsLoading(false);
       }
     };

@@ -4,6 +4,7 @@ import smk2Logo from "../assets/smk2.png";
 
 export default function LoadingPage({ onLoadingComplete }) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   /* ===============================
      AUTO FLIP LOGO - CONTINUOUS FLIP
@@ -17,6 +18,20 @@ export default function LoadingPage({ onLoadingComplete }) {
     return () => {
       clearInterval(flipInterval);
     };
+  }, []);
+
+  /* ===============================
+     PROGRESS ANIMATION
+  =============================== */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 90) return prev; // Stop at 90%, wait for actual completion
+        return prev + Math.random() * 20; // Random increment
+      });
+    }, 300);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -40,7 +55,18 @@ export default function LoadingPage({ onLoadingComplete }) {
             />
           </div>
         </div>
+
+        {/* Loading Progress Bar */}
+        <div className="loading-progress-bar">
+          <div 
+            className="loading-progress-fill" 
+            style={{ width: `${Math.min(progress, 100)}%` }}
+          />
+        </div>
+        
+        <p className="loading-text">Memuat aset...</p>
       </div>
     </div>
   );
 }
+
