@@ -74,43 +74,60 @@ export default function Hero() {
     }
   };
 
-  const handleJurusanMouseMove = (e) => {
-    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+  // Attach move/up events to document to ensure they work everywhere
+  useEffect(() => {
+    const handleDocumentMouseMove = (e) => {
+      if (!isJurusanDragging || !jurusanTrackRef.current) return;
 
-    const diff = e.clientX - jurusanDragStartRef.current;
-    const currentTranslate = jurusanCurrentTranslateRef.current + diff;
+      const diff = e.clientX - jurusanDragStartRef.current;
+      const currentTranslate = jurusanCurrentTranslateRef.current + diff;
 
-    jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
-  };
+      jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
+    };
 
-  const handleJurusanTouchMove = (e) => {
-    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+    const handleDocumentTouchMove = (e) => {
+      if (!isJurusanDragging || !jurusanTrackRef.current) return;
 
-    const diff = e.touches[0].clientX - jurusanDragStartRef.current;
-    const currentTranslate = jurusanCurrentTranslateRef.current + diff;
+      const diff = e.touches[0].clientX - jurusanDragStartRef.current;
+      const currentTranslate = jurusanCurrentTranslateRef.current + diff;
 
-    jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
-  };
+      jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
+    };
 
-  const handleJurusanMouseUp = (e) => {
-    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+    const handleDocumentMouseUp = (e) => {
+      if (!isJurusanDragging || !jurusanTrackRef.current) return;
 
-    const diff = e.clientX - jurusanDragStartRef.current;
-    jurusanCurrentTranslateRef.current += diff;
+      const diff = e.clientX - jurusanDragStartRef.current;
+      jurusanCurrentTranslateRef.current += diff;
 
-    setIsJurusanDragging(false);
-    jurusanTrackRef.current.style.animationPlayState = "running";
-  };
+      setIsJurusanDragging(false);
+      jurusanTrackRef.current.style.animationPlayState = "running";
+    };
 
-  const handleJurusanTouchEnd = (e) => {
-    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+    const handleDocumentTouchEnd = (e) => {
+      if (!isJurusanDragging || !jurusanTrackRef.current) return;
 
-    const diff = e.changedTouches[0].clientX - jurusanDragStartRef.current;
-    jurusanCurrentTranslateRef.current += diff;
+      const diff = e.changedTouches[0].clientX - jurusanDragStartRef.current;
+      jurusanCurrentTranslateRef.current += diff;
 
-    setIsJurusanDragging(false);
-    jurusanTrackRef.current.style.animationPlayState = "running";
-  };
+      setIsJurusanDragging(false);
+      jurusanTrackRef.current.style.animationPlayState = "running";
+    };
+
+    if (isJurusanDragging) {
+      document.addEventListener("mousemove", handleDocumentMouseMove);
+      document.addEventListener("mouseup", handleDocumentMouseUp);
+      document.addEventListener("touchmove", handleDocumentTouchMove);
+      document.addEventListener("touchend", handleDocumentTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleDocumentMouseMove);
+      document.removeEventListener("mouseup", handleDocumentMouseUp);
+      document.removeEventListener("touchmove", handleDocumentTouchMove);
+      document.removeEventListener("touchend", handleDocumentTouchEnd);
+    };
+  }, [isJurusanDragging]);
 
   return (
     <section className="hero">
@@ -164,12 +181,7 @@ export default function Hero() {
             <div
               className="jurusan-strip"
               onMouseDown={handleJurusanMouseDown}
-              onMouseMove={handleJurusanMouseMove}
-              onMouseUp={handleJurusanMouseUp}
-              onMouseLeave={handleJurusanMouseUp}
               onTouchStart={handleJurusanTouchStart}
-              onTouchMove={handleJurusanTouchMove}
-              onTouchEnd={handleJurusanTouchEnd}
               style={{ userSelect: "none", cursor: isJurusanDragging ? "grabbing" : "grab" }}
             >
               <div className="jurusan-track" ref={jurusanTrackRef}>
