@@ -6,26 +6,18 @@ export default function LoadingPage({ onLoadingComplete }) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   /* ===============================
-     AUTO FLIP LOGO - 2 SECONDS TOTAL
+     AUTO FLIP LOGO - CONTINUOUS FLIP
   =============================== */
   useEffect(() => {
-    // Start flip animation immediately
+    // Flip animation - flips every 1 second continuously
     const flipInterval = setInterval(() => {
-      setIsFlipped(true);
-      setTimeout(() => setIsFlipped(false), 1000);
-    }, 2000);
-
-    // After 2 seconds, complete loading
-    const loadingTimer = setTimeout(() => {
-      clearInterval(flipInterval);
-      onLoadingComplete();
-    }, 2000);
+      setIsFlipped((prev) => !prev);
+    }, 1000);
 
     return () => {
-      clearTimeout(loadingTimer);
       clearInterval(flipInterval);
     };
-  }, [onLoadingComplete]);
+  }, []);
 
   return (
     <div className="loading-page">
