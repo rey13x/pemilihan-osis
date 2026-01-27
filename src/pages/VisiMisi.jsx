@@ -124,19 +124,6 @@ export default function VisiMisi() {
             </button>
           </div>
         </div>
-
-        {/* Footer */}
-        <motion.section
-          className="visi-misi-footer"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <p>Pengolahan Informasi diproses oleh:</p>
-          <div className="visi-misi-logo">
-            <img src="/illustration.png" alt="OSIS 2026" />
-          </div>
-        </motion.section>
       </div>
     </>
   );
