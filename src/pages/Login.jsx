@@ -217,7 +217,7 @@ export default function Login() {
               className="login-select"
               disabled={isLoading}
             >
-              <option value="">Pilih Jurusan/Industri</option>
+              <option value="">Pilih Jurusan</option>
               <option value="RPL">RPL</option>
               <option value="TKJ">TKJ</option>
               <option value="AKL">AKL</option>
