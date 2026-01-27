@@ -155,7 +155,7 @@ export default function App() {
         <Route
           path="/voting-success"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowIfVoted={true}>
               <VotingSuccess />
             </ProtectedRoute>
           }
