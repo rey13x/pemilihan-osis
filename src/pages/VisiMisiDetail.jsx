@@ -233,7 +233,7 @@ non akademik.`,
               download 
               className="visi-misi-download-btn"
             >
-              📥 Download Visi & Misi
+              Download Visi & Misi
             </a>
           </section>
         </div>
