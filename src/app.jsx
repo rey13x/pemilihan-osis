@@ -17,7 +17,6 @@ import LoadingPage from "./components/LoadingPage";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
     // Pre-load all images and data with retry logic
@@ -89,24 +88,16 @@ export default function App() {
           });
         };
 
-        // Load all images with retry logic and track progress
-        const loadPromises = imagesToLoad.map((url, index) =>
-          loadImageWithRetry(url, 3).then(() => {
-            const progress = Math.floor(((index + 1) / imagesToLoad.length) * 90);
-            setLoadingProgress(progress);
-            return url;
-          })
+        // Load all images with retry logic
+        const loadPromises = imagesToLoad.map((url) =>
+          loadImageWithRetry(url, 3)
         );
 
         // Wait for all images to load with a max timeout
         await Promise.all(loadPromises);
 
-        setLoadingProgress(95);
-
         // Minimum loading time for UX (8 seconds) - STRICTLY ENFORCED
         await new Promise((resolve) => setTimeout(resolve, 8000));
-
-        setLoadingProgress(100);
         
         // Small delay before hiding loading screen
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -115,7 +106,6 @@ export default function App() {
       } catch (error) {
         console.error("Error preloading assets:", error);
         // Still proceed after timeout
-        setLoadingProgress(100);
         setIsLoading(false);
       }
     };

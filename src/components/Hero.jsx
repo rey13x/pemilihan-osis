@@ -8,7 +8,6 @@ export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isJurusanDragging, setIsJurusanDragging] = useState(false);
-  const [jurusanDragStart, setJurusanDragStart] = useState(0);
   const autoFlipRef = useRef(null);
   const jurusanTrackRef = useRef(null);
   const jurusanDragStartRef = useRef(0);
