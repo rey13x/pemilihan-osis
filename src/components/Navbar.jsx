@@ -36,6 +36,7 @@ export default function Navbar() {
         <div className="navbar-buttons">
           <button 
             className="navbar-btn visi-misi-btn"
+            onClick={() => navigate("/visi-misi")}
           >
             VisiMisi!
           </button>

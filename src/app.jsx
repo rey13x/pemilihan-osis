@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Simulasi from "./pages/Simulasi";
+import VisiMisi from "./pages/VisiMisi";
+import VisiMisiDetail from "./pages/VisiMisiDetail";
 import Voting from "./pages/Voting";
 import VotingSuccess from "./pages/VotingSuccess";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -137,6 +139,10 @@ export default function App() {
 
         {/* ================= SIMULASI (HALAMAN SENDIRI) ================= */}
         <Route path="/simulasi" element={<Simulasi />} />
+
+        {/* ================= VISI MISI ================= */}
+        <Route path="/visi-misi" element={<VisiMisi />} />
+        <Route path="/visi-misi/:nomor" element={<VisiMisiDetail />} />
 
         {/* ================= REGISTER ================= */}
         <Route path="/register" element={<Register />} />
