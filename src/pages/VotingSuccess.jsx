@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 export default function VotingSuccess() {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(15);
   const containerRef = useRef(null);
   const audioContextRef = useRef(null);
 
@@ -71,7 +71,7 @@ export default function VotingSuccess() {
     playBeep(600, 80); // jreg sound
   }, []);
 
-  // After 5 seconds, show message and auto scroll
+  // After 3 seconds, show message and auto scroll
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMessage(true);
@@ -81,7 +81,7 @@ export default function VotingSuccess() {
           containerRef.current.scrollIntoView({ behavior: "smooth" });
         }
       }, 300);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -150,7 +150,7 @@ export default function VotingSuccess() {
         animate={showMessage ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       >
-        <h2>Pilihanmu Tersimpan!</h2>
+        <h2>Yeay! Pilihanmu Tersimpan</h2>
         <p className="candidate-name">{candidate?.nama}</p>
         <p className="redirect-text">Kamu akan dialihkan ke halaman obrolan</p>
 
