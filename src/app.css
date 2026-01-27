@@ -3551,10 +3551,12 @@ button:hover {
 .voting-page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 40px 20px;
+  padding: clamp(24px, 6vw, 40px) clamp(16px, 4vw, 20px);
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: clamp(24px, 6vw, 40px);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .voting-header {
@@ -3576,9 +3578,10 @@ button:hover {
 }
 
 .voting-results {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
+  padding: 0 clamp(8px, 2vw, 12px);
 }
 
 /* Loading & Empty States */
@@ -3600,7 +3603,7 @@ button:hover {
 /* Result Item */
 .result-item {
   background: white;
-  padding: 24px;
+  padding: clamp(16px, 4vw, 24px);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -3744,16 +3747,20 @@ button:hover {
 
 @media (max-width: 768px) {
   .voting-page {
-    padding: 20px 16px;
-    gap: 30px;
+    padding: clamp(16px, 4vw, 20px) clamp(12px, 3vw, 16px);
+    gap: clamp(20px, 5vw, 30px);
   }
 
   .voting-header h1 {
-    font-size: 32px;
+    font-size: clamp(24px, 5vw, 32px);
+  }
+
+  .voting-header p {
+    font-size: clamp(14px, 3vw, 16px);
   }
 
   .result-item {
-    padding: 16px;
+    padding: clamp(12px, 3vw, 16px);
   }
 
   .result-header {
@@ -3764,6 +3771,7 @@ button:hover {
 
   .result-title {
     gap: 12px;
+    width: 100%;
   }
 
   .result-stats {
@@ -3772,38 +3780,76 @@ button:hover {
   }
 
   .nomor {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .nama {
-    font-size: 14px;
+    font-size: clamp(13px, 3vw, 14px);
   }
 
   .votes {
-    font-size: 18px;
+    font-size: clamp(16px, 4vw, 18px);
   }
 
   .percentage {
-    font-size: 14px;
+    font-size: clamp(12px, 3vw, 14px);
   }
 
   .winner-banner {
-    padding: 24px 16px;
+    padding: clamp(16px, 4vw, 24px);
+    border-radius: 12px;
   }
 
   .winner-banner h2 {
-    font-size: 24px;
+    font-size: clamp(20px, 4vw, 24px);
   }
 
   .winner-banner p {
-    font-size: 14px;
+    font-size: clamp(13px, 3vw, 14px);
   }
 
   .voting-btn {
-    padding: 14px 32px;
+    padding: clamp(12px, 3vw, 14px) clamp(20px, 5vw, 32px);
+    font-size: clamp(13px, 3vw, 14px);
+    min-width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .voting-page {
+    padding: clamp(12px, 3vw, 16px);
+    gap: clamp(16px, 4vw, 20px);
+  }
+
+  .voting-header {
+    margin-bottom: clamp(8px, 2vw, 12px);
+  }
+
+  .result-item {
+    padding: clamp(10px, 2vw, 12px);
+    border-radius: 8px;
+  }
+
+  .result-header {
+    gap: 10px;
+  }
+
+  .nomor {
+    width: 32px;
+    height: 32px;
     font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .result-title {
+    gap: 8px;
+  }
+
+  .voting-btn {
+    min-width: 120px;
+    border-radius: 10px;
   }
 }
 
