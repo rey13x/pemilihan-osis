@@ -65,7 +65,7 @@ export const initializeSecurityMeasures = () => {
 
   // Disable text selection on sensitive areas
   document.addEventListener('selectstart', (e) => {
-    if (e.target.closest('.secure-content')) {
+    if (e.target && typeof e.target.closest === 'function' && e.target.closest('.secure-content')) {
       e.preventDefault();
       return false;
     }
