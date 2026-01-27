@@ -110,7 +110,13 @@ export default function App() {
       }
     };
 
-    preloadAssets();
+    // Fallback timeout - ensure loading screen hides after max 15 seconds
+    const fallbackTimeout = setTimeout(() => {
+      console.warn("Loading timeout - forcing app to load");
+      setIsLoading(false);
+    }, 15000);
+
+    preloadAssets().finally(() => clearTimeout(fallbackTimeout));
   }, []);
 
   if (isLoading) {

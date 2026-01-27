@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function AdvertisementPopup() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    // Tampilkan popup setelah 500ms
+    // Hanya tampilkan popup di halaman home (/)
+    if (location.pathname !== "/") {
+      setIsOpen(false);
+      return;
+    }
+
+    // Tampilkan popup setelah 500ms hanya jika masih di halaman home
     const timer = setTimeout(() => {
       setIsOpen(true);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [location.pathname]);
 
   const handleClose = () => {
     setIsOpen(false);
