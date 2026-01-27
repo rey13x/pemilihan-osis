@@ -94,7 +94,7 @@ export default function VotingSuccess() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(countdown);
-          navigate("/obrolan");
+          navigate("/");
           return 0;
         }
         return prev - 1;

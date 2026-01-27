@@ -9,9 +9,9 @@ export default function ProtectedRoute({ children, allowIfVoted = false }) {
     return <Navigate to="/login" />;
   }
   
-  // Jika sudah voting dan tidak diizinkan akses setelah voting, redirect ke obrolan
+  // Jika sudah voting dan tidak diizinkan akses setelah voting, redirect ke home
   if (currentUserData?.sudahVote && !allowIfVoted) {
-    return <Navigate to="/obrolan" />;
+    return <Navigate to="/" />;
   }
   
   return children;
