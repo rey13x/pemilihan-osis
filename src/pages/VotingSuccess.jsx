@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 export default function VotingSuccess() {
   const navigate = useNavigate();
   const [showMessage, setShowMessage] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(60);
   const containerRef = useRef(null);
   const audioContextRef = useRef(null);
 
@@ -71,7 +71,7 @@ export default function VotingSuccess() {
     playBeep(600, 80); // jreg sound
   }, []);
 
-  // After 3 seconds, show message and auto scroll
+  // After 5 seconds, show message and auto scroll
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMessage(true);
@@ -81,7 +81,7 @@ export default function VotingSuccess() {
           containerRef.current.scrollIntoView({ behavior: "smooth" });
         }
       }, 300);
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -122,7 +122,7 @@ export default function VotingSuccess() {
             className="success-photo"
             animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
             transition={{ 
-              duration: 3, 
+              duration: 5, 
               times: [0, 0.3, 0.5, 0.7, 0.85, 1],
               ease: "easeInOut"
             }}
@@ -133,7 +133,7 @@ export default function VotingSuccess() {
             className="paslon-number"
             animate={{ scale: [1.2, 0.9, 1, 0.95, 1.05, 1] }}
             transition={{ 
-              duration: 3, 
+              duration: 5, 
               times: [0, 0.3, 0.5, 0.7, 0.85, 1],
               ease: "easeInOut"
             }}
@@ -152,12 +152,19 @@ export default function VotingSuccess() {
       >
         <h2>Yeay! Pilihanmu Tersimpan</h2>
         <p className="candidate-name">{candidate?.nama}</p>
-        <p className="redirect-text">Kamu akan dialihkan ke halaman obrolan</p>
+        <p className="redirect-text">Pilihanmu berhasil dicatat</p>
 
         <div className="countdown-display">
           <span className="countdown-number">{timeLeft}</span>
           <span className="countdown-text">detik</span>
         </div>
+
+        <button
+          className="btn-back-home"
+          onClick={() => navigate("/")}
+        >
+          ← Kembali ke Beranda
+        </button>
       </motion.div>
     </div>
   );

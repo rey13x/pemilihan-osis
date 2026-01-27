@@ -204,7 +204,6 @@ export default function Dashboard() {
         const q = query(usersRef, where("sudahVote", "==", true));
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
-          console.log("Voting data found:", snapshot.size, "records");
 
           const voteCount = {
             paslon1: 0,
@@ -223,8 +222,6 @@ export default function Dashboard() {
             const jurusan = data.jurusan || "Unknown";
             const nis = doc.id;
             const kelas = data.kelas || "Unknown";
-
-            console.log("Vote record:", { nis, vote, jurusan });
 
             jurusanSet.add(jurusan);
 
@@ -263,7 +260,6 @@ export default function Dashboard() {
           });
 
           const jurusans = ["all", ...Array.from(jurusanSet)];
-          console.log("Jurusans found:", jurusans);
           setJurusanList(jurusans);
         });
 
