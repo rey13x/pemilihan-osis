@@ -7,7 +7,12 @@ import Counter from "./Counter";
 export default function Hero() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isJurusanDragging, setIsJurusanDragging] = useState(false);
+  const [jurusanDragStart, setJurusanDragStart] = useState(0);
   const autoFlipRef = useRef(null);
+  const jurusanTrackRef = useRef(null);
+  const jurusanDragStartRef = useRef(0);
+  const jurusanCurrentTranslateRef = useRef(0);
 
   const jurusanLogos = ["RPL", "TKJ", "TEI", "TBSM", "AKL", "TET"];
 
@@ -49,6 +54,63 @@ export default function Hero() {
     document.body.style.overflow = isPopupOpen ? "hidden" : "";
     return () => (document.body.style.overflow = "");
   }, [isPopupOpen]);
+
+  /* ===============================
+     JURUSAN MARQUEE - DRAG & SWIPE
+  =============================== */
+  const handleJurusanMouseDown = (e) => {
+    setIsJurusanDragging(true);
+    jurusanDragStartRef.current = e.clientX;
+    if (jurusanTrackRef.current) {
+      jurusanTrackRef.current.style.animationPlayState = "paused";
+    }
+  };
+
+  const handleJurusanTouchStart = (e) => {
+    setIsJurusanDragging(true);
+    jurusanDragStartRef.current = e.touches[0].clientX;
+    if (jurusanTrackRef.current) {
+      jurusanTrackRef.current.style.animationPlayState = "paused";
+    }
+  };
+
+  const handleJurusanMouseMove = (e) => {
+    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+
+    const diff = e.clientX - jurusanDragStartRef.current;
+    const currentTranslate = jurusanCurrentTranslateRef.current + diff;
+
+    jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
+  };
+
+  const handleJurusanTouchMove = (e) => {
+    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+
+    const diff = e.touches[0].clientX - jurusanDragStartRef.current;
+    const currentTranslate = jurusanCurrentTranslateRef.current + diff;
+
+    jurusanTrackRef.current.style.transform = `translateX(${currentTranslate}px)`;
+  };
+
+  const handleJurusanMouseUp = (e) => {
+    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+
+    const diff = e.clientX - jurusanDragStartRef.current;
+    jurusanCurrentTranslateRef.current += diff;
+
+    setIsJurusanDragging(false);
+    jurusanTrackRef.current.style.animationPlayState = "running";
+  };
+
+  const handleJurusanTouchEnd = (e) => {
+    if (!isJurusanDragging || !jurusanTrackRef.current) return;
+
+    const diff = e.changedTouches[0].clientX - jurusanDragStartRef.current;
+    jurusanCurrentTranslateRef.current += diff;
+
+    setIsJurusanDragging(false);
+    jurusanTrackRef.current.style.animationPlayState = "running";
+  };
 
   return (
     <section className="hero">
@@ -99,9 +161,19 @@ export default function Hero() {
         <div className="hero-card-inner">
           <div className="card-text">
             {/* ===== MARQUEE JURUSAN ===== */}
-            <div className="jurusan-strip">
-              <div className="jurusan-track">
-                {[...jurusanLogos, ...jurusanLogos].map((j, i) => (
+            <div
+              className="jurusan-strip"
+              onMouseDown={handleJurusanMouseDown}
+              onMouseMove={handleJurusanMouseMove}
+              onMouseUp={handleJurusanMouseUp}
+              onMouseLeave={handleJurusanMouseUp}
+              onTouchStart={handleJurusanTouchStart}
+              onTouchMove={handleJurusanTouchMove}
+              onTouchEnd={handleJurusanTouchEnd}
+              style={{ userSelect: "none", cursor: isJurusanDragging ? "grabbing" : "grab" }}
+            >
+              <div className="jurusan-track" ref={jurusanTrackRef}>
+                {[...jurusanLogos, ...jurusanLogos, ...jurusanLogos].map((j, i) => (
                   <div className="jurusan-item" key={i}>
                     <img
                       src={`/jurusan/${j}.png`}

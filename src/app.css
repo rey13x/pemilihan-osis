@@ -650,6 +650,7 @@ html * {
 
   background: #f4f7f8;
   border-radius: 999px;
+  touch-action: none;
 }
 
 /* ===== TRACK ===== */
@@ -659,8 +660,9 @@ html * {
   gap: var(--marquee-gap);
   width: max-content;
 
-  animation: marquee-loop var(--marquee-speed) linear infinite;
+  animation: marquee-infinite var(--marquee-speed) linear infinite;
   will-change: transform;
+  transition: none;
 }
 
 /* ===== ITEM ===== */
@@ -695,7 +697,17 @@ html * {
   animation-play-state: paused;
 }
 
-/* ===== LOOP ===== */
+/* ===== INFINITE LOOP ANIMATION ===== */
+@keyframes marquee-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+
+/* Old loop animation (kept for reference) */
 @keyframes marquee-loop {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
