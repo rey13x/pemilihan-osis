@@ -68,6 +68,7 @@ export default function Obrolan() {
   }, [messages]);
 
   // Fetch messages from Firestore
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     console.log("Setting up Firestore listener...");
     try {
