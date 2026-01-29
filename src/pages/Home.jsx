@@ -3,7 +3,11 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "../components/Footer";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,6 +21,8 @@ export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
+  const [countdown, setCountdown] = useState({ days: 2, hours: 0, minutes: 0, seconds: 0 });
+  const [textRevealed, setTextRevealed] = useState(false);
 
   const kandidatList = [
     {
@@ -122,6 +128,67 @@ export default function Home() {
 
     return unsubscribe;
   }, []);
+
+  // Countdown Timer Effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown(prev => {
+        let { days, hours, minutes, seconds } = prev;
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else if (days > 0) {
+          days--;
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        }
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // GSAP Text Reveal Effect
+  useEffect(() => {
+    const revealElement = document.querySelector(".text-reveal-large");
+    const chooseText = document.querySelector(".choose-text");
+    
+    if (revealElement && !textRevealed) {
+      const words = revealElement.querySelectorAll(".word");
+      gsap.set(words, { x: -100, opacity: 0 });
+      
+      gsap.to(words, {
+        x: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: revealElement,
+          start: "top center",
+          end: "top 20%",
+          scrub: 0.5,
+          onEnter: () => {
+            setTextRevealed(true);
+            if (chooseText) {
+              chooseText.classList.add("revealed");
+            }
+          },
+        },
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, [textRevealed]);
 
   const getDisplayData = () => {
     if (selectedJurusan === "all") {
@@ -295,6 +362,78 @@ export default function Home() {
           </div>
         </motion.div>
       )}
+
+      {/* REPORT SECTION */}
+      <motion.div 
+        className="report-section container"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <p className="report-text">
+          Jika ada masalah, segera melapor melalui Instagram.
+        </p>
+      </motion.div>
+
+      {/* TEXT REVEAL & COUNTDOWN SECTION */}
+      <div className="text-countdown-section container">
+        {/* Large Text Reveal */}
+        <div className="text-reveal-large">
+          <span className="word">Jangan</span>
+          <span className="word">Lupa</span>
+          <span className="word">Segera</span>
+          <span className="word">Gunakan</span>
+          <span className="word">Hakmu!</span>
+        </div>
+
+        {/* Countdown Timer */}
+        <div className="countdown-container">
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.days).padStart(2, '0')}</span>
+            <span className="countdown-label">Hari</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.hours).padStart(2, '0')}</span>
+            <span className="countdown-label">Jam</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.minutes).padStart(2, '0')}</span>
+            <span className="countdown-label">Menit</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.seconds).padStart(2, '0')}</span>
+            <span className="countdown-label">Detik</span>
+          </div>
+        </div>
+
+        {/* Question Text */}
+        <div className="choose-question">
+          <span className="choose-text">Sudahkah kamu memilih?</span>
+        </div>
+
+        {/* Video Section */}
+        <motion.div
+          className="video-section"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <video
+            className="tutorial-video"
+            controls
+            width="100%"
+            poster="/tutorial/poster.jpg"
+          >
+            <source src="/tutorial/tutorial.mp4" type="video/mp4" />
+            Browser Anda tidak mendukung video HTML5
+          </video>
+        </motion.div>
+      </div>
 
       {/* FOOTER */}
       <Footer />
