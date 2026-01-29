@@ -262,6 +262,65 @@ export default function Home() {
         </div>
       </motion.div>
 
+      {/* TEXT REVEAL & COUNTDOWN SECTION */}
+      <div className="text-countdown-section container">
+        {/* Large Text Reveal */}
+        <div className="text-reveal-large">
+          <span className="word">Jangan</span>
+          <span className="word">Lupa</span>
+          <span className="word">Segera</span>
+          <span className="word">Gunakan</span>
+          <span className="word">Hakmu!</span>
+        </div>
+
+        {/* Countdown Timer */}
+        <div className="countdown-container">
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.days).padStart(2, '0')}</span>
+            <span className="countdown-label">Hari</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.hours).padStart(2, '0')}</span>
+            <span className="countdown-label">Jam</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.minutes).padStart(2, '0')}</span>
+            <span className="countdown-label">Menit</span>
+          </div>
+          <span className="countdown-separator">:</span>
+          <div className="countdown-item">
+            <span className="countdown-value">{String(countdown.seconds).padStart(2, '0')}</span>
+            <span className="countdown-label">Detik</span>
+          </div>
+        </div>
+
+        {/* Question Text */}
+        <div className="choose-question">
+          <span className="choose-text">Sudahkah kamu memilih?</span>
+        </div>
+
+        {/* Video Section */}
+        <motion.div
+          className="video-section"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <video
+            className="tutorial-video"
+            controls
+            width="100%"
+            poster="/tutorial/poster.jpg"
+          >
+            <source src="/tutorial/tutorial.mp4" type="video/mp4" />
+            Browser Anda tidak mendukung video HTML5
+          </video>
+        </motion.div>
+      </div>
+
       {/* SIMULASI CTA */}
       <motion.div 
         className="simulasi-section container"
@@ -375,65 +434,6 @@ export default function Home() {
           Jika ada masalah, segera melapor melalui Instagram.
         </p>
       </motion.div>
-
-      {/* TEXT REVEAL & COUNTDOWN SECTION */}
-      <div className="text-countdown-section container">
-        {/* Large Text Reveal */}
-        <div className="text-reveal-large">
-          <span className="word">Jangan</span>
-          <span className="word">Lupa</span>
-          <span className="word">Segera</span>
-          <span className="word">Gunakan</span>
-          <span className="word">Hakmu!</span>
-        </div>
-
-        {/* Countdown Timer */}
-        <div className="countdown-container">
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.days).padStart(2, '0')}</span>
-            <span className="countdown-label">Hari</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.hours).padStart(2, '0')}</span>
-            <span className="countdown-label">Jam</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.minutes).padStart(2, '0')}</span>
-            <span className="countdown-label">Menit</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.seconds).padStart(2, '0')}</span>
-            <span className="countdown-label">Detik</span>
-          </div>
-        </div>
-
-        {/* Question Text */}
-        <div className="choose-question">
-          <span className="choose-text">Sudahkah kamu memilih?</span>
-        </div>
-
-        {/* Video Section */}
-        <motion.div
-          className="video-section"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <video
-            className="tutorial-video"
-            controls
-            width="100%"
-            poster="/tutorial/poster.jpg"
-          >
-            <source src="/tutorial/tutorial.mp4" type="video/mp4" />
-            Browser Anda tidak mendukung video HTML5
-          </video>
-        </motion.div>
-      </div>
 
       {/* FOOTER */}
       <Footer />
