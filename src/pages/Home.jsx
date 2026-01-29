@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, doc, getDoc, setDoc } from "firebase/firestore";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "../components/Footer";
@@ -23,6 +23,10 @@ export default function Home() {
   const [jurusanList, setJurusanList] = useState([]);
   const [countdown, setCountdown] = useState({ days: 2, hours: 0, minutes: 0, seconds: 0 });
   const [hasVoted, setHasVoted] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [nisInput, setNisInput] = useState("");
+  const [tokenInput, setTokenInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const kandidatList = [
     {
@@ -175,6 +179,65 @@ export default function Home() {
     
     return () => clearInterval(interval);
   }, []);
+
+  // Handle chat login
+  const handleChatClick = () => {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser || hasVoted) {
+      // Already logged in or voted
+      navigate("/obrolan");
+    } else {
+      // Show login modal
+      setShowLoginModal(true);
+    }
+  };
+
+  // Handle NIS Token login for chat
+  const handleChatLogin = async () => {
+    if (!nisInput.trim() || !tokenInput.trim()) {
+      alert("NIS dan Token harus diisi!");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Check if user exists in database
+      const userRef = doc(db, "users", nisInput);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        alert("NIS tidak ditemukan di database!");
+        setIsLoading(false);
+        return;
+      }
+
+      const userData = userSnap.data();
+      // Validate token (simple check - can be enhanced with backend validation)
+      if (userData.token !== tokenInput) {
+        alert("Token tidak sesuai!");
+        setIsLoading(false);
+        return;
+      }
+
+      // Store user in localStorage for this session
+      localStorage.setItem("currentUser", JSON.stringify({
+        nis: nisInput,
+        nama: userData.nama || nisInput,
+        token: tokenInput
+      }));
+
+      // Close modal and navigate
+      setShowLoginModal(false);
+      setNisInput("");
+      setTokenInput("");
+      navigate("/obrolan");
+    } catch (error) {
+      console.error("Error logging in:", error);
+      alert("Error: " + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // GSAP Text Reveal on Scroll with Proper ScrollTrigger
   useEffect(() => {
@@ -489,19 +552,80 @@ export default function Home() {
       {/* FOOTER */}
       <Footer />
 
-      {/* CHAT BUTTON - ONLY VISIBLE IF USER HAS VOTED */}
-      {hasVoted && (
-        <motion.button
-          className="chat-button-floating"
-          onClick={() => navigate("/obrolan")}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      {/* CHAT BUTTON - VISIBLE TO ALL USERS */}
+      <motion.button
+        className="chat-button-floating"
+        onClick={handleChatClick}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      >
+        💬
+      </motion.button>
+
+      {/* LOGIN MODAL FOR CHAT */}
+      {showLoginModal && (
+        <motion.div
+          className="modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => {
+            setShowLoginModal(false);
+            setNisInput("");
+            setTokenInput("");
+          }}
         >
-          💬
-        </motion.button>
+          <motion.div
+            className="modal-content"
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.8 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>Login untuk Chat</h2>
+            <p>Masukkan NIS dan Token untuk mengakses ruang obrolan</p>
+            
+            <input
+              type="text"
+              placeholder="NIS"
+              value={nisInput}
+              onChange={(e) => setNisInput(e.target.value)}
+              disabled={isLoading}
+            />
+            
+            <input
+              type="password"
+              placeholder="Token"
+              value={tokenInput}
+              onChange={(e) => setTokenInput(e.target.value)}
+              disabled={isLoading}
+            />
+            
+            <div className="modal-buttons">
+              <button
+                onClick={handleChatLogin}
+                disabled={isLoading}
+                className="btn-login"
+              >
+                {isLoading ? "Loading..." : "Login"}
+              </button>
+              <button
+                onClick={() => {
+                  setShowLoginModal(false);
+                  setNisInput("");
+                  setTokenInput("");
+                }}
+                disabled={isLoading}
+                className="btn-cancel"
+              >
+                Batal
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
     </>
   );

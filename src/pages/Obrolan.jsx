@@ -31,6 +31,10 @@ export default function Obrolan() {
   const [totalMessages, setTotalMessages] = useState(0);
   const [isRoomLocked, setIsRoomLocked] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginNis, setLoginNis] = useState("");
+  const [loginToken, setLoginToken] = useState("");
   const containerRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -61,11 +65,7 @@ export default function Obrolan() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    setCurrentUser(user);
+    setCurrentUser(user); // Set user (can be null for viewing only)
 
     // Fetch messages from global chat room
     const messagesRef = collection(db, "chats", "obrolan", "messages");
@@ -75,38 +75,77 @@ export default function Obrolan() {
       limit(100)
     );
     
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const messagesList = [];
-      let userMessageData = null;
-      
-      snapshot.docs.forEach((doc) => {
-        const data = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        messagesList.push(data);
-        
-        // Check if this message belongs to current user
-        if (data.userId === user.nis) {
-          userMessageData = data;
+    const unsubscribe = onSnapshot(
+      q, 
+      (snapshot) => {
+        try {
+          const messagesList = [];
+          let userMessageData = null;
+          
+          snapshot.docs.forEach((doc) => {
+            const data = {
+              id: doc.id,
+              ...doc.data(),
+            };
+            messagesList.push(data);
+            
+            // Check if this message belongs to current user
+            if (user && data.userId === user.nis) {
+              userMessageData = data;
+            }
+          });
+          
+          setMessages(messagesList);
+          setUserMessage(userMessageData);
+          setTotalMessages(messagesList.length);
+          
+          // Lock room if 100 messages reached
+          setIsRoomLocked(messagesList.length >= 100);
+          setLoading(false);
+        } catch (error) {
+          console.error("Error processing messages:", error);
+          setError(error.message);
+          setLoading(false);
         }
-      });
-      
-      setMessages(messagesList);
-      setUserMessage(userMessageData);
-      setTotalMessages(messagesList.length);
-      
-      // Lock room if 100 messages reached
-      setIsRoomLocked(messagesList.length >= 100);
-      setLoading(false);
-    });
+      },
+      (error) => {
+        console.error("Error fetching messages:", error);
+        setError("Error loading chat: " + error.message);
+        setLoading(false);
+      }
+    );
 
     return unsubscribe;
-  }, [navigate]);
+  }, []);
+
+  // Handle chat login
+  const handleChatLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      if (user.nis === loginNis && user.token === loginToken) {
+        setCurrentUser(user);
+        setShowLoginModal(false);
+        setLoginNis("");
+        setLoginToken("");
+      } else {
+        alert("NIS atau Token tidak sesuai");
+      }
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
+    
+    if (!currentUser) {
+      alert("Silakan login terlebih dahulu untuk mengirim pesan");
+      navigate("/login");
+      return;
+    }
+    
     if (userMessage) {
       alert("Kamu hanya bisa mengirim 1 pesan. Edit atau hapus pesan kamu untuk mengirim pesan baru.");
       return;
@@ -121,7 +160,8 @@ export default function Obrolan() {
       const messagesRef = collection(db, "chats", "obrolan", "messages");
       await addDoc(messagesRef, {
         userId: currentUser?.nis,
-        userName: currentUser?.nama,
+        nis: currentUser?.nis,
+        nama: currentUser?.nama,
         kelas: currentUser?.kelas,
         jurusan: currentUser?.jurusan,
         message: message.trim(),
@@ -182,6 +222,56 @@ export default function Obrolan() {
   return (
     <>
       <Navbar />
+      
+      {/* Login Modal for Non-Authenticated Users */}
+      {showLoginModal && (
+        <motion.div 
+          className="obrolan-modal-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div 
+            className="obrolan-modal"
+            initial={{ scale: 0.9, y: -50 }}
+            animate={{ scale: 1, y: 0 }}
+          >
+            <h2>Masuk untuk Komentar</h2>
+            <p>Silakan masukkan NIS dan Token untuk mengirim pesan</p>
+            <form onSubmit={handleChatLogin}>
+              <input
+                type="text"
+                placeholder="NIS"
+                value={loginNis}
+                onChange={(e) => setLoginNis(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Token"
+                value={loginToken}
+                onChange={(e) => setLoginToken(e.target.value)}
+                required
+              />
+              <button type="submit">Masuk</button>
+            </form>
+            <button 
+              className="close-modal" 
+              onClick={() => setShowLoginModal(false)}
+            >
+              Tutup
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div style={{ padding: "20px", background: "#ffebee", color: "#c62828" }}>
+          <p>⚠️ Error: {error}</p>
+        </div>
+      )}
+
       <motion.div 
         className="obrolan-page"
         initial={{ opacity: 0 }}
@@ -235,7 +325,7 @@ export default function Obrolan() {
                   </div>
                   <div className="message-content">
                     <div className="message-header">
-                      <span className="message-name">{msg.userName}</span>
+                      <span className="message-name">NIS: {msg.nis || msg.userId}</span>
                       <span className="message-class">{msg.kelas}</span>
                       <span className="message-time">{formatTime(msg.timestamp)}</span>
                       {msg.edited && <span className="message-edited">(diedit)</span>}
@@ -304,19 +394,28 @@ export default function Obrolan() {
         {/* Input Message */}
         {!userMessage && !isRoomLocked && (
           <div className="obrolan-input-section">
-            <form onSubmit={handleSendMessage} className="obrolan-form">
-              <input
-                type="text"
-                placeholder="Tulis pesanmu..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="obrolan-input"
-                disabled={sending}
-              />
-              <button type="submit" className="obrolan-send-btn" disabled={sending || !message.trim()}>
-                {sending ? "Kirim..." : "Kirim"}
+            {!currentUser ? (
+              <button 
+                className="obrolan-login-btn"
+                onClick={() => setShowLoginModal(true)}
+              >
+                🔐 Masuk untuk Kirim Pesan
               </button>
-            </form>
+            ) : (
+              <form onSubmit={handleSendMessage} className="obrolan-form">
+                <input
+                  type="text"
+                  placeholder="Tulis pesanmu..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="obrolan-input"
+                  disabled={sending}
+                />
+                <button type="submit" className="obrolan-send-btn" disabled={sending || !message.trim()}>
+                  {sending ? "Kirim..." : "Kirim"}
+                </button>
+              </form>
+            )}
           </div>
         )}
         

@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // USERS: LOGIN PAKAI NIS + TOKEN
+    match /users/{nis} {
+      // BOLEH DIBACA UNTUK LOGIN
+      allow read: if true;
+
+      // BOLEH UPDATE SAAT VOTING (opsional)
+      allow update: if true;
+
+      // CREATE & DELETE DILARANG DARI CLIENT
+      allow create, delete: if false;
+    }
+
+    // VOTES
+    match /votes/{voteId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if false;
+    }
+
+    // PHOTOS - Simpan foto voting
+    match /photos/{photoId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if true;
+    }
+
+    // CHATS - Obrolan/chat room (PUBLIK)
+    match /chats/{chatId}/{documents=**} {
+      allow create: if true;
+      allow read: if true;
+      allow update: if true;
+      allow delete: if true;
+    }
+
+    // SETTINGS - Pengaturan voting visibility
+    match /settings/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

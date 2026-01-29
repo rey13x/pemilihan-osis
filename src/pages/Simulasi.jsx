@@ -35,15 +35,19 @@ export default function Simulasi() {
         return;
       }
 
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      const constraints = { 
         video: { 
           width: { ideal: 1280 },
           height: { ideal: 720 }
         },
         audio: false 
-      });
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       setCameraActive(true);
-      videoRef.current.srcObject = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
       
       // Start 5 second countdown
       let count = 5;
@@ -64,13 +68,15 @@ export default function Simulasi() {
       
       // Handle different error types
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        alert("❌ Izin kamera ditolak!\n\nUntuk menggunakan kamera:\n1. Klik ikon gembok di address bar\n2. Pilih 'Izinkan' untuk kamera\n3. Coba lagi\n\nAtau reset izin situs di pengaturan browser.");
+        alert("❌ Izin kamera ditolak!\n\nUntuk menggunakan kamera:\n1. Klik ikon gembok di address bar\n2. Pilih 'Izinkan' untuk kamera\n3. Coba lagi\n\nAtau reset izin situs di pengaturan browser.\n\nJika masih tidak bisa, hubungi admin untuk setup HTTPS.");
       } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
         alert("❌ Kamera tidak ditemukan!\n\nPastikan:\n1. Kamera sudah terpasang\n2. Tidak ada aplikasi lain yang menggunakan kamera");
-      } else if (error.name === "NotReadableError") {
+      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
         alert("❌ Kamera sedang digunakan oleh aplikasi lain!\n\nTutup aplikasi lain yang menggunakan kamera terlebih dahulu.");
+      } else if (error.name === "SecurityError") {
+        alert("❌ Error keamanan!\n\nWebsite ini harus menggunakan HTTPS untuk akses kamera.\n\nHubungi admin untuk setup HTTPS atau gunakan localhost dengan flag khusus.");
       } else {
-        alert("❌ Error akses kamera: " + error.message);
+        alert("❌ Error akses kamera: " + error.name + " - " + error.message);
       }
     }
   };
