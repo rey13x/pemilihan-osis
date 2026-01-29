@@ -156,94 +156,70 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP Text Reveal Effect with Engaging Animations (Mobile-Safe)
+  // GSAP Text Reveal Effect - Simple and Robust for Mobile
   useEffect(() => {
-    try {
-      const revealElement = document.querySelector(".text-reveal-large");
-      const chooseText = document.querySelector(".choose-text");
-      const chooseSubtexts = document.querySelectorAll(".choose-subtext");
-      
-      if (!revealElement || textRevealed) return;
-      
-      // Check if we're on mobile (viewport < 768px)
-      const isMobile = window.innerWidth < 768;
-      
-      const words = revealElement.querySelectorAll(".word");
-      if (words.length === 0) return;
-      
-      // Set initial state
-      gsap.set(words, { x: -100, opacity: 0 });
-      if (chooseSubtexts.length > 0) {
+    if (textRevealed) return;
+    
+    const timer = setTimeout(() => {
+      try {
+        const revealElement = document.querySelector(".text-reveal-large");
+        if (!revealElement) return;
+        
+        const chooseText = document.querySelector(".choose-text");
+        const chooseSubtexts = document.querySelectorAll(".choose-subtext");
+        const words = revealElement.querySelectorAll(".word");
+        
+        if (words.length === 0) return;
+        
+        // Kill previous animations
+        gsap.killTweensOf(words);
+        gsap.killTweensOf(chooseSubtexts);
+        
+        // Set initial state
+        gsap.set(words, { x: -100, opacity: 0 });
         gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
-      }
-      
-      // For mobile, use simpler animation without ScrollTrigger
-      if (isMobile) {
+        
+        // Simple animation for both mobile and desktop
         gsap.to(words, {
           x: 0,
           opacity: 1,
-          duration: 0.6,
-          stagger: 0.08,
-          delay: 0.3,
+          duration: 0.5,
+          stagger: 0.06,
+          delay: 0.1,
+          ease: "power2.out",
           onComplete: () => {
             setTextRevealed(true);
             if (chooseText) {
               chooseText.classList.add("revealed");
             }
+            // Animate subtext
             if (chooseSubtexts.length > 0) {
               gsap.to(chooseSubtexts, {
                 y: 0,
                 opacity: 1,
-                duration: 0.5,
-                stagger: 0.12,
-                delay: 0.2,
+                duration: 0.4,
+                stagger: 0.08,
+                ease: "power2.out",
               });
             }
           }
         });
-      } else {
-        // Desktop with ScrollTrigger
-        gsap.to(words, {
-          x: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: revealElement,
-            start: "top center",
-            end: "top 20%",
-            scrub: 0.5,
-            onEnter: () => {
-              setTextRevealed(true);
-              if (chooseText) {
-                chooseText.classList.add("revealed");
-              }
-              if (chooseSubtexts.length > 0) {
-                gsap.to(chooseSubtexts, {
-                  y: 0,
-                  opacity: 1,
-                  duration: 0.6,
-                  stagger: 0.15,
-                  delay: 0.4,
-                });
-              }
-            },
-          },
-        });
+      } catch (err) {
+        // Silently fail
+        setTextRevealed(true);
       }
-    } catch (err) {
-      console.warn("GSAP animation error:", err);
-      setTextRevealed(true);
-    }
+    }, 500);
 
     return () => {
+      clearTimeout(timer);
       try {
         ScrollTrigger.getAll().forEach(t => t.kill());
       } catch (err) {
-        // Silently ignore cleanup errors
+        // Ignore
       }
     };
-  }, [textRevealed]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getDisplayData = () => {
     if (selectedJurusan === "all") {
@@ -488,19 +464,6 @@ export default function Home() {
           </div>
         </motion.div>
       )}
-
-      {/* REPORT SECTION */}
-      <motion.div 
-        className="report-section container"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        <p className="report-text">
-          Jika ada masalah, segera melapor melalui Instagram.
-        </p>
-      </motion.div>
 
       {/* FOOTER */}
       <Footer />
