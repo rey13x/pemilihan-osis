@@ -246,9 +246,16 @@ export default function Login() {
               placeholder="Token"
               value={token}
               onChange={(e) => setToken(e.target.value)}
+              onBlur={(e) => {
+                // Prevent auto-navigation on blur
+                setToken(e.target.value);
+              }}
               disabled={isLoading}
               maxLength="20"
               autoComplete="off"
+              spellCheck="false"
+              data-1p-ignore
+              data-lpignore="true"
             />
 
             <button 

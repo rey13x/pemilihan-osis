@@ -6280,7 +6280,7 @@ button:hover {
 
 .choose-question {
   margin-bottom: 60px;
-  min-height: 80px;
+  min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6289,15 +6289,38 @@ button:hover {
   z-index: 10;
 }
 
+.choose-text-wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
 .choose-text {
   font-size: clamp(24px, 5vw, 48px);
   font-weight: 700;
   color: #ccc;
   transition: color 1.5s ease;
+  display: block;
+  margin-bottom: 20px;
 }
 
 .choose-text.revealed {
   color: #BF841D;
+}
+
+.choose-subtext-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choose-subtext {
+  font-size: clamp(14px, 3vw, 18px);
+  color: #666;
+  font-weight: 500;
+  line-height: 1.4;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .video-section {
@@ -6324,6 +6347,7 @@ button:hover {
   .text-reveal-large {
     font-size: clamp(24px, 6vw, 48px);
     gap: 8px;
+    margin-bottom: 40px;
   }
 
   .countdown-value {
@@ -6336,8 +6360,22 @@ button:hover {
     margin: 0 4px;
   }
 
+  .choose-question {
+    min-height: 140px;
+    margin-bottom: 40px;
+  }
+
   .choose-text {
     font-size: clamp(18px, 4vw, 32px);
+    margin-bottom: 16px;
+  }
+
+  .choose-subtext {
+    font-size: clamp(13px, 2.5vw, 16px);
+  }
+
+  .choose-text-wrapper {
+    padding: 0 15px;
   }
 
   .report-section {
@@ -6359,6 +6397,7 @@ button:hover {
   .text-reveal-large {
     font-size: clamp(20px, 5vw, 36px);
     gap: 6px;
+    margin-bottom: 35px;
   }
 
   .countdown-value {
@@ -6376,8 +6415,23 @@ button:hover {
     font-size: 10px;
   }
 
+  .choose-question {
+    min-height: 150px;
+    margin-bottom: 35px;
+    top: 50%;
+  }
+
   .choose-text {
-    font-size: clamp(16px, 3vw, 24px);
+    font-size: clamp(16px, 3.5vw, 24px);
+    margin-bottom: 14px;
+  }
+
+  .choose-subtext {
+    font-size: clamp(12px, 2vw, 14px);
+  }
+
+  .choose-text-wrapper {
+    padding: 0 12px;
   }
 
   .report-section {

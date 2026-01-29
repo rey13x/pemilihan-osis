@@ -156,14 +156,16 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP Text Reveal Effect
+  // GSAP Text Reveal Effect with Engaging Animations
   useEffect(() => {
     const revealElement = document.querySelector(".text-reveal-large");
     const chooseText = document.querySelector(".choose-text");
+    const chooseSubtexts = document.querySelectorAll(".choose-subtext");
     
     if (revealElement && !textRevealed) {
       const words = revealElement.querySelectorAll(".word");
       gsap.set(words, { x: -100, opacity: 0 });
+      gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
       
       gsap.to(words, {
         x: 0,
@@ -180,6 +182,14 @@ export default function Home() {
             if (chooseText) {
               chooseText.classList.add("revealed");
             }
+            // Animate subtext after main text
+            gsap.to(chooseSubtexts, {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.15,
+              delay: 0.4,
+            });
           },
         },
       });
@@ -296,9 +306,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Question Text */}
+        {/* Question Text with Engaging Follow-up */}
         <div className="choose-question">
-          <span className="choose-text">Sudahkah kamu memilih?</span>
+          <div className="choose-text-wrapper">
+            <span className="choose-text">Sudahkah kamu memilih?</span>
+            <div className="choose-subtext-container">
+              <span className="choose-subtext">Jangan sia-siakan kesempatan emas ini!</span>
+              <span className="choose-subtext">Suaramu penting untuk masa depan OSIS yang lebih baik 🗳️</span>
+            </div>
+          </div>
         </div>
 
         {/* Video Section */}

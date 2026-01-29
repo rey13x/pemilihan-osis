@@ -1,18 +1,30 @@
 // Security utility to prevent tampering
 
 export const initializeSecurityMeasures = () => {
-  // Disable console
-  Object.defineProperty(window, 'console', {
-    value: new Proxy(console, {
+  // Disable console safely
+  try {
+    const consoleProxy = new Proxy(console, {
       get(target, prop) {
         if (['log', 'error', 'warn', 'info', 'debug'].includes(prop)) {
           return () => {};
         }
         return target[prop];
       }
-    }),
-    writable: false
-  });
+    });
+    
+    if (!Object.getOwnPropertyDescriptor(window, 'console')?.configurable) {
+      // Skip if console property is not configurable
+      return;
+    }
+    
+    Object.defineProperty(window, 'console', {
+      value: consoleProxy,
+      writable: false,
+      configurable: false
+    });
+  } catch (e) {
+    // Silently ignore if defineProperty fails
+  }
 
   // Disable developer tools
   const disableDevTools = () => {
@@ -81,12 +93,20 @@ export const initializeSecurityMeasures = () => {
     originalSetItem.apply(this, arguments);
   };
 
-  // Prevent modification of critical functions
-  Object.defineProperty(window, 'eval', {
-    value: function() {
-      throw new Error('eval is disabled');
+  // Prevent modification of critical functions safely
+  try {
+    if (Object.getOwnPropertyDescriptor(window, 'eval')?.configurable !== false) {
+      Object.defineProperty(window, 'eval', {
+        value: function() {
+          throw new Error('eval is disabled');
+        },
+        writable: false,
+        configurable: false
+      });
     }
-  });
+  } catch (e) {
+    // Silently ignore if defineProperty fails
+  }
 };
 
 // Validate user data integrity
