@@ -22,7 +22,6 @@ export default function Home() {
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
   const [countdown, setCountdown] = useState({ days: 2, hours: 0, minutes: 0, seconds: 0 });
-  const [textRevealed, setTextRevealed] = useState(false);
 
   const kandidatList = [
     {
@@ -156,69 +155,70 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP Text Reveal Effect - Simple and Robust for Mobile
+  // GSAP Text Reveal on Scroll with Proper ScrollTrigger
   useEffect(() => {
-    if (textRevealed) return;
-    
-    const timer = setTimeout(() => {
-      try {
-        const revealElement = document.querySelector(".text-reveal-large");
-        if (!revealElement) return;
-        
-        const chooseText = document.querySelector(".choose-text");
-        const chooseSubtexts = document.querySelectorAll(".choose-subtext");
-        const words = revealElement.querySelectorAll(".word");
-        
-        if (words.length === 0) return;
-        
-        // Kill previous animations
-        gsap.killTweensOf(words);
-        gsap.killTweensOf(chooseSubtexts);
-        
-        // Set initial state
-        gsap.set(words, { x: -100, opacity: 0 });
-        gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
-        
-        // Simple animation for both mobile and desktop
-        gsap.to(words, {
-          x: 0,
-          opacity: 1,
-          duration: 0.5,
-          stagger: 0.06,
-          delay: 0.1,
-          ease: "power2.out",
-          onComplete: () => {
-            setTextRevealed(true);
-            if (chooseText) {
-              chooseText.classList.add("revealed");
-            }
-            // Animate subtext
-            if (chooseSubtexts.length > 0) {
-              gsap.to(chooseSubtexts, {
-                y: 0,
-                opacity: 1,
-                duration: 0.4,
-                stagger: 0.08,
-                ease: "power2.out",
-              });
-            }
-          }
-        });
-      } catch (err) {
-        // Silently fail
-        setTextRevealed(true);
+    const revealElement = document.querySelector(".text-reveal-large");
+    if (!revealElement) return;
+
+    const words = revealElement.querySelectorAll(".word");
+    const chooseText = document.querySelector(".choose-text");
+    const chooseSubtexts = document.querySelectorAll(".choose-subtext");
+
+    if (words.length === 0) return;
+
+    // Kill existing animations
+    gsap.killTweensOf(words);
+    if (chooseSubtexts) gsap.killTweensOf(chooseSubtexts);
+    if (chooseText) gsap.killTweensOf(chooseText);
+
+    // Set initial state - words start hidden
+    gsap.set(words, { x: -50, opacity: 0 });
+    if (chooseSubtexts.length > 0) {
+      gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
+    }
+
+    // Create timeline for scroll animation
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: revealElement,
+        start: "top 70%",
+        end: "top 30%",
+        scrub: 0.5,
+        markers: false,
+        once: false,
       }
-    }, 500);
+    });
+
+    // Animate words in on scroll
+    tl.to(words, {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      stagger: 0.05,
+      ease: "power2.out"
+    }, 0);
+
+    // After words animate, animate the choose text
+    tl.to(chooseText, {
+      color: "#BF841D",
+      duration: 0.8,
+      ease: "power2.out"
+    }, 0.5);
+
+    // Animate subtext at the end
+    if (chooseSubtexts.length > 0) {
+      tl.to(chooseSubtexts, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out"
+      }, 0.8);
+    }
 
     return () => {
-      clearTimeout(timer);
-      try {
-        ScrollTrigger.getAll().forEach(t => t.kill());
-      } catch (err) {
-        // Ignore
-      }
+      tl.kill();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDisplayData = () => {
