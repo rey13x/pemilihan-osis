@@ -95,7 +95,7 @@ export default function CameraGallery() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <img src={photo.photoData} alt="Voting photo from student" />
+              <img src={photo.photoData} alt="Voting evidence" />
               <div className="photo-info">
                 <div className="photo-date">
                   {photo.timestamp?.toDate?.().toLocaleString("id-ID") || "No date"}
