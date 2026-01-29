@@ -1,10 +1,207 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import NotificationPopup from "../components/NotificationPopup";
+
+// Utility untuk download CSV
+const downloadCSV = (data, filename) => {
+  const csv = convertToCSV(data);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename);
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const convertToCSV = (data) => {
+  if (!Array.isArray(data) || data.length === 0) return "";
+  
+  const headers = Object.keys(data[0]);
+  const csv = [headers.join(",")];
+  
+  data.forEach((row) => {
+    const values = headers.map((header) => {
+      const value = row[header];
+      // Escape quotes in values
+      return typeof value === "string" && value.includes(",")
+        ? `"${value.replace(/"/g, '""')}"`
+        : value;
+    });
+    csv.push(values.join(","));
+  });
+  
+  return csv.join("\n");
+};
+
+// Modal untuk detail paslon
+const PasalonDetailModal = ({ isOpen, paslon, allData, onClose, jurusanList }) => {
+  const [selectedJurusan, setSelectedJurusan] = useState("all");
+
+  if (!isOpen || !paslon) return null;
+
+  // Get data untuk paslon yang dipilih
+  const getPasalonVotes = () => {
+    if (selectedJurusan === "all") {
+      return allData.votes[paslon.id] || 0;
+    }
+    return (allData.votesByJurusan[selectedJurusan]?.[paslon.id]) || 0;
+  };
+
+  // Filter voters untuk paslon dan jurusan ini
+  const getFilteredVoters = () => {
+    let filtered = allData.voterDetails.filter(v => v.vote === paslon.id);
+    
+    if (selectedJurusan !== "all") {
+      filtered = filtered.filter(v => v.jurusan === selectedJurusan);
+    }
+    
+    return filtered;
+  };
+
+  // Get vote summary untuk paslon ini grouped by jurusan
+  const getJurusanSummary = () => {
+    const summary = {};
+    Object.entries(allData.votesByJurusan).forEach(([jurusan, votes]) => {
+      summary[jurusan] = votes[paslon.id] || 0;
+    });
+    return summary;
+  };
+
+  const filteredVoters = getFilteredVoters();
+  const jurusanSummary = getJurusanSummary();
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="modal-overlay"
+        onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          className="modal-content paslon-detail-modal"
+          onClick={(e) => e.stopPropagation()}
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+        >
+          <button className="modal-close" onClick={onClose}>✕</button>
+
+          {/* Header */}
+          <div className="modal-header" style={{ borderBottomColor: paslon.color }}>
+            <div className="modal-header-content">
+              <span className="modal-nomor" style={{ backgroundColor: paslon.color }}>
+                {paslon.nomor}
+              </span>
+              <div>
+                <h2>{paslon.nama}</h2>
+                <p className="modal-total-votes">{getPasalonVotes()} Suara</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Jurusan */}
+          <div className="modal-filter">
+            <label>Filter Jurusan:</label>
+            <select value={selectedJurusan} onChange={(e) => setSelectedJurusan(e.target.value)}>
+              <option value="all">Semua Jurusan</option>
+              {jurusanList.filter(j => j !== "all").map(j => (
+                <option key={j} value={j}>{j}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Rincian Jurusan */}
+          <div className="modal-section">
+            <h3>Rincian per Jurusan</h3>
+            <div className="table-wrapper">
+              <table className="detail-table">
+                <thead>
+                  <tr>
+                    <th>Jurusan</th>
+                    <th>Suara</th>
+                    <th>Persentase</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(jurusanSummary).map(([jurusan, votes]) => {
+                    const totalJurusan = (allData.votesByJurusan[jurusan]?.paslon1 || 0) +
+                                        (allData.votesByJurusan[jurusan]?.paslon2 || 0) +
+                                        (allData.votesByJurusan[jurusan]?.paslon3 || 0) +
+                                        (allData.votesByJurusan[jurusan]?.paslon4 || 0);
+                    const percentage = totalJurusan > 0 ? ((votes / totalJurusan) * 100).toFixed(1) : 0;
+                    return (
+                      <tr key={jurusan}>
+                        <td>{jurusan}</td>
+                        <td className="votes-cell">{votes}</td>
+                        <td className="percentage-cell">{percentage}%</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Detail Pemilih */}
+          <div className="modal-section">
+            <h3>Detail Pemilih ({filteredVoters.length})</h3>
+            <div className="table-wrapper">
+              <table className="detail-table voters-table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>NIS</th>
+                    <th>Kelas</th>
+                    <th>Jurusan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredVoters.map((voter, idx) => (
+                    <tr key={idx}>
+                      <td className="no-cell">{idx + 1}</td>
+                      <td className="nis-cell">{voter.nis}</td>
+                      <td>{voter.kelas}</td>
+                      <td>{voter.jurusan}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Download Buttons */}
+          <div className="modal-actions">
+            <button 
+              className="btn-download"
+              onClick={() => {
+                const voters = getFilteredVoters().map((v, idx) => ({
+                  No: idx + 1,
+                  NIS: v.nis,
+                  Kelas: v.kelas,
+                  Jurusan: v.jurusan
+                }));
+                const jurusanFilter = selectedJurusan === "all" ? "semua-jurusan" : selectedJurusan;
+                downloadCSV(voters, `pemilih_${paslon.id}_${jurusanFilter}.csv`);
+              }}
+            >
+              📥 Download CSV
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
 
 const Paslon = [
   { id: "paslon1", nomor: "1", nama: "Paslon 1", foto: "/paslon/paslon-1.png", color: "#FF6B6B" },
@@ -111,6 +308,9 @@ export default function Dashboard() {
     type: "error",
     message: "",
   });
+
+  const [selectedPaslon, setSelectedPaslon] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [dashboardData, setDashboardData] = useState({
     totalVotes: 0,
@@ -469,9 +669,14 @@ export default function Dashboard() {
           return (
             <motion.div
               key={paslon.id}
-              className={`paslon-card ${paslon.id}`}
+              className={`paslon-card ${paslon.id} clickable`}
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
+              onClick={() => {
+                setSelectedPaslon(paslon);
+                setIsModalOpen(true);
+              }}
+              style={{ cursor: "pointer" }}
             >
               {/* Foto */}
               <div className="paslon-photo-container">
@@ -514,6 +719,9 @@ export default function Dashboard() {
                   }}
                 />
               </div>
+
+              {/* Click Hint */}
+              <div className="paslon-click-hint">Klik untuk detail</div>
             </motion.div>
           );
         })}
@@ -608,6 +816,102 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
+      {/* Download Section */}
+      <motion.div
+        className="dashboard-download-section"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <h2>Download Laporan</h2>
+        <div className="download-grid">
+          <button 
+            className="download-btn"
+            onClick={() => {
+              // Download all voters data
+              const data = dashboardData.voterDetails
+                .sort((a, b) => a.nis.localeCompare(b.nis))
+                .map((v, idx) => ({
+                  No: idx + 1,
+                  NIS: v.nis,
+                  Kelas: v.kelas,
+                  Jurusan: v.jurusan,
+                  Vote: v.vote,
+                  "Voted At": new Date(v.votedAt).toLocaleString()
+                }));
+              downloadCSV(data, `pemilih_semua_${new Date().toISOString().split('T')[0]}.csv`);
+              setNotification({
+                isOpen: true,
+                type: "success",
+                message: "Download berhasil!"
+              });
+            }}
+          >
+            📥 Download Semua Pemilih
+          </button>
+
+          <button 
+            className="download-btn"
+            onClick={() => {
+              // Download summary by jurusan
+              const data = Object.entries(dashboardData.votesByJurusan).map(([jurusan, votes]) => ({
+                Jurusan: jurusan,
+                Paslon1: votes.paslon1 || 0,
+                Paslon2: votes.paslon2 || 0,
+                Paslon3: votes.paslon3 || 0,
+                Paslon4: votes.paslon4 || 0,
+                Total: (votes.paslon1 || 0) + (votes.paslon2 || 0) + (votes.paslon3 || 0) + (votes.paslon4 || 0)
+              }));
+              downloadCSV(data, `ringkasan_jurusan_${new Date().toISOString().split('T')[0]}.csv`);
+              setNotification({
+                isOpen: true,
+                type: "success",
+                message: "Download berhasil!"
+              });
+            }}
+          >
+            📊 Download Ringkasan Jurusan
+          </button>
+
+          <button 
+            className="download-btn"
+            onClick={() => {
+              // Download summary by paslon
+              const paslon1Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon1');
+              const paslon2Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon2');
+              const paslon3Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon3');
+              const paslon4Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon4');
+
+              const data = [{
+                Paslon: "Paslon 1",
+                "Total Suara": paslon1Voters.length,
+                Persentase: ((paslon1Voters.length / dashboardData.totalVotes) * 100).toFixed(2) + '%'
+              }, {
+                Paslon: "Paslon 2",
+                "Total Suara": paslon2Voters.length,
+                Persentase: ((paslon2Voters.length / dashboardData.totalVotes) * 100).toFixed(2) + '%'
+              }, {
+                Paslon: "Paslon 3",
+                "Total Suara": paslon3Voters.length,
+                Persentase: ((paslon3Voters.length / dashboardData.totalVotes) * 100).toFixed(2) + '%'
+              }, {
+                Paslon: "Paslon 4",
+                "Total Suara": paslon4Voters.length,
+                Persentase: ((paslon4Voters.length / dashboardData.totalVotes) * 100).toFixed(2) + '%'
+              }];
+              downloadCSV(data, `ringkasan_paslon_${new Date().toISOString().split('T')[0]}.csv`);
+              setNotification({
+                isOpen: true,
+                type: "success",
+                message: "Download berhasil!"
+              });
+            }}
+          >
+            🏆 Download Ringkasan Paslon
+          </button>
+        </div>
+      </motion.div>
+
       {/* Voting Results Toggle & Display */}
       <motion.div
         className="dashboard-voting-results"
@@ -616,6 +920,15 @@ export default function Dashboard() {
         transition={{ duration: 0.5, delay: 0.6 }}
       >
       </motion.div>
+
+      {/* Modal Detail Paslon */}
+      <PasalonDetailModal 
+        isOpen={isModalOpen}
+        paslon={selectedPaslon}
+        allData={dashboardData}
+        onClose={() => setIsModalOpen(false)}
+        jurusanList={jurusanList}
+      />
       </div>
     </>
   );

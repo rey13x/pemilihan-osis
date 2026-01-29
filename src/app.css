@@ -3247,7 +3247,21 @@ button:hover {
     padding: 9px;
     gap: 3px;
   }
+}
 
+/* Portrait mode - reduce card image size */
+@media (orientation: portrait) {
+  .card-image {
+    width: 25% !important;
+    min-height: auto !important;
+  }
+
+  .card-info {
+    width: 75% !important;
+  }
+}
+
+@media (max-width: 320px) {
   .card-number {
     width: 26px;
     height: 26px;
@@ -6237,6 +6251,18 @@ button:hover {
   }
 }
 
+/* Portrait mode - reduce image size */
+@media (orientation: portrait) {
+  .visi-misi-detail-hero {
+    height: 300px;
+  }
+
+  .visi-misi-detail-hero img {
+    max-width: 70vw;
+    max-height: 100%;
+  }
+}
+
 
 /* Footer */
 .visi-misi-footer {
@@ -6294,4 +6320,449 @@ button:hover {
   }
 }
 
+/* ==================================================
+   PASLON DETAIL MODAL
+================================================== */
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 15px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.paslon-detail-modal {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f0f0f0;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.modal-close:hover {
+  background: #e0e0e0;
+  transform: rotate(90deg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  border-bottom: 3px solid #BF841D;
+  position: relative;
+}
+
+.modal-header-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.modal-nomor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 900;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  font-size: 28px;
+  font-weight: 900;
+  color: #2b2b2b;
+  margin: 0;
+}
+
+.modal-total-votes {
+  font-size: 14px;
+  color: #999;
+  margin: 5px 0 0 0;
+}
+
+.modal-filter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 30px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-filter label {
+  font-weight: 600;
+  color: #2b2b2b;
+  margin: 0;
+}
+
+.modal-filter select {
+  padding: 8px 12px;
+  border: 2px solid #BF841D;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  background: white;
+  color: #2b2b2b;
+}
+
+.modal-filter select:focus {
+  outline: none;
+  border-color: #9B6B1A;
+}
+
+.modal-section {
+  padding: 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-section h3 {
+  font-size: 18px;
+  font-weight: 900;
+  color: #2b2b2b;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.detail-table thead {
+  background: #f9f9f9;
+}
+
+.detail-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 900;
+  color: #2b2b2b;
+  border-bottom: 2px solid #BF841D;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.detail-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #666;
+}
+
+.detail-table tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.detail-table .votes-cell {
+  font-weight: 700;
+  color: #BF841D;
+}
+
+.detail-table .percentage-cell {
+  font-weight: 700;
+  color: #2b2b2b;
+}
+
+.detail-table .no-cell {
+  font-weight: 600;
+  text-align: center;
+  width: 50px;
+}
+
+.detail-table .nis-cell {
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.voters-table {
+  font-size: 13px;
+}
+
+.voters-table th {
+  font-size: 11px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 30px;
+  background: #f9f9f9;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-download {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #BF841D, #9B6B1A);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 900;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-download:hover {
+  background: linear-gradient(135deg, #D4932A, #A87621);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(191, 132, 29, 0.3);
+}
+
+.paslon-click-hint {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #BF841D;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.paslon-card.clickable:hover .paslon-click-hint {
+  opacity: 1;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 85vh;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .modal-nomor {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-section {
+    padding: 20px;
+  }
+
+  .modal-section h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .detail-table th,
+  .detail-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .modal-actions {
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .btn-download {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    max-height: 80vh;
+    margin: 0;
+    border-radius: 8px;
+  }
+
+  .modal-header {
+    padding: 15px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .modal-header-content {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .modal-total-votes {
+    font-size: 12px;
+  }
+
+  .modal-filter {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .modal-filter select {
+    width: 100%;
+  }
+
+  .modal-section {
+    padding: 15px;
+  }
+
+  .modal-section h3 {
+    font-size: 14px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .detail-table th,
+  .detail-table td {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .modal-actions {
+    padding: 15px;
+    flex-direction: column;
+  }
+
+  .btn-download {
+    width: 100%;
+    padding: 12px 16px;
+  }
+}
+/* ==================================================
+   DASHBOARD DOWNLOAD SECTION
+================================================== */
+
+.dashboard-download-section {
+  padding: 40px;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+  margin: 40px;
+  border-radius: 12px;
+  border: 2px solid #BF841D;
+}
+
+.dashboard-download-section h2 {
+  font-size: 24px;
+  font-weight: 900;
+  color: #2b2b2b;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.download-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.download-btn {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #BF841D, #9B6B1A);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(191, 132, 29, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #D4932A, #A87621);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(191, 132, 29, 0.4);
+}
+
+.download-btn:active {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .dashboard-download-section {
+    padding: 30px 20px;
+    margin: 30px 20px;
+  }
+
+  .download-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .download-btn {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+}
