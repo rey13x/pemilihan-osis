@@ -302,13 +302,13 @@ export default function Home() {
         viewport={{ once: true, amount: 0.2 }}
       >
         {/* Large Text Reveal */}
-        <div className="text-reveal-large">
+        {/* <div className="text-reveal-large">
           <span className="word">Jangan</span>
           <span className="word">Lupa</span>
           <span className="word">Segera</span>
           <span className="word">Gunakan</span>
           <span className="word">Hakmu!</span>
-        </div>
+        </div> */}
 
         {/* Countdown Timer */}
         <div className="countdown-container">
@@ -334,7 +334,7 @@ export default function Home() {
         </div>
 
         {/* Question Text with Engaging Follow-up */}
-        <div className="choose-question">
+        {/* <div className="choose-question">
           <div className="choose-text-wrapper">
             <span className="choose-text">Sudahkah kamu memilih?</span>
             <div className="choose-subtext-container">
@@ -342,7 +342,7 @@ export default function Home() {
               <span className="choose-subtext">Suaramu penting untuk masa depan OSIS yang lebih baik 🗳️</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Video Section */}
         <motion.div
