@@ -44,15 +44,6 @@ export default function Footer() {
             </a>
           </div>
         </div>
-
-        <div className="footer-section footer-links">
-          <h3>Navigasi</h3>
-          <ul>
-            <li><a href="/">Beranda</a></li>
-            <li><a href="/visi-misi">Visi Misi</a></li>
-            <li><a href="/login">Pilih OSIS</a></li>
-          </ul>
-        </div>
       </div>
     </footer>
   );
