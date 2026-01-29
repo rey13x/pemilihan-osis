@@ -29,7 +29,19 @@ export default function Simulasi() {
   // Handle Camera Click
   const handleCameraClick = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      // Check if getUserMedia is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert("Browser kamu tidak mendukung akses kamera. Gunakan browser modern seperti Chrome, Firefox, atau Edge.");
+        return;
+      }
+
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false 
+      });
       setCameraActive(true);
       videoRef.current.srcObject = stream;
       
@@ -47,7 +59,19 @@ export default function Simulasi() {
         }
       }, 1000);
     } catch (error) {
-      alert("Izin kamera ditolak atau terjadi error: " + error.message);
+      setCameraActive(false);
+      setCountdown(null);
+      
+      // Handle different error types
+      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
+        alert("❌ Izin kamera ditolak!\n\nUntuk menggunakan kamera:\n1. Klik ikon gembok di address bar\n2. Pilih 'Izinkan' untuk kamera\n3. Coba lagi\n\nAtau reset izin situs di pengaturan browser.");
+      } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
+        alert("❌ Kamera tidak ditemukan!\n\nPastikan:\n1. Kamera sudah terpasang\n2. Tidak ada aplikasi lain yang menggunakan kamera");
+      } else if (error.name === "NotReadableError") {
+        alert("❌ Kamera sedang digunakan oleh aplikasi lain!\n\nTutup aplikasi lain yang menggunakan kamera terlebih dahulu.");
+      } else {
+        alert("❌ Error akses kamera: " + error.message);
+      }
     }
   };
 
@@ -57,39 +81,43 @@ export default function Simulasi() {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0);
+    try {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0);
 
-    // Convert to blob and save
-    canvas.toBlob(async (blob) => {
-      const file = new File([blob], `photo-${Date.now()}.png`, { type: "image/png" });
-      
-      // Save to Firebase Storage and Firestore
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("timestamp", new Date().toISOString());
-      formData.append("userId", localStorage.getItem("currentUser"));
+      // Convert to blob and save
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], `photo-${Date.now()}.png`, { type: "image/png" });
+        
+        try {
+          // Save photo metadata to Firestore
+          await addDoc(collection(db, "photos"), {
+            userId: localStorage.getItem("currentUser"),
+            timestamp: serverTimestamp(),
+            photoName: file.name,
+            photoData: await fileToBase64(file),
+          });
 
-      try {
-        // Save photo metadata to Firestore
-        await addDoc(collection(db, "photos"), {
-          userId: localStorage.getItem("currentUser"),
-          timestamp: serverTimestamp(),
-          photoName: file.name,
-          photoData: await fileToBase64(file),
-        });
+          alert("✅ Foto berhasil disimpan!");
+        } catch (error) {
+          console.error("Error saving photo:", error);
+          alert("❌ Error menyimpan foto: " + error.message);
+        }
 
-        alert("Foto berhasil disimpan!");
-      } catch (error) {
-        console.error("Error saving photo:", error);
-      }
-
-      // Stop camera
+        // Stop camera and cleanup
+        stream.getTracks().forEach((track) => track.stop());
+        setCameraActive(false);
+        setCountdown(null);
+      });
+    } catch (error) {
+      console.error("Error capturing photo:", error);
+      alert("❌ Error mengambil foto: " + error.message);
+      // Cleanup on error
       stream.getTracks().forEach((track) => track.stop());
       setCameraActive(false);
       setCountdown(null);
-    });
+    }
   };
 
   // Convert file to base64

@@ -149,7 +149,6 @@ export default function VisiMisi() {
 
         {/* Footer */}
         <div className="visi-misi-footer">
-          <p>Pilih calon pemimpin yang paling Anda percayai</p>
           <motion.button
             className="back-btn"
             onClick={() => navigate("/")}
