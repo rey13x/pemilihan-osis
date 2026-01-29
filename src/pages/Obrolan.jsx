@@ -244,7 +244,7 @@ export default function Obrolan() {
           {!loading && messages.length === 0 && <div className="no-messages"><p>Jadilah yang pertama mengirim pesan!</p></div>}
           {!loading && messages.map((msg) => (
             <div key={msg.id} className={`message-item ${msg.userId === currentUser?.nis ? 'user-message' : ''}`}>
-              <div className="message-avatar">{msg.userId?.substring(0, 2).toUpperCase() || "?"}</div>
+              <div className="message-avatar"><img src="/info/profil.png" alt="avatar" /></div>
               <div className="message-content">
                 <div className="message-header">
                   <span className="message-name">NIS: {msg.nis || msg.userId}</span>

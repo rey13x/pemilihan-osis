@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { db } from "../firebase/firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 
 export default function Simulasi() {
@@ -15,12 +15,31 @@ export default function Simulasi() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [countdown, setCountdown] = useState(null);
+  const [userHasPhoto, setUserHasPhoto] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Check authentication
+  // Check authentication and existing photo
   useEffect(() => {
     const user = localStorage.getItem("currentUser");
     if (user) {
       setIsAuthenticated(true);
+      setCurrentUser(user);
+      
+      // Check if user already has a photo
+      const checkExistingPhoto = async () => {
+        try {
+          const photosRef = collection(db, "photos");
+          const q = query(photosRef, where("userId", "==", user));
+          const querySnapshot = await getDocs(q);
+          if (querySnapshot.docs.length > 0) {
+            setUserHasPhoto(true);
+          }
+        } catch (error) {
+          console.error("Error checking photos:", error);
+        }
+      };
+      
+      checkExistingPhoto();
     } else {
       navigate("/login");
     }
@@ -28,6 +47,12 @@ export default function Simulasi() {
 
   // Handle Camera Click
   const handleCameraClick = async () => {
+    // Check if user already has a photo
+    if (userHasPhoto) {
+      alert("✓ Kamu sudah foto! Hanya bisa foto sekali");
+      return;
+    }
+    
     try {
       // Check if getUserMedia is available
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -99,13 +124,14 @@ export default function Simulasi() {
         try {
           // Save photo metadata to Firestore
           await addDoc(collection(db, "photos"), {
-            userId: localStorage.getItem("currentUser"),
+            userId: currentUser,
             timestamp: serverTimestamp(),
             photoName: file.name,
             photoData: await fileToBase64(file),
           });
 
           alert("✅ Foto berhasil disimpan!");
+          setUserHasPhoto(true);
         } catch (error) {
           console.error("Error saving photo:", error);
           alert("❌ Error menyimpan foto: " + error.message);
@@ -231,7 +257,7 @@ export default function Simulasi() {
                   📸
                 </button>
               </div>
-              <h2>Mulai Voting</h2>
+              <h2>Mau Ciss?</h2>
               <p>Klik tombol kamera untuk foto! atau lanjut mulai voting.</p>
               <button
                 className="simulasi-start-btn"
@@ -301,11 +327,13 @@ export default function Simulasi() {
         {/* Camera Modal */}
         {cameraActive && (
           <div className="camera-modal">
+            <div className="camera-notification">📷 Kamera Aktif</div>
             <div className="camera-container">
               <h3>Ambil Foto</h3>
               <video ref={videoRef} autoPlay playsInline className="camera-video" />
               <canvas ref={canvasRef} style={{ display: "none" }} />
-              <div className="countdown">{countdown}</div>
+              <div className="camera-countdown">{countdown}</div>
+              <div style={{ color: "white", fontSize: "18px", marginTop: "20px", fontWeight: "600" }}>Siap Bergaya!!</div>
             </div>
           </div>
         )}

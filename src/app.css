@@ -3421,18 +3421,18 @@ button:hover {
   text-align: center;
   max-width: 600px;
   padding: clamp(24px, 6vw, 40px) clamp(16px, 4vw, 20px);
-  background: transparent;
+  background: linear-gradient(135deg, #BF841D 0%, #9B6B1A 100%);
   border-radius: 20px;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  box-shadow: none;
+  box-shadow: 0 8px 24px rgba(191, 132, 29, 0.3);
   width: 100%;
 }
 
 .success-message-section h2 {
   font-size: clamp(28px, 6vw, 42px);
   font-weight: 900;
-  color: #2b2b2b;
+  color: white;
   margin: 0 0 16px 0;
   line-height: 1.2;
 }
@@ -3440,13 +3440,13 @@ button:hover {
 .candidate-name {
   font-size: clamp(18px, 4vw, 24px);
   font-weight: 700;
-  color: #BF841D;
+  color: white;
   margin: 0 0 8px 0;
 }
 
 .candidate-paslon {
   font-size: clamp(14px, 3vw, 18px);
-  color: #666;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 500;
   margin: 0 0 24px 0;
 }
@@ -3458,18 +3458,19 @@ button:hover {
   gap: 12px;
   margin-top: 24px;
   margin-bottom: 24px;
+  color: white;
 }
 
 .countdown-number {
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 900;
-  color: #BF841D;
+  color: white;
   line-height: 1;
 }
 
 .countdown-text {
   font-size: 16px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
 }
 
@@ -5125,8 +5126,8 @@ button:hover {
 
 .simulasi-card {
   background: white;
-  border: 2px solid #BF841D;
-  border-radius: 20px;
+  border: none;
+  border-radius: 0;
   padding: clamp(24px, 5vw, 40px);
   text-align: center;
   width: 100%;
@@ -5366,6 +5367,86 @@ button:hover {
   font-weight: 900;
   color: #2b2b2b;
   margin: 0 0 12px 0;
+}
+
+/* Camera notification style */
+.camera-notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  font-size: clamp(14px, 2.5vw, 16px);
+  font-weight: 600;
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateX(-50%) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.camera-countdown {
+  font-size: clamp(48px, 10vw, 64px);
+  font-weight: 900;
+  color: #4caf50;
+  text-align: center;
+  margin-top: 16px;
+  animation: scaleDown 1s ease-out;
+}
+
+@keyframes scaleDown {
+  0% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+/* Camera Modal - Right corner for landscape */
+.camera-modal {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Hide camera modal on portrait/mobile */
+@media (max-width: 768px), (orientation: portrait) {
+  .camera-modal {
+    display: none;
+  }
 }
 
 .simulasi-card p {
@@ -7231,6 +7312,283 @@ button:hover {
     padding: 14px 20px;
     font-size: 13px;
   }
+}
+
+/* ==================================================
+   OBROLAN - Chat Page
+================================================== */
+.obrolan-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f5f5f5;
+  padding-top: 60px;
+}
+
+.obrolan-header {
+  padding: 20px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.obrolan-header h1 {
+  font-size: 24px;
+  margin: 10px 0 5px 0;
+  color: #333;
+}
+
+.obrolan-header p {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #BF841D;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  color: #9B6B1A;
+}
+
+.message-counter {
+  font-size: 13px;
+  color: #999;
+}
+
+.room-locked-banner {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  font-size: 13px;
+}
+
+.obrolan-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: white;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading,
+.no-messages {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.message-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+}
+
+.message-item.user-message {
+  background: transparent;
+  border-color: transparent;
+  align-self: flex-end;
+  max-width: 70%;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.message-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.message-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.message-time {
+  color: #999;
+  font-size: 11px;
+}
+
+.message-edited {
+  color: #999;
+  font-style: italic;
+  font-size: 11px;
+}
+
+.message-text {
+  margin: 0;
+  color: #333;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.message-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.message-actions button {
+  padding: 4px 12px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.message-actions button:hover {
+  background: #f0f0f0;
+  border-color: #BF841D;
+  color: #BF841D;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-input {
+  padding: 8px;
+  border: 1px solid #BF841D;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.edit-form button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-form button:first-of-type {
+  background: #4caf50;
+  color: white;
+}
+
+.edit-form button:last-of-type {
+  background: #f44336;
+  color: white;
+}
+
+.obrolan-input-section {
+  padding: 15px;
+  background: white;
+  border-top: 1px solid #ddd;
+}
+
+.obrolan-form {
+  display: flex;
+  gap: 10px;
+}
+
+.obrolan-input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+}
+
+.obrolan-input:focus {
+  outline: none;
+  border-color: #BF841D;
+}
+
+.obrolan-input:disabled {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.obrolan-send-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #BF841D, #9B6B1A);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.obrolan-send-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.obrolan-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.obrolan-locked,
+.obrolan-full {
+  padding: 15px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  text-align: center;
+  margin: 0 15px 15px 15px;
+}
+
+.obrolan-full {
+  background: #ffebee;
+  border-color: #f44336;
+  color: #c62828;
 }
 
 /* ==================================================

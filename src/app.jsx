@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PilihPaslon from "./pages/PilihPaslon";
 import AdvertisementPopup from "./components/AdvertisementPopup";
 import Dashboard from "./pages/Dashboard";
+import Obrolan from "./pages/Obrolan";
 
 import PageTransition from "./components/PageTransition";
 import LoadingPage from "./components/LoadingPage";
@@ -179,6 +180,9 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* ================= OBROLAN (CHAT PAGE) ================= */}
+        <Route path="/obrolan" element={<Obrolan />} />
 
         {/* ================= DASHBOARD (ADMIN ONLY) ================= */}
         <Route path="/dashboard" element={<Dashboard />} />
