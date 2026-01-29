@@ -5345,6 +5345,59 @@ button:hover {
   background: black;
 }
 
+.camera-preview {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  background: black;
+  margin-bottom: 16px;
+}
+
+.camera-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.camera-save-btn,
+.camera-retake-btn,
+.camera-cancel-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.camera-save-btn {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+}
+
+.camera-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.camera-retake-btn {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+}
+
+.camera-retake-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.camera-cancel-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ff5252);
+  width: 100%;
+  margin-top: 16px;
+}
+
 .countdown {
   position: absolute;
   top: 50%;
@@ -7515,12 +7568,12 @@ button:hover {
 }
 
 .edit-form button:first-of-type {
-  background: #4caf50;
+  background: #BF841D;
   color: white;
 }
 
 .edit-form button:last-of-type {
-  background: #f44336;
+  background: #BF841D;
   color: white;
 }
 

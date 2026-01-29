@@ -13,7 +13,9 @@ import {
   doc, 
   updateDoc,
   orderBy,
-  limit
+  limit,
+  getDocs,
+  where
 } from "firebase/firestore";
 import Navbar from "../components/Navbar";
 import "../components/NotificationPopup.css";
@@ -106,7 +108,7 @@ export default function Obrolan() {
       setError(err.message);
       setLoading(false);
     }
-  }, [currentUser]);
+  }, []);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -147,25 +149,39 @@ export default function Obrolan() {
     }
   };
 
-  const handleChatLogin = (e) => {
+  const handleChatLogin = async (e) => {
     e.preventDefault();
-    const stored = localStorage.getItem("currentUser");
-    if (!stored) {
-      alert("User data not found");
+    if (!loginNis || !loginToken) {
+      alert("NIS dan Token harus diisi");
       return;
     }
     
     try {
-      const user = JSON.parse(stored);
-      if (user.nis === loginNis && user.token === loginToken) {
-        setCurrentUser(user);
+      // Validate against Firebase users collection
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("nis", "==", loginNis));
+      const snapshot = await getDocs(q);
+      
+      if (snapshot.empty) {
+        alert("NIS tidak ditemukan");
+        return;
+      }
+      
+      const userData = snapshot.docs[0].data();
+      if (userData.token === loginToken) {
+        setCurrentUser({
+          nis: loginNis,
+          token: loginToken,
+          kelas: userData.kelas || "-"
+        });
         setShowLoginModal(false);
         setLoginNis("");
         setLoginToken("");
       } else {
-        alert("NIS atau Token salah");
+        alert("Token salah");
       }
     } catch (err) {
+      console.error("Login error:", err);
       alert("Error: " + err.message);
     }
   };

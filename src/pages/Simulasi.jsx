@@ -17,6 +17,9 @@ export default function Simulasi() {
   const [countdown, setCountdown] = useState(null);
   const [userHasPhoto, setUserHasPhoto] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [photoCaptured, setPhotoCaptured] = useState(false);
+  const [photoDataUrl, setPhotoDataUrl] = useState(null);
+  const [stream, setStream] = useState(null);
 
   // Check authentication and existing photo
   useEffect(() => {
@@ -68,10 +71,11 @@ export default function Simulasi() {
         audio: false 
       };
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       setCameraActive(true);
+      setStream(mediaStream);
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = mediaStream;
       }
       
       // Start 5 second countdown
@@ -84,12 +88,13 @@ export default function Simulasi() {
         
         if (count === 0) {
           clearInterval(countdownInterval);
-          capturePhoto(stream);
+          capturePhoto(mediaStream);
         }
       }, 1000);
     } catch (error) {
       setCameraActive(false);
       setCountdown(null);
+      setStream(null);
       
       // Handle different error types
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
@@ -107,7 +112,7 @@ export default function Simulasi() {
   };
 
   // Capture Photo
-  const capturePhoto = async (stream) => {
+  const capturePhoto = async (mediaStream) => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -117,49 +122,84 @@ export default function Simulasi() {
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0);
 
-      // Convert to blob and save
-      canvas.toBlob(async (blob) => {
-        const file = new File([blob], `photo-${Date.now()}.png`, { type: "image/png" });
-        
-        try {
-          // Save photo metadata to Firestore
-          await addDoc(collection(db, "photos"), {
-            userId: currentUser,
-            timestamp: serverTimestamp(),
-            photoName: file.name,
-            photoData: await fileToBase64(file),
-          });
-
-          alert("✅ Foto berhasil disimpan!");
-          setUserHasPhoto(true);
-        } catch (error) {
-          console.error("Error saving photo:", error);
-          alert("❌ Error menyimpan foto: " + error.message);
-        }
-
-        // Stop camera and cleanup
-        stream.getTracks().forEach((track) => track.stop());
-        setCameraActive(false);
-        setCountdown(null);
-      });
+      // Get data URL and show preview
+      const dataUrl = canvas.toDataURL("image/png");
+      setPhotoDataUrl(dataUrl);
+      setPhotoCaptured(true);
+      
+      // Stop video stream but keep it available
+      setCountdown(null);
     } catch (error) {
       console.error("Error capturing photo:", error);
       alert("❌ Error mengambil foto: " + error.message);
       // Cleanup on error
-      stream.getTracks().forEach((track) => track.stop());
+      mediaStream.getTracks().forEach((track) => track.stop());
       setCameraActive(false);
       setCountdown(null);
     }
   };
 
-  // Convert file to base64
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-    });
+  // Save captured photo to Firestore
+  const savePhoto = async () => {
+    if (!photoDataUrl) return;
+    
+    try {
+      // Save photo metadata to Firestore
+      await addDoc(collection(db, "photos"), {
+        userId: currentUser,
+        timestamp: serverTimestamp(),
+        photoName: `photo-${Date.now()}.png`,
+        photoData: photoDataUrl,
+      });
+
+      alert("✅ Foto berhasil disimpan!");
+      setUserHasPhoto(true);
+      
+      // Cleanup
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+      setCameraActive(false);
+      setPhotoCaptured(false);
+      setPhotoDataUrl(null);
+      setStream(null);
+    } catch (error) {
+      console.error("Error saving photo:", error);
+      alert("❌ Error menyimpan foto: " + error.message);
+    }
+  };
+
+  // Retake photo
+  const retakePhoto = () => {
+    setPhotoCaptured(false);
+    setPhotoDataUrl(null);
+    // Restart countdown
+    let count = 5;
+    setCountdown(count);
+    
+    const countdownInterval = setInterval(() => {
+      count -= 1;
+      setCountdown(count);
+      
+      if (count === 0) {
+        clearInterval(countdownInterval);
+        if (videoRef.current && stream) {
+          capturePhoto(stream);
+        }
+      }
+    }, 1000);
+  };
+
+  // Cancel camera
+  const cancelCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+    setCameraActive(false);
+    setPhotoCaptured(false);
+    setPhotoDataUrl(null);
+    setCountdown(null);
+    setStream(null);
   };
 
   // GSAP Animations
@@ -329,11 +369,25 @@ export default function Simulasi() {
           <div className="camera-modal">
             <div className="camera-notification">📷 Kamera Aktif</div>
             <div className="camera-container">
-              <h3>Ambil Foto</h3>
-              <video ref={videoRef} autoPlay playsInline className="camera-video" />
-              <canvas ref={canvasRef} style={{ display: "none" }} />
-              <div className="camera-countdown">{countdown}</div>
-              <div style={{ color: "white", fontSize: "18px", marginTop: "20px", fontWeight: "600" }}>Siap Bergaya!!</div>
+              {!photoCaptured ? (
+                <>
+                  <h3>Ambil Foto</h3>
+                  <video ref={videoRef} autoPlay playsInline className="camera-video" />
+                  <canvas ref={canvasRef} style={{ display: "none" }} />
+                  <div className="camera-countdown">{countdown}</div>
+                  <div style={{ color: "white", fontSize: "16px", marginTop: "20px", fontWeight: "600" }}>Siap Bergaya!!</div>
+                  <button onClick={cancelCamera} className="camera-cancel-btn">Batal</button>
+                </>
+              ) : (
+                <>
+                  <h3>Preview Foto</h3>
+                  <img src={photoDataUrl} alt="captured" className="camera-preview" />
+                  <div className="camera-actions">
+                    <button onClick={savePhoto} className="camera-save-btn">✓ Simpan Foto</button>
+                    <button onClick={retakePhoto} className="camera-retake-btn">↻ Ambil Ulang</button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
