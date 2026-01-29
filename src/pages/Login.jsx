@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -177,7 +178,12 @@ export default function Login() {
         onClose={closeNotification}
       />
 
-      <section className="login-hero">
+      <motion.section 
+        className="login-hero"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <button className="back-btn" onClick={() => navigate("/")} type="button">
           ← Kembali
         </button>
@@ -186,9 +192,15 @@ export default function Login() {
           <h1>Login</h1>
           <p>Yuk isi sesuai format!</p>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="login-form-section">
+      <motion.section 
+        className="login-form-section"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="login-card">
           <form onSubmit={handleLogin}>
             <input
@@ -248,7 +260,7 @@ export default function Login() {
             </button>
           </form>
         </div>
-      </section>
+      </motion.section>
     </>
   );
 }

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, getDoc } from "firebase/firestore";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -150,14 +152,25 @@ export default function Home() {
   return (
     <>
       {/* STEPS */}
-      <div className="steps-section container">
+      <motion.div 
+        className="steps-section container"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="steps-wrapper">
           <h2 className="steps-top">3 Cara Kamu</h2>
           <div className="steps-bottom">Pilih OSIS</div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="steps-card-section container">
+      <motion.div 
+        className="steps-card-section container"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="steps-card-grid">
           <div className="steps-card">
             <div className="steps-number">1</div>
@@ -180,10 +193,16 @@ export default function Home() {
             <p>Pilihanmu tersimpan hingga pengumuman.</p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* SIMULASI CTA */}
-      <div className="simulasi-section container">
+      <motion.div 
+        className="simulasi-section container"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         <div className="simulasi-card">
           <div className="simulasi-text">
             <h2>
@@ -201,11 +220,17 @@ export default function Home() {
             <img src="/simulasi/foto-2.png" alt="Simulasi OSIS" />
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* VOTING RESULTS SECTION */}
       {showCarousel && (
-        <div className="voting-results-section container">
+        <motion.div 
+          className="voting-results-section container"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
           <h2 className="voting-results-title">Hasil Pilih OSIS</h2>
           
           {/* Filter Jurusan */}
@@ -268,8 +293,11 @@ export default function Home() {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
+
+      {/* FOOTER */}
+      <Footer />
     </>
   );
 }

@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 
 import PageTransition from "./components/PageTransition";
 import LoadingPage from "./components/LoadingPage";
+import "./styles/Footer.css";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);

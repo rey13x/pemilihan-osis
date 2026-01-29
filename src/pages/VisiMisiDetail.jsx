@@ -50,7 +50,7 @@ siswa.`,
 sekolah, dengan memanfaatkan kemajuan teknologi dan sumber daya
 manusia.`,
       ],
-      proker: [],
+      proker: ["Playlist Day", "Butun Cup"],
       jargon: `Satukan suara dukung paslon dua\nBe Wise, We Lead You\nJadilah agen perubahan bersama paslon dua\nPaslon dua siap taklukan dunia`,
     },
     "3": {
@@ -70,7 +70,7 @@ kegiatan yang memberikan manfaat nyata bagi siswa/i.`,
         `Mendorong pengembangan minat, bakat, serta kreativitas siswa/i melalui
 program kerja OSIS yang terarah dan berkelanjutan.`,
       ],
-      proker: [],
+      proker: ["Aksi Sosial", "Forum Aspirasi", "Osis Family Day"],
       jargon: `tak banyak kata, tunjukkan aksi nyata, pilih nomor kosong tiga`,
     },
     "4": {
@@ -93,7 +93,7 @@ nyaman, serta disiplin dengan melibatkan Pengurus OSIS & Siswa/i`,
 non akademik.`,
       ],
       proker: ["PKS (PEKAN KREATIVITAS SISWA)", "FESTIVAL ESTRAKULIKULER"],
-      jargon: "",
+      jargon: `Konsisten dengan satu tujuan membawa perubahan bergerak untuk masa depan... bersama 04.... Menuju Kesuksesan`,
     },
   };
 

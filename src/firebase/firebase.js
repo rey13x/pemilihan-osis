@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyCEH-o9AUTUf576tj_BdTbxxiOzTIPV3Pk",
-  authDomain: "osis2026-ab377.firebaseapp.com",
-  projectId: "osis2026-ab377",
-  storageBucket: "osis2026-ab377.firebasestorage.app",
-  messagingSenderId: "975888654604",
-  appId: "1:975888654604:web:23a5eb8d80fed9a9eaa929",
-  measurementId: "G-0HBPMX1WCQ"
+  apiKey: "AIzaSyCspsxBnxtI2QBqDTQy3AsYv6WXZQDV6_o",
+  authDomain: "osis2026-8a231.firebaseapp.com",
+  projectId: "osis2026-8a231",
+  storageBucket: "osis2026-8a231.firebasestorage.app",
+  messagingSenderId: "706225836165",
+  appId: "1:706225836165:web:fcbb220b23583ba264d9ec",
+  measurementId: "G-DZ75Y0QVZH"
 };
 
 // Initialize Firebase

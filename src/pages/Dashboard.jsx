@@ -6,14 +6,14 @@ import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import NotificationPopup from "../components/NotificationPopup";
 
-// Utility untuk download CSV
-const downloadCSV = (data, filename) => {
+// Utility untuk Simpan CSV
+const SimpanCSV = (data, filename) => {
   const csv = convertToCSV(data);
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
   link.setAttribute("href", url);
-  link.setAttribute("download", filename);
+  link.setAttribute("Simpan", filename);
   link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
@@ -178,10 +178,10 @@ const PasalonDetailModal = ({ isOpen, paslon, allData, onClose, jurusanList }) =
             </div>
           </div>
 
-          {/* Download Buttons */}
+          {/* Simpan Buttons */}
           <div className="modal-actions">
             <button 
-              className="btn-download"
+              className="btn-Simpan"
               onClick={() => {
                 const voters = getFilteredVoters().map((v, idx) => ({
                   No: idx + 1,
@@ -190,10 +190,10 @@ const PasalonDetailModal = ({ isOpen, paslon, allData, onClose, jurusanList }) =
                   Jurusan: v.jurusan
                 }));
                 const jurusanFilter = selectedJurusan === "all" ? "semua-jurusan" : selectedJurusan;
-                downloadCSV(voters, `pemilih_${paslon.id}_${jurusanFilter}.csv`);
+                SimpanCSV(voters, `pemilih_${paslon.id}_${jurusanFilter}.csv`);
               }}
             >
-              📥 Download CSV
+              Simpan CSV
             </button>
           </div>
         </motion.div>
@@ -816,19 +816,19 @@ export default function Dashboard() {
         </div>
       </motion.div>
 
-      {/* Download Section */}
+      {/* Simpan Section */}
       <motion.div
-        className="dashboard-download-section"
+        className="dashboard-Simpan-section"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <h2>Download Laporan</h2>
-        <div className="download-grid">
+        <h2>Simpan Laporan</h2>
+        <div className="Simpan-grid">
           <button 
-            className="download-btn"
+            className="Simpan-btn"
             onClick={() => {
-              // Download all voters data
+              // Simpan all voters data
               const data = dashboardData.voterDetails
                 .sort((a, b) => a.nis.localeCompare(b.nis))
                 .map((v, idx) => ({
@@ -839,21 +839,21 @@ export default function Dashboard() {
                   Vote: v.vote,
                   "Voted At": new Date(v.votedAt).toLocaleString()
                 }));
-              downloadCSV(data, `pemilih_semua_${new Date().toISOString().split('T')[0]}.csv`);
+              SimpanCSV(data, `pemilih_semua_${new Date().toISOString().split('T')[0]}.csv`);
               setNotification({
                 isOpen: true,
                 type: "success",
-                message: "Download berhasil!"
+                message: "Simpan berhasil!"
               });
             }}
           >
-            📥 Download Semua Pemilih
+            Simpan Semua Pemilih
           </button>
 
           <button 
-            className="download-btn"
+            className="Simpan-btn"
             onClick={() => {
-              // Download summary by jurusan
+              // Simpan summary by jurusan
               const data = Object.entries(dashboardData.votesByJurusan).map(([jurusan, votes]) => ({
                 Jurusan: jurusan,
                 Paslon1: votes.paslon1 || 0,
@@ -862,21 +862,21 @@ export default function Dashboard() {
                 Paslon4: votes.paslon4 || 0,
                 Total: (votes.paslon1 || 0) + (votes.paslon2 || 0) + (votes.paslon3 || 0) + (votes.paslon4 || 0)
               }));
-              downloadCSV(data, `ringkasan_jurusan_${new Date().toISOString().split('T')[0]}.csv`);
+              SimpanCSV(data, `ringkasan_jurusan_${new Date().toISOString().split('T')[0]}.csv`);
               setNotification({
                 isOpen: true,
                 type: "success",
-                message: "Download berhasil!"
+                message: "Simpan berhasil!"
               });
             }}
           >
-            📊 Download Ringkasan Jurusan
+            Simpan Ringkasan Jurusan
           </button>
 
           <button 
-            className="download-btn"
+            className="Simpan-btn"
             onClick={() => {
-              // Download summary by paslon
+              // Simpan summary by paslon
               const paslon1Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon1');
               const paslon2Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon2');
               const paslon3Voters = dashboardData.voterDetails.filter(v => v.vote === 'paslon3');
@@ -899,15 +899,15 @@ export default function Dashboard() {
                 "Total Suara": paslon4Voters.length,
                 Persentase: ((paslon4Voters.length / dashboardData.totalVotes) * 100).toFixed(2) + '%'
               }];
-              downloadCSV(data, `ringkasan_paslon_${new Date().toISOString().split('T')[0]}.csv`);
+              SimpanCSV(data, `ringkasan_paslon_${new Date().toISOString().split('T')[0]}.csv`);
               setNotification({
                 isOpen: true,
                 type: "success",
-                message: "Download berhasil!"
+                message: "Simpan berhasil!"
               });
             }}
           >
-            🏆 Download Ringkasan Paslon
+            Simpan Ringkasan Paslon
           </button>
         </div>
       </motion.div>
