@@ -95,19 +95,7 @@ export default function Simulasi() {
       setCameraActive(false);
       setCountdown(null);
       setStream(null);
-      
-      // Handle different error types
-      if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
-        alert("❌ Izin kamera ditolak!\n\nUntuk menggunakan kamera:\n1. Klik ikon gembok di address bar\n2. Pilih 'Izinkan' untuk kamera\n3. Coba lagi\n\nAtau reset izin situs di pengaturan browser.\n\nJika masih tidak bisa, hubungi admin untuk setup HTTPS.");
-      } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
-        alert("❌ Kamera tidak ditemukan!\n\nPastikan:\n1. Kamera sudah terpasang\n2. Tidak ada aplikasi lain yang menggunakan kamera");
-      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
-        alert("❌ Kamera sedang digunakan oleh aplikasi lain!\n\nTutup aplikasi lain yang menggunakan kamera terlebih dahulu.");
-      } else if (error.name === "SecurityError") {
-        alert("❌ Error keamanan!\n\nWebsite ini harus menggunakan HTTPS untuk akses kamera.\n\nHubungi admin untuk setup HTTPS atau gunakan localhost dengan flag khusus.");
-      } else {
-        alert("❌ Error akses kamera: " + error.name + " - " + error.message);
-      }
+      console.error("Camera error:", error);
     }
   };
 
