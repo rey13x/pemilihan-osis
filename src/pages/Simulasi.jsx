@@ -63,55 +63,109 @@ export default function Simulasi() {
         return;
       }
 
-      const constraints = { 
-        video: { 
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
+      // Try with minimal constraints first
+      let constraints = { 
+        video: true,
         audio: false 
       };
 
+      console.log("Requesting camera access...");
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log("Camera access granted, stream tracks:", mediaStream.getTracks());
+      
       setCameraActive(true);
       setStream(mediaStream);
+      
+      // Set video stream with proper error handling
       if (videoRef.current) {
+        console.log("Setting srcObject to mediaStream");
         videoRef.current.srcObject = mediaStream;
-      }
-      
-      // Start 5 second countdown
-      let count = 5;
-      setCountdown(count);
-      
-      const countdownInterval = setInterval(() => {
-        count -= 1;
-        setCountdown(count);
         
-        if (count === 0) {
-          clearInterval(countdownInterval);
-          capturePhoto(mediaStream);
-        }
-      }, 1000);
+        // Add onplay event listener
+        const handlePlay = () => {
+          console.log("Video element playing");
+          videoRef.current?.removeEventListener("play", handlePlay);
+        };
+        videoRef.current.addEventListener("play", handlePlay);
+        
+        // Ensure video plays and displays stream
+        const handleLoadedMetadata = () => {
+          console.log("Video metadata loaded, video dimensions:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
+          
+          // Force play the video
+          const playPromise = videoRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log("Video started playing successfully");
+            }).catch((error) => {
+              console.error("Play error:", error);
+            });
+          }
+        };
+        
+        videoRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+        
+        // Handle error if video element fails to load
+        videoRef.current.onerror = (error) => {
+          console.error("Video element error:", error);
+          alert("Error menampilkan video kamera");
+        };
+      }
     } catch (error) {
       setCameraActive(false);
       setCountdown(null);
       setStream(null);
       console.error("Camera error:", error);
+      alert("❌ Error mengakses kamera: " + error.message);
     }
   };
 
   // Capture Photo
   const capturePhoto = async (mediaStream) => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-
     try {
+      // Validate refs exist
+      if (!videoRef.current || !canvasRef.current) {
+        console.error("Video or canvas ref not available");
+        throw new Error("Video atau canvas tidak tersedia");
+      }
+
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      console.log("Capturing photo, video dimensions:", video.videoWidth, "x", video.videoHeight);
+      
+      // Wait for video to have dimensions
+      await new Promise((resolve, reject) => {
+        let attempts = 0;
+        const checkReady = () => {
+          attempts++;
+          if (video.videoWidth > 0 && video.videoHeight > 0) {
+            console.log("Video ready for capture at attempt", attempts);
+            resolve();
+          } else if (attempts > 50) {
+            reject(new Error("Video tidak siap dalam waktu yang ditentukan"));
+          } else {
+            setTimeout(checkReady, 100);
+          }
+        };
+        checkReady();
+      });
+
+      // Small delay to ensure video frame is rendered
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      const context = canvas.getContext("2d");
+      if (!context) {
+        throw new Error("Tidak bisa mendapatkan canvas context");
+      }
+
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0);
 
       // Get data URL and show preview
       const dataUrl = canvas.toDataURL("image/png");
+      console.log("Photo captured successfully");
       setPhotoDataUrl(dataUrl);
       setPhotoCaptured(true);
       
@@ -121,10 +175,33 @@ export default function Simulasi() {
       console.error("Error capturing photo:", error);
       alert("❌ Error mengambil foto: " + error.message);
       // Cleanup on error
-      mediaStream.getTracks().forEach((track) => track.stop());
+      if (mediaStream) {
+        mediaStream.getTracks().forEach((track) => track.stop());
+      }
       setCameraActive(false);
       setCountdown(null);
     }
+  };
+
+  // Manual trigger photo with countdown
+  const startPhotoCountdown = async () => {
+    if (!stream) {
+      alert("Stream tidak tersedia");
+      return;
+    }
+
+    let count = 5;
+    setCountdown(count);
+    
+    const countdownInterval = setInterval(() => {
+      count -= 1;
+      setCountdown(count);
+      
+      if (count === 0) {
+        clearInterval(countdownInterval);
+        capturePhoto(stream);
+      }
+    }, 1000);
   };
 
   // Save captured photo to Firestore
@@ -159,23 +236,14 @@ export default function Simulasi() {
 
   // Retake photo
   const retakePhoto = () => {
+    if (!stream) {
+      alert("Stream tidak tersedia");
+      return;
+    }
+    
     setPhotoCaptured(false);
     setPhotoDataUrl(null);
-    // Restart countdown
-    let count = 5;
-    setCountdown(count);
-    
-    const countdownInterval = setInterval(() => {
-      count -= 1;
-      setCountdown(count);
-      
-      if (count === 0) {
-        clearInterval(countdownInterval);
-        if (videoRef.current && stream) {
-          capturePhoto(stream);
-        }
-      }
-    }, 1000);
+    setCountdown(null);
   };
 
   // Cancel camera
@@ -360,16 +428,33 @@ export default function Simulasi() {
               {!photoCaptured ? (
                 <>
                   <h3>Ambil Foto</h3>
-                  <video ref={videoRef} autoPlay playsInline className="camera-video" />
+                  <video 
+                    ref={videoRef} 
+                    autoPlay 
+                    playsInline 
+                    muted 
+                    className="camera-video"
+                  />
                   <canvas ref={canvasRef} style={{ display: "none" }} />
-                  <div className="camera-countdown">{countdown}</div>
-                  <div style={{ color: "white", fontSize: "16px", marginTop: "20px", fontWeight: "600" }}>Siap Bergaya!!</div>
+                  
+                  {countdown !== null ? (
+                    <>
+                      <div className="camera-countdown">{countdown}</div>
+                      <div style={{ color: "white", fontSize: "16px", marginTop: "20px", fontWeight: "600" }}>Siap Bergaya!!</div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ color: "white", fontSize: "16px", marginTop: "20px", fontWeight: "600" }}>Posisikan kamera dengan baik 😊</div>
+                      <button onClick={startPhotoCountdown} className="camera-capture-btn">📸 Ambil Foto</button>
+                    </>
+                  )}
+                  
                   <button onClick={cancelCamera} className="camera-cancel-btn">Batal</button>
                 </>
               ) : (
                 <>
                   <h3>Preview Foto</h3>
-                  <img src={photoDataUrl} alt="captured" className="camera-preview" />
+                  <img src={photoDataUrl} alt="captured" className="camera-preview" style={{ width: "100%", borderRadius: "8px" }} />
                   <div className="camera-actions">
                     <button onClick={savePhoto} className="camera-save-btn">✓ Simpan Foto</button>
                     <button onClick={retakePhoto} className="camera-retake-btn">↻ Ambil Ulang</button>
