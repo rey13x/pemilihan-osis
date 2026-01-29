@@ -156,47 +156,92 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // GSAP Text Reveal Effect with Engaging Animations
+  // GSAP Text Reveal Effect with Engaging Animations (Mobile-Safe)
   useEffect(() => {
-    const revealElement = document.querySelector(".text-reveal-large");
-    const chooseText = document.querySelector(".choose-text");
-    const chooseSubtexts = document.querySelectorAll(".choose-subtext");
-    
-    if (revealElement && !textRevealed) {
-      const words = revealElement.querySelectorAll(".word");
-      gsap.set(words, { x: -100, opacity: 0 });
-      gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
+    try {
+      const revealElement = document.querySelector(".text-reveal-large");
+      const chooseText = document.querySelector(".choose-text");
+      const chooseSubtexts = document.querySelectorAll(".choose-subtext");
       
-      gsap.to(words, {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: revealElement,
-          start: "top center",
-          end: "top 20%",
-          scrub: 0.5,
-          onEnter: () => {
+      if (!revealElement || textRevealed) return;
+      
+      // Check if we're on mobile (viewport < 768px)
+      const isMobile = window.innerWidth < 768;
+      
+      const words = revealElement.querySelectorAll(".word");
+      if (words.length === 0) return;
+      
+      // Set initial state
+      gsap.set(words, { x: -100, opacity: 0 });
+      if (chooseSubtexts.length > 0) {
+        gsap.set(chooseSubtexts, { y: 20, opacity: 0 });
+      }
+      
+      // For mobile, use simpler animation without ScrollTrigger
+      if (isMobile) {
+        gsap.to(words, {
+          x: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          delay: 0.3,
+          onComplete: () => {
             setTextRevealed(true);
             if (chooseText) {
               chooseText.classList.add("revealed");
             }
-            // Animate subtext after main text
-            gsap.to(chooseSubtexts, {
-              y: 0,
-              opacity: 1,
-              duration: 0.6,
-              stagger: 0.15,
-              delay: 0.4,
-            });
+            if (chooseSubtexts.length > 0) {
+              gsap.to(chooseSubtexts, {
+                y: 0,
+                opacity: 1,
+                duration: 0.5,
+                stagger: 0.12,
+                delay: 0.2,
+              });
+            }
+          }
+        });
+      } else {
+        // Desktop with ScrollTrigger
+        gsap.to(words, {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: revealElement,
+            start: "top center",
+            end: "top 20%",
+            scrub: 0.5,
+            onEnter: () => {
+              setTextRevealed(true);
+              if (chooseText) {
+                chooseText.classList.add("revealed");
+              }
+              if (chooseSubtexts.length > 0) {
+                gsap.to(chooseSubtexts, {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.6,
+                  stagger: 0.15,
+                  delay: 0.4,
+                });
+              }
+            },
           },
-        },
-      });
+        });
+      }
+    } catch (err) {
+      console.warn("GSAP animation error:", err);
+      setTextRevealed(true);
     }
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      try {
+        ScrollTrigger.getAll().forEach(t => t.kill());
+      } catch (err) {
+        // Silently ignore cleanup errors
+      }
     };
   }, [textRevealed]);
 
@@ -273,7 +318,13 @@ export default function Home() {
       </motion.div>
 
       {/* TEXT REVEAL & COUNTDOWN SECTION */}
-      <div className="text-countdown-section container">
+      <motion.div 
+        className="text-countdown-section container"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         {/* Large Text Reveal */}
         <div className="text-reveal-large">
           <span className="word">Jangan</span>
@@ -335,7 +386,7 @@ export default function Home() {
             Browser Anda tidak mendukung video HTML5
           </video>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* SIMULASI CTA */}
       <motion.div 
