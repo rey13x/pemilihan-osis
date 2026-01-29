@@ -35,27 +35,29 @@ export default function Obrolan() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginNis, setLoginNis] = useState("");
   const [loginToken, setLoginToken] = useState("");
-  const containerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // GSAP animations for messages
+  // Load current user from localStorage
+  useEffect(() => {
+    const userStr = localStorage.getItem("currentUser");
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setCurrentUser(user);
+      } catch (e) {
+        console.error("Error parsing user:", e);
+      }
+    }
+  }, []);
+
+  // GSAP animations
   useEffect(() => {
     if (messages.length === 0) return;
-
     gsap.utils.toArray(".message-item").forEach((msg, i) => {
-      gsap.fromTo(
-        msg,
-        { opacity: 0, y: 10 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          delay: i * 0.05,
-        }
-      );
+      gsap.fromTo(msg, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, delay: i * 0.05 });
     });
   }, [messages]);
 
@@ -63,95 +65,65 @@ export default function Obrolan() {
     scrollToBottom();
   }, [messages]);
 
+  // Fetch messages from Firestore
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    setCurrentUser(user); // Set user (can be null for viewing only)
-
-    // Fetch messages from global chat room
-    const messagesRef = collection(db, "chats", "obrolan", "messages");
-    const q = query(
-      messagesRef,
-      orderBy("timestamp", "asc"),
-      limit(100)
-    );
-    
-    const unsubscribe = onSnapshot(
-      q, 
-      (snapshot) => {
-        try {
+    console.log("Setting up Firestore listener...");
+    try {
+      const messagesRef = collection(db, "chats", "obrolan", "messages");
+      const q = query(messagesRef, orderBy("timestamp", "asc"), limit(100));
+      
+      const unsubscribe = onSnapshot(
+        q, 
+        (snapshot) => {
+          console.log("Got snapshot with", snapshot.docs.length, "messages");
           const messagesList = [];
-          let userMessageData = null;
+          let userMsg = null;
           
           snapshot.docs.forEach((doc) => {
-            const data = {
-              id: doc.id,
-              ...doc.data(),
-            };
+            const data = { id: doc.id, ...doc.data() };
             messagesList.push(data);
-            
-            // Check if this message belongs to current user
-            if (user && data.userId === user.nis) {
-              userMessageData = data;
+            if (currentUser && data.userId === currentUser.nis) {
+              userMsg = data;
             }
           });
           
           setMessages(messagesList);
-          setUserMessage(userMessageData);
+          setUserMessage(userMsg);
           setTotalMessages(messagesList.length);
-          
-          // Lock room if 100 messages reached
           setIsRoomLocked(messagesList.length >= 100);
           setLoading(false);
-        } catch (error) {
-          console.error("Error processing messages:", error);
-          setError(error.message);
+        },
+        (err) => {
+          console.error("Firestore error:", err);
+          setError(err.message);
           setLoading(false);
         }
-      },
-      (error) => {
-        console.error("Error fetching messages:", error);
-        setError("Error loading chat: " + error.message);
-        setLoading(false);
-      }
-    );
-
-    return unsubscribe;
-  }, []);
-
-  // Handle chat login
-  const handleChatLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
-      if (user.nis === loginNis && user.token === loginToken) {
-        setCurrentUser(user);
-        setShowLoginModal(false);
-        setLoginNis("");
-        setLoginToken("");
-      } else {
-        alert("NIS atau Token tidak sesuai");
-      }
-    } catch (error) {
-      alert("Error: " + error.message);
+      );
+      
+      return () => unsubscribe();
+    } catch (err) {
+      console.error("Setup error:", err);
+      setError(err.message);
+      setLoading(false);
     }
-  };
+  }, [currentUser]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
     
     if (!currentUser) {
-      alert("Silakan login terlebih dahulu untuk mengirim pesan");
-      navigate("/login");
+      setShowLoginModal(true);
       return;
     }
     
     if (userMessage) {
-      alert("Kamu hanya bisa mengirim 1 pesan. Edit atau hapus pesan kamu untuk mengirim pesan baru.");
+      alert("Kamu hanya bisa mengirim 1 pesan");
       return;
     }
+    
     if (isRoomLocked && !userMessage) {
-      alert("Chat sudah penuh (100 pesan). Tidak bisa mengirim pesan baru.");
+      alert("Chat sudah penuh");
       return;
     }
 
@@ -159,277 +131,162 @@ export default function Obrolan() {
     try {
       const messagesRef = collection(db, "chats", "obrolan", "messages");
       await addDoc(messagesRef, {
-        userId: currentUser?.nis,
-        nis: currentUser?.nis,
-        nama: currentUser?.nama,
-        kelas: currentUser?.kelas,
-        jurusan: currentUser?.jurusan,
+        userId: currentUser.nis,
+        nis: currentUser.nis,
+        username: currentUser.nis,
+        kelas: currentUser.kelas || "-",
         message: message.trim(),
         timestamp: serverTimestamp(),
-        edited: false,
-        editedAt: null,
       });
       setMessage("");
     } catch (err) {
-      console.error("Error sending message:", err);
-      alert("Gagal mengirim pesan");
+      console.error("Send error:", err);
+      alert("Error: " + err.message);
     } finally {
       setSending(false);
     }
   };
 
-  const handleDeleteMessage = async (messageId) => {
-    if (window.confirm("Hapus pesan ini?")) {
+  const handleChatLogin = (e) => {
+    e.preventDefault();
+    const stored = localStorage.getItem("currentUser");
+    if (!stored) {
+      alert("User data not found");
+      return;
+    }
+    
+    try {
+      const user = JSON.parse(stored);
+      if (user.nis === loginNis && user.token === loginToken) {
+        setCurrentUser(user);
+        setShowLoginModal(false);
+        setLoginNis("");
+        setLoginToken("");
+      } else {
+        alert("NIS atau Token salah");
+      }
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  };
+
+  const handleDeleteMessage = async (msgId) => {
+    if (window.confirm("Hapus pesan?")) {
       try {
-        await deleteDoc(doc(db, "chats", "obrolan", "messages", messageId));
-        setUserMessage(null);
+        await deleteDoc(doc(db, "chats", "obrolan", "messages", msgId));
       } catch (err) {
-        console.error("Error deleting message:", err);
-        alert("Gagal menghapus pesan");
+        alert("Error: " + err.message);
       }
     }
   };
 
-  const handleEditMessage = async (messageId, newMessage) => {
-    if (!newMessage.trim()) return;
-    
+  const handleEditMessage = async (msgId) => {
+    if (!editingText.trim()) return;
     try {
-      await updateDoc(doc(db, "chats", "obrolan", "messages", messageId), {
-        message: newMessage.trim(),
+      await updateDoc(doc(db, "chats", "obrolan", "messages", msgId), {
+        message: editingText.trim(),
         edited: true,
-        editedAt: serverTimestamp(),
       });
       setEditingId(null);
       setEditingText("");
     } catch (err) {
-      console.error("Error editing message:", err);
-      alert("Gagal mengedit pesan");
+      alert("Error: " + err.message);
     }
   };
 
   const formatTime = (timestamp) => {
     if (!timestamp) return "";
-    const date = timestamp.toDate();
-    const now = new Date();
-    const diff = now - date;
-    
-    if (diff < 60000) return "Baru saja";
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m lalu`;
-    if (diff < 86400000) return `${Math.floor(diff / 3600000)}j lalu`;
-    return date.toLocaleDateString("id-ID");
+    try {
+      const date = timestamp.toDate();
+      const now = new Date();
+      const diff = now - date;
+      if (diff < 60000) return "Baru saja";
+      if (diff < 3600000) return `${Math.floor(diff / 60000)}m`;
+      if (diff < 86400000) return `${Math.floor(diff / 3600000)}j`;
+      return date.toLocaleDateString("id-ID");
+    } catch (e) {
+      return "";
+    }
   };
 
   return (
     <>
       <Navbar />
       
-      {/* Login Modal for Non-Authenticated Users */}
       {showLoginModal && (
-        <motion.div 
-          className="obrolan-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div 
-            className="obrolan-modal"
-            initial={{ scale: 0.9, y: -50 }}
-            animate={{ scale: 1, y: 0 }}
-          >
+        <motion.div className="obrolan-modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <motion.div className="obrolan-modal" initial={{ scale: 0.9, y: -50 }} animate={{ scale: 1, y: 0 }}>
             <h2>Masuk untuk Komentar</h2>
-            <p>Silakan masukkan NIS dan Token untuk mengirim pesan</p>
+            <p>Masukkan NIS dan Token kamu</p>
             <form onSubmit={handleChatLogin}>
-              <input
-                type="text"
-                placeholder="NIS"
-                value={loginNis}
-                onChange={(e) => setLoginNis(e.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Token"
-                value={loginToken}
-                onChange={(e) => setLoginToken(e.target.value)}
-                required
-              />
+              <input type="text" placeholder="NIS" value={loginNis} onChange={(e) => setLoginNis(e.target.value)} required />
+              <input type="password" placeholder="Token" value={loginToken} onChange={(e) => setLoginToken(e.target.value)} required />
               <button type="submit">Masuk</button>
             </form>
-            <button 
-              className="close-modal" 
-              onClick={() => setShowLoginModal(false)}
-            >
-              Tutup
-            </button>
+            <button className="close-modal" onClick={() => setShowLoginModal(false)}>Tutup</button>
           </motion.div>
         </motion.div>
       )}
 
-      {/* Error State */}
-      {error && (
-        <div style={{ padding: "20px", background: "#ffebee", color: "#c62828" }}>
-          <p>⚠️ Error: {error}</p>
-        </div>
-      )}
+      {error && <div style={{ padding: "20px", background: "#ffebee", color: "#c62828" }}>⚠️ {error}</div>}
 
-      <motion.div 
-        className="obrolan-page"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div 
-          className="obrolan-header"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <button className="back-button" onClick={() => navigate("/")}>
-            ← Kembali
-          </button>
+      <motion.div className="obrolan-page" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <motion.div className="obrolan-header" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <button className="back-button" onClick={() => navigate("/")}>← Kembali</button>
           <h1>Obrolan Pemilih OSIS</h1>
-          <p>Bagikan pengalamanmu dengan teman-teman</p>
-          <div className="message-counter">
-            {totalMessages}/100 pesan
-          </div>
-          {isRoomLocked && (
-            <div className="room-locked-banner">
-              🔒 Chat penuh - semua pesan terkunci
-            </div>
-          )}
+          <p>Bagikan pengalamanmu</p>
+          <div className="message-counter">{totalMessages}/100 pesan</div>
+          {isRoomLocked && <div className="room-locked-banner">🔒 Chat penuh</div>}
         </motion.div>
 
-        {/* Messages List */}
-        <motion.div 
-          className="obrolan-messages"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {loading ? (
-            <div className="loading">Memuat pesan...</div>
-          ) : messages.length === 0 ? (
-            <div className="no-messages">
-              <p>Jadilah yang pertama mengirim pesan!</p>
-            </div>
-          ) : (
-            <>
-              {messages.map((msg) => (
-                <div 
-                  key={msg.id} 
-                  className={`message-item ${msg.userId === currentUser?.nis ? 'user-message' : ''} ${isRoomLocked ? 'locked' : ''}`}
-                >
-                  <div className="message-avatar">
-                    {msg.userId?.substring(0, 2).toUpperCase() || "?"}
-                  </div>
-                  <div className="message-content">
-                    <div className="message-header">
-                      <span className="message-name">NIS: {msg.nis || msg.userId}</span>
-                      <span className="message-class">{msg.kelas}</span>
-                      <span className="message-time">{formatTime(msg.timestamp)}</span>
-                      {msg.edited && <span className="message-edited">(diedit)</span>}
-                    </div>
-                    
-                    {editingId === msg.id ? (
-                      <div className="edit-form">
-                        <textarea
-                          value={editingText}
-                          onChange={(e) => setEditingText(e.target.value)}
-                          className="edit-input"
-                          disabled={isRoomLocked}
-                        />
-                        <div className="edit-buttons">
-                          <button 
-                            className="edit-save-btn"
-                            onClick={() => handleEditMessage(msg.id, editingText)}
-                            disabled={isRoomLocked}
-                          >
-                            Simpan
-                          </button>
-                          <button 
-                            className="edit-cancel-btn"
-                            onClick={() => {
-                              setEditingId(null);
-                              setEditingText("");
-                            }}
-                          >
-                            Batal
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <p className="message-text">{msg.message}</p>
-                        {msg.userId === currentUser?.nis && (
-                          <div className="message-actions">
-                            <button 
-                              className="action-btn edit-btn"
-                              onClick={() => {
-                                setEditingId(msg.id);
-                                setEditingText(msg.message);
-                              }}
-                              disabled={isRoomLocked}
-                            >
-                              Edit
-                            </button>
-                            <button 
-                              className="action-btn delete-btn"
-                              onClick={() => handleDeleteMessage(msg.id)}
-                            >
-                              Hapus
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
+        <motion.div className="obrolan-messages" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true, amount: 0.2 }}>
+          {loading && <div className="loading">Memuat pesan...</div>}
+          {!loading && messages.length === 0 && <div className="no-messages"><p>Jadilah yang pertama mengirim pesan!</p></div>}
+          {!loading && messages.map((msg) => (
+            <div key={msg.id} className={`message-item ${msg.userId === currentUser?.nis ? 'user-message' : ''}`}>
+              <div className="message-avatar">{msg.userId?.substring(0, 2).toUpperCase() || "?"}</div>
+              <div className="message-content">
+                <div className="message-header">
+                  <span className="message-name">NIS: {msg.nis || msg.userId}</span>
+                  <span className="message-time">{formatTime(msg.timestamp)}</span>
+                  {msg.edited && <span className="message-edited">(diedit)</span>}
                 </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </>
-          )}
+                {editingId === msg.id ? (
+                  <div className="edit-form">
+                    <textarea value={editingText} onChange={(e) => setEditingText(e.target.value)} className="edit-input" />
+                    <button onClick={() => handleEditMessage(msg.id)}>Simpan</button>
+                    <button onClick={() => setEditingId(null)}>Batal</button>
+                  </div>
+                ) : (
+                  <p className="message-text">{msg.message}</p>
+                )}
+                {msg.userId === currentUser?.nis && editingId !== msg.id && (
+                  <div className="message-actions">
+                    <button onClick={() => { setEditingId(msg.id); setEditingText(msg.message); }}>Edit</button>
+                    <button onClick={() => handleDeleteMessage(msg.id)}>Hapus</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
         </motion.div>
 
-        {/* Input Message */}
         {!userMessage && !isRoomLocked && (
           <div className="obrolan-input-section">
             {!currentUser ? (
-              <button 
-                className="obrolan-login-btn"
-                onClick={() => setShowLoginModal(true)}
-              >
-                🔐 Masuk untuk Kirim Pesan
-              </button>
+              <button className="obrolan-login-btn" onClick={() => setShowLoginModal(true)}>🔐 Masuk untuk Kirim Pesan</button>
             ) : (
               <form onSubmit={handleSendMessage} className="obrolan-form">
-                <input
-                  type="text"
-                  placeholder="Tulis pesanmu..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="obrolan-input"
-                  disabled={sending}
-                />
-                <button type="submit" className="obrolan-send-btn" disabled={sending || !message.trim()}>
-                  {sending ? "Kirim..." : "Kirim"}
-                </button>
+                <input type="text" placeholder="Tulis pesanmu..." value={message} onChange={(e) => setMessage(e.target.value)} className="obrolan-input" disabled={sending} />
+                <button type="submit" className="obrolan-send-btn" disabled={sending || !message.trim()}>{sending ? "Kirim..." : "Kirim"}</button>
               </form>
             )}
           </div>
         )}
-        
-        {userMessage && (
-          <div className="obrolan-locked">
-            <p>✓ Pesan kamu sudah terkirim. Edit atau hapus untuk mengirim pesan baru.</p>
-          </div>
-        )}
 
-        {isRoomLocked && !userMessage && (
-          <div className="obrolan-full">
-            <p>🔒 Chat sudah penuh. Semua pesan terkunci.</p>
-          </div>
-        )}
+        {userMessage && <div className="obrolan-locked"><p>✓ Pesan kamu sudah terkirim</p></div>}
+        {isRoomLocked && !userMessage && <div className="obrolan-full"><p>🔒 Chat sudah penuh</p></div>}
       </motion.div>
     </>
   );
