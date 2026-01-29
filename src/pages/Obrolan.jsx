@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import { db } from "../firebase/firebase";
 import { 
   collection, 
@@ -30,10 +31,29 @@ export default function Obrolan() {
   const [totalMessages, setTotalMessages] = useState(0);
   const [isRoomLocked, setIsRoomLocked] = useState(false);
   const [sending, setSending] = useState(false);
+  const containerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // GSAP animations for messages
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    gsap.utils.toArray(".message-item").forEach((msg, i) => {
+      gsap.fromTo(
+        msg,
+        { opacity: 0, y: 10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          delay: i * 0.05,
+        }
+      );
+    });
+  }, [messages]);
 
   useEffect(() => {
     scrollToBottom();

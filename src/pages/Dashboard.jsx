@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import CameraGallery from "../components/CameraGallery";
 import { db } from "../firebase/firebase";
 import { collection, query, where, onSnapshot, doc, setDoc, getDoc } from "firebase/firestore";
 import NotificationPopup from "../components/NotificationPopup";
@@ -911,6 +912,9 @@ export default function Dashboard() {
           </button>
         </div>
       </motion.div>
+
+      {/* Camera Gallery Section */}
+      <CameraGallery />
 
       {/* Voting Results Toggle & Display */}
       <motion.div

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
 import { db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,7 @@ import Navbar from "../components/Navbar";
 
 export default function Login() {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   const [nis, setNis] = useState("");
   const [kelas, setKelas] = useState("");
@@ -20,6 +22,43 @@ export default function Login() {
     type: "error",
     message: "",
   });
+
+  // GSAP Animations on mount
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    gsap.fromTo(
+      ".login-hero-text h1",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+    );
+
+    gsap.fromTo(
+      ".login-hero-text p",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: "power2.out" }
+    );
+
+    gsap.fromTo(
+      ".login-card",
+      { opacity: 0, scale: 0.95 },
+      { opacity: 1, scale: 1, duration: 0.8, delay: 0.4, ease: "back.out" }
+    );
+
+    gsap.utils.toArray(".login-card input").forEach((input, i) => {
+      gsap.fromTo(
+        input,
+        { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.6, delay: 0.5 + i * 0.1, ease: "power2.out" }
+      );
+    });
+
+    gsap.fromTo(
+      ".login-btn",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, delay: 0.9, ease: "power2.out" }
+    );
+  }, []);
 
   const closeNotification = () => {
     setNotification({ ...notification, isOpen: false });

@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import NotificationPopup from "../components/NotificationPopup";
 import Navbar from "../components/Navbar";
 import { db } from "../firebase/firebase";
@@ -89,7 +90,7 @@ export default function PilihPaslon() {
       wakil: "Aulia Najibah & Reza Rizki Pratama",
       foto: "/paslon/paslon-2.png",
       tagline: "Be Wise, We Lead You",
-      partai: "Be Wise, We Lead You",
+      partai: "Be Wise, We Lead You. Jadilah agen perubahan bersama 02.",
     },
     {
       id: "paslon3",
@@ -97,8 +98,8 @@ export default function PilihPaslon() {
       nama: "Paslon 3",
       wakil: "Fitri Ramadhani & Reefly Aprilian",
       foto: "/paslon/paslon-3.png",
-      tagline: "tak banyak kata, tunjukkan aksi nyata, pilih nomor kosong tiga",
-      partai: "tak banyak kata, tunjukkan aksi nyata, pilih nomor kosong tiga",
+      tagline: "Tak Banyak Kata, Tunjukan Aksi Nyata",
+      partai: "Tak Banyak kata, Tunjukan Aksi nyata, Pilih nomor 03.",
     },
     {
       id: "paslon4",
@@ -106,8 +107,8 @@ export default function PilihPaslon() {
       nama: "Paslon 4",
       wakil: "Rahmat Alfian & Muhamad Yusuf",
       foto: "/paslon/paslon-4.png",
-      tagline: "Konsisten Dengan Satu Tujuan Membawa Perubahan dan Bergerak untuk Masa Depan",
-      partai: "Konsisten Dengan Satu Tujuan Membawa Perubahan dan Bergerak untuk Masa Depan",
+      tagline: "Konsisten dengan satu tujuan membawa perubahan bergerak untuk masa depan",
+      partai: "Konsisten dengan satu tujuan membawa perubahan bergerak untuk masa depan bersama 04 menuju kesuksesan",
     },
   ];
 
@@ -166,6 +167,22 @@ export default function PilihPaslon() {
   };
 
   const selectedCandidate = kandidatList.find((k) => k.id === selectedPaslon);
+
+  // GSAP scroll trigger animations
+  useEffect(() => {
+    gsap.utils.toArray(".candidate-card").forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { opacity: 0, scale: 0.95 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          delay: i * 0.1,
+        }
+      );
+    });
+  }, []);
 
   return (
     <div className="pilih-paslon-gallery">

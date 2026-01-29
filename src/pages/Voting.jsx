@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Navbar from "../components/Navbar";
 import { db } from "../firebase/firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Voting() {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
   const [votes, setVotes] = useState({});
   const [loading, setLoading] = useState(true);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -15,185 +19,166 @@ export default function Voting() {
     {
       id: "paslon1",
       nomor: "1",
-      nama: "Anies Baswedan & Muhaimin Iskandar",
+      nama: "Paslon 1",
+      subtitle: "Shandyka Dhavid & Virgina Zanuba Khafsoh",
+      tagline: "SATU SUARA, SATU TUJUAN, BERSAMA 01, WUJUDKAN IMPIAN",
       warna: "#FF6B6B",
     },
     {
       id: "paslon2",
       nomor: "2",
-      nama: "Prabowo Subianto & Gibran Rakabuming",
+      nama: "Paslon 2",
+      subtitle: "Aulia Najibah & Reza Rizki Pratama",
+      tagline: "Be Wise, We Lead You",
       warna: "#4ECDC4",
     },
     {
       id: "paslon3",
       nomor: "3",
-      nama: "Ganjar Pranowo & Mahfud MD",
+      nama: "Paslon 3",
+      subtitle: "Fitri Ramadhani & Reefly Aprilian",
+      tagline: "Tak Banyak Kata, Tunjukan Aksi Nyata",
       warna: "#FFD93D",
     },
     {
       id: "paslon4",
       nomor: "4",
-      nama: "Hari Poernomo & Sjaiful Bahri",
+      nama: "Paslon 4",
+      subtitle: "Rahmat Alfian & Muhamad Yusuf",
+      tagline: "Konsisten dengan satu tujuan membawa perubahan bergerak untuk masa depan",
       warna: "#A8E6CF",
     },
   ];
 
+  // Fetch votes from Firebase
   useEffect(() => {
-    const fetchVotes = async () => {
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("sudahVote", "==", true));
+    const votesRef = collection(db, "votes");
+    const q = query(votesRef);
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const voteCount = {
-            paslon1: 0,
-            paslon2: 0,
-            paslon3: 0,
-            paslon4: 0,
-          };
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const voteData = {
+        paslon1: 0,
+        paslon2: 0,
+        paslon3: 0,
+        paslon4: 0,
+      };
 
-          snapshot.docs.forEach((doc) => {
-            const vote = doc.data().vote;
-            if (vote && voteCount[vote] !== undefined) {
-              voteCount[vote]++;
-            }
-          });
+      let total = 0;
+      snapshot.forEach((doc) => {
+        const vote = doc.data().vote;
+        if (vote in voteData) {
+          voteData[vote]++;
+          total++;
+        }
+      });
 
-          setVotes(voteCount);
-          setTotalVotes(Object.values(voteCount).reduce((a, b) => a + b, 0));
-          setLoading(false);
-        });
+      setVotes(voteData);
+      setTotalVotes(total);
+      setLoading(false);
+    });
 
-        return unsubscribe;
-      } catch (err) {
-        console.error("Error fetching votes:", err);
-        setLoading(false);
-      }
-    };
-
-    fetchVotes();
+    return unsubscribe;
   }, []);
 
-  const getPercentage = (voteCount) => {
-    if (totalVotes === 0) return 0;
-    return Math.round((voteCount / totalVotes) * 100);
-  };
+  // GSAP Animations
+  useEffect(() => {
+    if (!containerRef.current || loading) return;
 
-  const getWinner = () => {
-    if (totalVotes === 0) return null;
-    return Object.entries(votes).reduce((a, b) =>
-      votes[a[0]] > votes[b[0]] ? a : b
+    // Title animation
+    gsap.fromTo(
+      ".voting-title",
+      { opacity: 0, y: -20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
     );
-  };
 
-  const winner = getWinner();
-  const winnerCandidate = winner
-    ? kandidatList.find((k) => k.id === winner[0])
-    : null;
+    // Result items staggered animation
+    gsap.utils.toArray(".voting-result-item").forEach((item, i) => {
+      gsap.fromTo(
+        item,
+        { opacity: 0, x: -30 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          delay: 0.2 + i * 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 80%",
+            end: "top 50%",
+            scrub: 1,
+          },
+        }
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [loading]);
+
+  if (loading) {
+    return (
+      <div style={{ padding: "40px 20px", textAlign: "center" }}>
+        <Navbar />
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="voting-page">
+    <>
       <Navbar />
-      <button className="back-button" onClick={() => navigate("/")}>
-        ← Kembali
-      </button>
-      {/* Header */}
-      <motion.div
-        className="voting-header"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1>Hasil Sementara Voting</h1>
-        <p>Total Vote: {totalVotes}</p>
-      </motion.div>
+      <div className="voting-page" ref={containerRef}>
+        <div className="voting-container">
+          <h1 className="voting-title">Hasil Real-time Voting OSIS</h1>
+          <p className="voting-subtitle">Total Suara: {totalVotes}</p>
 
-      {/* Results Container */}
-      <div className="voting-results">
-        {loading ? (
-          <div className="loading-state">
-            <p>Loading results...</p>
-          </div>
-        ) : totalVotes === 0 ? (
-          <div className="empty-state">
-            <p>Belum ada voting</p>
-          </div>
-        ) : (
-          <>
-            {/* Results Bars */}
-            <div className="results-container">
-              {kandidatList.map((kandidat, index) => (
-                <motion.div
+          <div className="voting-results">
+            {kandidatList.map((kandidat) => {
+              const voteCount = votes[kandidat.id] || 0;
+              const percentage =
+                totalVotes > 0 ? ((voteCount / totalVotes) * 100).toFixed(1) : 0;
+
+              return (
+                <div
                   key={kandidat.id}
-                  className="result-item"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="voting-result-item"
+                  style={{ borderLeftColor: kandidat.warna }}
                 >
                   <div className="result-header">
-                    <div className="result-title">
-                      <span className="nomor">{kandidat.nomor}</span>
-                      <span className="nama">{kandidat.nama}</span>
+                    <div className="result-title-block">
+                      <h3>{kandidat.nama}</h3>
+                      <p className="result-subtitle">{kandidat.subtitle}</p>
                     </div>
-                    <div className="result-stats">
-                      <span className="votes">{votes[kandidat.id]}</span>
-                      <span className="percentage">
-                        {getPercentage(votes[kandidat.id])}%
-                      </span>
-                    </div>
+                    <span className="vote-count">{voteCount} suara</span>
                   </div>
 
-                  <div className="progress-bar-container">
-                    <motion.div
-                      className="progress-bar"
-                      style={{ backgroundColor: kandidat.warna }}
-                      initial={{ width: 0 }}
-                      animate={{
-                        width: `${
-                          totalVotes > 0
-                            ? (votes[kandidat.id] / totalVotes) * 100
-                            : 0
-                        }%`,
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${percentage}%`,
+                        backgroundColor: kandidat.warna,
                       }}
-                      transition={{ duration: 1, delay: 0.3 + index * 0.1 }}
                     />
                   </div>
-                </motion.div>
-              ))}
-            </div>
 
-            {/* Winner Banner */}
-            {winnerCandidate && (
-              <motion.div
-                className="winner-banner"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <div className="winner-content">
-                  <span className="winner-badge">👑 PEMENANG</span>
-                  <h2>{winnerCandidate.nama}</h2>
-                  <p>
-                    {votes[winnerCandidate.id]} suara dari {totalVotes} total
-                  </p>
+                  <p className="percentage">{percentage}%</p>
                 </div>
-              </motion.div>
-            )}
-          </>
-        )}
-      </div>
+              );
+            })}
+          </div>
 
-      {/* Footer */}
-      <motion.div
-        className="voting-footer"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <button className="voting-btn" onClick={() => navigate("/")}>
-          Kembali ke Home
-        </button>
-      </motion.div>
-    </div>
+          <button
+            className="btn-back-voting"
+            onClick={() => navigate("/")}
+            style={{ marginTop: "40px" }}
+          >
+            ← Kembali ke Beranda
+          </button>
+        </div>
+      </div>
+    </>
   );
 }

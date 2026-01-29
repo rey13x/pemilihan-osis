@@ -22,6 +22,7 @@ export default function Home() {
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
   const [countdown, setCountdown] = useState({ days: 2, hours: 0, minutes: 0, seconds: 0 });
+  const [hasVoted, setHasVoted] = useState(false);
 
   const kandidatList = [
     {
@@ -49,6 +50,26 @@ export default function Home() {
       warna: "#A8E6CF",
     },
   ];
+
+  // Check if current user has voted
+  useEffect(() => {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) {
+      const user = JSON.parse(currentUser);
+      const checkVoting = async () => {
+        try {
+          const userRef = doc(db, "users", user.nis);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists() && userSnap.data().sudahVote) {
+            setHasVoted(true);
+          }
+        } catch (err) {
+          console.error("Error checking voting status:", err);
+        }
+      };
+      checkVoting();
+    }
+  }, []);
 
   // Load visibility setting
   useEffect(() => {
@@ -467,6 +488,21 @@ export default function Home() {
 
       {/* FOOTER */}
       <Footer />
+
+      {/* CHAT BUTTON - ONLY VISIBLE IF USER HAS VOTED */}
+      {hasVoted && (
+        <motion.button
+          className="chat-button-floating"
+          onClick={() => navigate("/obrolan")}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+        >
+          💬
+        </motion.button>
+      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
 import Navbar from "../components/Navbar";
 
 export default function VotingSuccess() {
@@ -8,6 +9,7 @@ export default function VotingSuccess() {
   const [showMessage, setShowMessage] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
   const messageRef = useRef(null);
+  const containerRef = useRef(null);
 
   const selectedCandidateStr = localStorage.getItem("selectedCandidate");
   const candidate = selectedCandidateStr ? JSON.parse(selectedCandidateStr) : null;
@@ -18,6 +20,17 @@ export default function VotingSuccess() {
     console.log("VotingSuccess - LocalStorage selectedCandidate:", selectedCandidateStr);
   }, [candidate, selectedCandidateStr]);
 
+  // GSAP animations
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    gsap.fromTo(
+      ".success-photo-section",
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.8, ease: "back.out" }
+    );
+  }, []);
+
   // After 5 seconds, show message and auto scroll
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,6 +40,13 @@ export default function VotingSuccess() {
           messageRef.current.scrollIntoView({ behavior: "smooth" });
         }
       }, 300);
+
+      // GSAP animation untuk message
+      gsap.fromTo(
+        ".success-message-section",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
+      );
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -40,7 +60,7 @@ export default function VotingSuccess() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(countdown);
-          navigate("/");
+          navigate("/obrolan");
           return 0;
         }
         return prev - 1;
@@ -51,7 +71,7 @@ export default function VotingSuccess() {
   }, [showMessage, navigate]);
 
   return (
-    <div className="voting-success-page">
+    <div className="voting-success-page" ref={containerRef}>
       <Navbar />
       
       {!candidate ? (
@@ -72,6 +92,30 @@ export default function VotingSuccess() {
             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
           >
             <div className="photo-container">
+              {/* Photo animation - bouncy effect with fire emojis behind */}
+              <div className="fire-emoji-container">
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="fire-emoji"
+                    animate={{
+                      y: [0, -100, 0],
+                      opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: i * 0.2,
+                      repeat: Infinity,
+                    }}
+                    style={{
+                      left: `${(i * 360) / 8}deg`,
+                    }}
+                  >
+                    🔥
+                  </motion.div>
+                ))}
+              </div>
+
               {/* Photo with bouncy animation */}
               <motion.img
                 src={candidate?.foto}

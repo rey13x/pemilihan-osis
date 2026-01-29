@@ -1,112 +1,281 @@
-import { useState } from "react";
-import { db } from "../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { db } from "../firebase/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import Navbar from "../components/Navbar";
 
-export default function Login() {
+export default function Simulasi() {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
+  const buttonRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cameraActive, setCameraActive] = useState(false);
+  const [countdown, setCountdown] = useState(null);
 
-  const [nis, setNis] = useState("");
-  const [kelas, setKelas] = useState("");
-  const [jurusan, setJurusan] = useState("");
-  const [token, setToken] = useState("");
-  const [error, setError] = useState("");
+  // Check authentication
+  useEffect(() => {
+    const user = localStorage.getItem("currentUser");
+    if (user) {
+      setIsAuthenticated(true);
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
 
-  const handleLogin = async () => {
+  // Handle Camera Click
+  const handleCameraClick = async () => {
     try {
-      if (!nis || !kelas || !jurusan || !token) {
-        setError("Semua data wajib diisi");
-        return;
-      }
-
-      const userRef = doc(db, "users", nis);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        setError("Data tidak ditemukan");
-        return;
-      }
-
-      const user = userSnap.data();
-
-      if (
-        user.kelas !== kelas ||
-        user.jurusan !== jurusan ||
-        user.token !== token
-      ) {
-        setError("Data tidak cocok");
-        return;
-      }
-
-      if (user.sudahVote) {
-        setError("Kamu sudah melakukan voting");
-        return;
-      }
-
-      navigate("/simulasi");
-    } catch (err) {
-      console.error(err);
-      setError("Terjadi kesalahan");
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setCameraActive(true);
+      videoRef.current.srcObject = stream;
+      
+      // Start 5 second countdown
+      let count = 5;
+      setCountdown(count);
+      
+      const countdownInterval = setInterval(() => {
+        count -= 1;
+        setCountdown(count);
+        
+        if (count === 0) {
+          clearInterval(countdownInterval);
+          capturePhoto(stream);
+        }
+      }, 1000);
+    } catch (error) {
+      alert("Izin kamera ditolak atau terjadi error: " + error.message);
     }
   };
 
+  // Capture Photo
+  const capturePhoto = async (stream) => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+
+    // Convert to blob and save
+    canvas.toBlob(async (blob) => {
+      const file = new File([blob], `photo-${Date.now()}.png`, { type: "image/png" });
+      
+      // Save to Firebase Storage and Firestore
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("timestamp", new Date().toISOString());
+      formData.append("userId", localStorage.getItem("currentUser"));
+
+      try {
+        // Save photo metadata to Firestore
+        await addDoc(collection(db, "photos"), {
+          userId: localStorage.getItem("currentUser"),
+          timestamp: serverTimestamp(),
+          photoName: file.name,
+          photoData: await fileToBase64(file),
+        });
+
+        alert("Foto berhasil disimpan!");
+      } catch (error) {
+        console.error("Error saving photo:", error);
+      }
+
+      // Stop camera
+      stream.getTracks().forEach((track) => track.stop());
+      setCameraActive(false);
+      setCountdown(null);
+    });
+  };
+
+  // Convert file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+  };
+
+  // GSAP Animations
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Animate hero title
+    gsap.fromTo(
+      ".simulasi-hero h1",
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      }
+    );
+
+    // Animate hero text
+    gsap.fromTo(
+      ".simulasi-hero p",
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.2,
+        ease: "power2.out",
+      }
+    );
+
+    // Animate card
+    gsap.fromTo(
+      ".simulasi-card",
+      { opacity: 0, scale: 0.9 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        delay: 0.4,
+        ease: "back.out",
+      }
+    );
+
+    // Pulse animation on button
+    gsap.to(".simulasi-start-btn", {
+      boxShadow: [
+        "0 0 0 0 rgba(191, 132, 29, 0.7)",
+        "0 0 0 20px rgba(191, 132, 29, 0)",
+      ],
+      duration: 2,
+      repeat: -1,
+      ease: "power1.inOut",
+    });
+  }, []);
+
+  const handleStartVoting = () => {
+    // Navigate to pilih paslon page
+    navigate("/pilih-paslon");
+  };
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <>
-      {/* ================= HERO ================= */}
-      <section className="login-hero">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          ← Pemilu 101
-        </button>
-
-        <div className="login-hero-text">
-          <div className="badge">SAAT HARI</div>
-          <h1>PEMILU</h1>
-          <p>
-            Aku harus ngapain aja sih <span>🤔</span> ?
-          </p>
-        </div>
-      </section>
-
-      {/* ================= FORM ================= */}
-      <section className="login-form-section">
-        <div className="login-card">
-          <h2>Yuk isi Data Kamu</h2>
-
-          <input
-            type="text"
-            placeholder="NIS"
-            value={nis}
-            onChange={(e) => setNis(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Kelas (contoh: XII)"
-            value={kelas}
-            onChange={(e) => setKelas(e.target.value)}
-          />
-
-          <input
-            type="text"
-            placeholder="Jurusan (contoh: RPL 2)"
-            value={jurusan}
-            onChange={(e) => setJurusan(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Token"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-          />
-
-          {error && <p className="error-text">{error}</p>}
-
-          <button className="login-btn" onClick={handleLogin}>
-            Masuk!
+      <Navbar />
+      <div className="simulasi-page" ref={containerRef}>
+        {/* Hero Section */}
+        <section className="simulasi-hero">
+          <button
+            className="back-btn"
+            onClick={() => navigate("/")}
+            style={{ marginBottom: "20px" }}
+          >
+            ← Kembali
           </button>
-        </div>
-      </section>
+
+          <h1>Sudah Siap Voting?</h1>
+          <p>Berikut adalah langkah-langkah yang perlu kamu lakukan untuk berpartisipasi dalam pemilihan OSIS.</p>
+        </section>
+
+        {/* Info Card Section */}
+        <section className="simulasi-content">
+          <div className="simulasi-image-info-section">
+            <div className="simulasi-card">
+              <div className="simulasi-icon-group">
+                <span className="simulasi-main-icon">😎</span>
+                <button
+                  className="simulasi-camera-btn"
+                  onClick={handleCameraClick}
+                  disabled={cameraActive}
+                >
+                  📸
+                </button>
+              </div>
+              <h2>Mulai Voting</h2>
+              <p>Klik tombol kamera untuk foto! atau lanjut mulai voting.</p>
+              <button
+                className="simulasi-start-btn"
+                onClick={handleStartVoting}
+                ref={buttonRef}
+              >
+                Mulai Voting
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Steps Section */}
+        <section className="simulasi-steps-section">
+          <h2>Langkah-Langkah Voting:</h2>
+          <div className="simulasi-steps">
+            <motion.div
+              className="step-card"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="step-number">1</div>
+              <h3>Kenali Paslon</h3>
+              <p>Pelajari visi, misi, dan program kerja setiap paslon OSIS</p>
+            </motion.div>
+
+            <motion.div
+              className="step-card"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <div className="step-number">2</div>
+              <h3>Pilih Paslon</h3>
+              <p>Pilih paslon yang paling sesuai dengan visi dan impianmu</p>
+            </motion.div>
+
+            <motion.div
+              className="step-card"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="step-number">3</div>
+              <h3>Konfirmasi Voting</h3>
+              <p>Pastikan pilihan kamu dan tekan tombol Yakin!</p>
+            </motion.div>
+
+            <motion.div
+              className="step-card"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <div className="step-number">4</div>
+              <h3>Selesai!</h3>
+              <p>Voting kamu berhasil disimpan. Terima kasih telah berpartisipasi!</p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Camera Modal */}
+        {cameraActive && (
+          <div className="camera-modal">
+            <div className="camera-container">
+              <h3>Ambil Foto</h3>
+              <video ref={videoRef} autoPlay playsInline className="camera-video" />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
+              <div className="countdown">{countdown}</div>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
