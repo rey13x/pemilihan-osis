@@ -109,6 +109,7 @@ export default function Obrolan() {
       setError(err.message);
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSendMessage = async (e) => {
