@@ -440,9 +440,12 @@ export default function Home() {
             className="tutorial-video"
             controls
             width="100%"
+            height="auto"
             poster="/tutorial/poster.jpg"
             muted
-            playsinline
+            playsInline
+            preload="metadata"
+            crossOrigin="anonymous"
           >
             <source src="/tutorial/tutorial.mp4" type="video/mp4" />
             Browser Anda tidak mendukung video HTML5
