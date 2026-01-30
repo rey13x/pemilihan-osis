@@ -441,8 +441,8 @@ export default function Home() {
             controls
             width="100%"
             poster="/tutorial/poster.jpg"
-            autoplay
             muted
+            playsinline
           >
             <source src="/tutorial/tutorial.mp4" type="video/mp4" />
             Browser Anda tidak mendukung video HTML5

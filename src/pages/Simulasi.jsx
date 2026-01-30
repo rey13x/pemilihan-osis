@@ -345,16 +345,8 @@ export default function Simulasi() {
             <div className="simulasi-card">
               <div className="simulasi-icon-group">
                 <span className="simulasi-main-icon">😎</span>
-                <button
-                  className="simulasi-camera-btn"
-                  onClick={handleCameraClick}
-                  disabled={cameraActive}
-                >
-                  📸
-                </button>
               </div>
-              <h2>Mau Ciss?</h2>
-              <p>Klik tombol kamera untuk foto! atau lanjut mulai voting.</p>
+              <p>Yakin dengan Pilihanmu yuks klik Mulai Voting!</p>
               <button
                 className="simulasi-start-btn"
                 onClick={handleStartVoting}
