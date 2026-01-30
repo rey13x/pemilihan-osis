@@ -159,7 +159,7 @@ export default function VotingSuccess() {
             animate={showMessage ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
           >
-            <h2>Mau Ciss?</h2>
+            <h2>Yeay, Pilihanmu Disimpan!!</h2>
             <p className="candidate-name">{candidate?.nama}</p>
             <p className="candidate-paslon">Paslon #{candidate?.nomor}</p>
 
