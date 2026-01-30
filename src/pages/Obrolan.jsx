@@ -73,7 +73,7 @@ export default function Obrolan() {
     console.log("Setting up Firestore listener...");
     try {
       const messagesRef = collection(db, "chats", "obrolan", "messages");
-      const q = query(messagesRef, orderBy("timestamp", "asc"), limit(100));
+      const q = query(messagesRef, orderBy("timestamp", "asc"), limit(2000));
       
       const unsubscribe = onSnapshot(
         q, 
@@ -93,7 +93,7 @@ export default function Obrolan() {
           setMessages(messagesList);
           setUserMessage(userMsg);
           setTotalMessages(messagesList.length);
-          setIsRoomLocked(messagesList.length >= 100);
+          setIsRoomLocked(messagesList.length >= 2000);
           setLoading(false);
         },
         (err) => {
@@ -253,7 +253,7 @@ export default function Obrolan() {
           <button className="back-button" onClick={() => navigate("/")}>← Kembali</button>
           <h1>Obrolan Pemilih OSIS</h1>
           <p>Bagikan pengalamanmu</p>
-          <div className="message-counter">{totalMessages}/100 pesan</div>
+          <div className="message-counter">{totalMessages}/2000 pesan</div>
           {isRoomLocked && <div className="room-locked-banner">🔒 Chat penuh</div>}
         </motion.div>
 
