@@ -429,7 +429,7 @@ export default function Home() {
         </div> */}
 
         {/* Video Section */}
-        <motion.div
+        {/* <motion.div
           className="video-section"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -450,7 +450,7 @@ export default function Home() {
             <source src="/tutorial/tutorial.mp4" type="video/mp4" />
             Browser Anda tidak mendukung video HTML5
           </video>
-        </motion.div>
+        </motion.div> */}
       </motion.div>
 
       {/* SIMULASI CTA */}
