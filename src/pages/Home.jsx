@@ -111,10 +111,6 @@ export default function Home() {
     // Enable dragging on mobile and desktop
     gsap.registerPlugin(gsap.utils.toArray ? null : {});
     
-    let proxy = { skew: 0 },
-        skewSetter = gsap.quickSetter(".tiktok-carousel-wrapper", "skewY", "deg"),
-        clamp = gsap.utils.clamp(-20, 20);
-    
     gsap.set(".tiktok-carousel-wrapper", { transformOrigin: "center center", force3D: true });
     
     // Use Draggable if available, otherwise fallback to manual scroll
@@ -545,7 +541,7 @@ export default function Home() {
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.2 }}
       >
-        <h2 className="tiktok-carousel-title"></h2>
+        <h2 className="tiktok-carousel-title">Videos</h2>
         
         <div className="tiktok-carousel-container" ref={tiktokCarouselRef}>
           <div className="tiktok-carousel-wrapper">
