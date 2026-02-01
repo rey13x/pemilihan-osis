@@ -78,8 +78,8 @@ export default function VotingSuccess() {
         <div style={{ padding: "40px 20px", textAlign: "center" }}>
           <h2>Data tidak ditemukan</h2>
           <p>Silakan kembali ke halaman sebelumnya</p>
-          <button onClick={() => navigate("/")} className="btn-back-home">
-            ← Kembali ke Beranda
+          <button onClick={() => navigate("/obrolan")} className="btn-back-home">
+            ← Pergi ke Halaman Obrolan
           </button>
         </div>
       ) : (
@@ -170,9 +170,9 @@ export default function VotingSuccess() {
 
             <button
               className="btn-back-home"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/obrolan")}
             >
-              ← Kembali ke Beranda
+              ← Pergi ke Halaman Obrolan
             </button>
           </motion.div>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
@@ -21,12 +21,14 @@ export default function Home() {
   const [showCarousel, setShowCarousel] = useState(false);
   const [selectedJurusan, setSelectedJurusan] = useState("all");
   const [jurusanList, setJurusanList] = useState([]);
-  const [countdown, setCountdown] = useState({ days: 2, hours: 0, minutes: 0, seconds: 0 });
   const [hasVoted, setHasVoted] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [nisInput, setNisInput] = useState("");
   const [tokenInput, setTokenInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const tiktokCarouselRef = useRef(null);
+  const [comments, setComments] = useState([]);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState(0);
 
   const kandidatList = [
     {
@@ -101,6 +103,57 @@ export default function Home() {
     return unsubscribe;
   }, []);
 
+  // Setup GSAP Draggable for TikTok Carousel on Mobile
+  useEffect(() => {
+    const wrapper = tiktokCarouselRef.current?.querySelector('.tiktok-carousel-wrapper');
+    if (!wrapper) return;
+
+    // Enable dragging on mobile and desktop
+    gsap.registerPlugin(gsap.utils.toArray ? null : {});
+    
+    let proxy = { skew: 0 },
+        skewSetter = gsap.quickSetter(".tiktok-carousel-wrapper", "skewY", "deg"),
+        clamp = gsap.utils.clamp(-20, 20);
+    
+    gsap.set(".tiktok-carousel-wrapper", { transformOrigin: "center center", force3D: true });
+    
+    // Use Draggable if available, otherwise fallback to manual scroll
+    let startX = 0;
+    const handleMouseDown = (e) => {
+      startX = e.clientX || e.touches?.[0]?.clientX;
+    };
+    
+    const handleMouseMove = (e) => {
+      if (startX === 0) return;
+      const currentX = e.clientX || e.touches?.[0]?.clientX;
+      const diff = startX - currentX;
+      wrapper.scrollLeft += diff;
+      startX = currentX;
+    };
+    
+    const handleMouseUp = () => {
+      startX = 0;
+    };
+
+    wrapper.addEventListener('mousedown', handleMouseDown);
+    wrapper.addEventListener('touchstart', handleMouseDown);
+    wrapper.addEventListener('mousemove', handleMouseMove);
+    wrapper.addEventListener('touchmove', handleMouseMove);
+    wrapper.addEventListener('mouseup', handleMouseUp);
+    wrapper.addEventListener('touchend', handleMouseUp);
+    wrapper.addEventListener('mouseleave', handleMouseUp);
+
+    return () => {
+      wrapper.removeEventListener('mousedown', handleMouseDown);
+      wrapper.removeEventListener('touchstart', handleMouseDown);
+      wrapper.removeEventListener('mousemove', handleMouseMove);
+      wrapper.removeEventListener('touchmove', handleMouseMove);
+      wrapper.removeEventListener('mouseup', handleMouseUp);
+      wrapper.removeEventListener('touchend', handleMouseUp);
+      wrapper.removeEventListener('mouseleave', handleMouseUp);
+    };
+  }, []);
+
   // Fetch voting data from Firebase
   useEffect(() => {
     const usersRef = collection(db, "users");
@@ -153,32 +206,38 @@ export default function Home() {
     return unsubscribe;
   }, []);
 
-  // Countdown Timer Effect
+  // Fetch comments from Obrolan for live notification
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCountdown(prev => {
-        let { days, hours, minutes, seconds } = prev;
-        if (seconds > 0) {
-          seconds--;
-        } else if (minutes > 0) {
-          minutes--;
-          seconds = 59;
-        } else if (hours > 0) {
-          hours--;
-          minutes = 59;
-          seconds = 59;
-        } else if (days > 0) {
-          days--;
-          hours = 23;
-          minutes = 59;
-          seconds = 59;
-        }
-        return { days, hours, minutes, seconds };
+    const messagesRef = collection(db, "chats", "obrolan", "messages");
+    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+      const allComments = [];
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        allComments.push({
+          id: doc.id,
+          nis: data.userId || data.nis || "Anonymous",
+          pesan: data.message || data.pesan || "",
+          timestamp: data.timestamp?.toMillis?.() || data.timestamp || new Date(),
+        });
       });
-    }, 1000);
-    
-    return () => clearInterval(interval);
+      // Sort by timestamp descending (newest first)
+      allComments.sort((a, b) => b.timestamp - a.timestamp);
+      setComments(allComments);
+    });
+
+    return unsubscribe;
   }, []);
+
+  // Timer to rotate comments every 2 seconds
+  useEffect(() => {
+    if (comments.length === 0) return;
+
+    const timer = setInterval(() => {
+      setCurrentCommentIndex((prev) => (prev + 1) % comments.length);
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [comments.length]);
 
   // Handle chat login
   const handleChatClick = () => {
@@ -377,82 +436,6 @@ export default function Home() {
         </div>
       </motion.div>
 
-      {/* TEXT REVEAL & COUNTDOWN SECTION */}
-      <motion.div 
-        className="text-countdown-section container"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true, amount: 0.2 }}
-      >
-        {/* Large Text Reveal */}
-        {/* <div className="text-reveal-large">
-          <span className="word">Jangan</span>
-          <span className="word">Lupa</span>
-          <span className="word">Segera</span>
-          <span className="word">Gunakan</span>
-          <span className="word">Hakmu!</span>
-        </div> */}
-
-        {/* Countdown Timer */}
-        <div className="countdown-container">
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.days).padStart(2, '0')}</span>
-            <span className="countdown-label">Hari</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.hours).padStart(2, '0')}</span>
-            <span className="countdown-label">Jam</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.minutes).padStart(2, '0')}</span>
-            <span className="countdown-label">Menit</span>
-          </div>
-          <span className="countdown-separator">:</span>
-          <div className="countdown-item">
-            <span className="countdown-value">{String(countdown.seconds).padStart(2, '0')}</span>
-            <span className="countdown-label">Detik</span>
-          </div>
-        </div>
-
-        {/* Question Text with Engaging Follow-up */}
-        {/* <div className="choose-question">
-          <div className="choose-text-wrapper">
-            <span className="choose-text">Sudahkah kamu memilih?</span>
-            <div className="choose-subtext-container">
-              <span className="choose-subtext">Jangan sia-siakan kesempatan emas ini!</span>
-              <span className="choose-subtext">Suaramu penting untuk masa depan OSIS yang lebih baik 🗳️</span>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Video Section */}
-        {/* <motion.div
-          className="video-section"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <video
-            className="tutorial-video"
-            controls
-            width="100%"
-            height="auto"
-            poster="/tutorial/poster.jpg"
-            muted
-            playsInline
-            preload="metadata"
-            crossOrigin="anonymous"
-          >
-            <source src="/tutorial/tutorial.mp4" type="video/mp4" />
-            Browser Anda tidak mendukung video HTML5
-          </video>
-        </motion.div> */}
-      </motion.div>
-
       {/* SIMULASI CTA */}
       <motion.div 
         className="simulasi-section container"
@@ -554,6 +537,63 @@ export default function Home() {
         </motion.div>
       )}
 
+      {/* TIKTOK CAROUSEL SECTION */}
+      <motion.div
+        className="tiktok-carousel-section container"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        <h2 className="tiktok-carousel-title"></h2>
+        
+        <div className="tiktok-carousel-container" ref={tiktokCarouselRef}>
+          <div className="tiktok-carousel-wrapper">
+            {/* Video 1 - Left */}
+            <div className="tiktok-carousel-item">
+              <iframe
+                src="https://www.tiktok.com/embed/7601397395376622869"
+                width="300"
+                height="550"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                className="tiktok-iframe"
+                title="TikTok Video 1"
+              />
+            </div>
+
+            {/* Video 2 - Center */}
+            <div className="tiktok-carousel-item">
+              <iframe
+                src="https://www.tiktok.com/embed/7550179419525074232"
+                width="300"
+                height="550"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                className="tiktok-iframe"
+                title="TikTok Video 2"
+              />
+            </div>
+
+            {/* Video 3 - Right */}
+            <div className="tiktok-carousel-item">
+              <iframe
+                src="https://www.tiktok.com/embed/7560680511304158475"
+                width="300"
+                height="550"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                className="tiktok-iframe"
+                title="TikTok Video 3"
+              />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
       {/* FOOTER */}
       <Footer />
 
@@ -562,10 +602,23 @@ export default function Home() {
         className="chat-button-floating"
         onClick={handleChatClick}
         initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1,
+          y: [0, -15, 0],
+        }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 400, 
+          damping: 10,
+          y: {
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }
+        }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 400, damping: 10 }}
       >
         💬
       </motion.button>
@@ -632,6 +685,33 @@ export default function Home() {
           </motion.div>
         </motion.div>
       )}
+
+      {/* LIVE COMMENT NOTIFICATION - BOTTOM LEFT */}
+      <div className="comment-notification-container">
+        {comments.length > 0 && (
+          <motion.div
+            key={`comment-${comments[currentCommentIndex]?.id}`}
+            className="comment-notification-item"
+            initial={{ y: 150, opacity: 0, scale: 0.8 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+            transition={{ 
+              duration: 0.8,
+              ease: [0.34, 1.56, 0.64, 1]
+            }}
+            onAnimationComplete={() => {
+              // Optional: Add fade out before transitioning to next comment
+            }}
+          >
+            <div className="comment-nis">
+              nis: {comments[currentCommentIndex]?.nis}
+            </div>
+            <div className="comment-text">
+              {comments[currentCommentIndex]?.pesan}
+            </div>
+          </motion.div>
+        )}
+      </div>
     </>
   );
 }

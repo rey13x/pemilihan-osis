@@ -227,6 +227,10 @@ export default function Obrolan() {
     }
   };
 
+  // Pisahkan pesan pertama (pinned) dan sisanya
+  const pinnedMessage = messages.length > 0 ? messages[0] : null;
+  const regularMessages = messages.length > 0 ? messages.slice(1) : [];
+
   return (
     <>
       <Navbar />
@@ -260,7 +264,39 @@ export default function Obrolan() {
         <motion.div className="obrolan-messages" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} viewport={{ once: true, amount: 0.2 }}>
           {loading && <div className="loading">Memuat pesan...</div>}
           {!loading && messages.length === 0 && <div className="no-messages"><p>Jadilah yang pertama mengirim pesan!</p></div>}
-          {!loading && messages.map((msg) => (
+          
+          {/* Pinned First Message */}
+          {!loading && pinnedMessage && (
+            <div className={`message-item pinned-message ${pinnedMessage.userId === currentUser?.nis ? 'user-message' : ''}`}>
+              <div className="pin-indicator"></div>
+              <div className="message-avatar"><img src="/info/profil.png" alt="avatar" /></div>
+              <div className="message-content">
+                <div className="message-header">
+                  <span className="message-name">NIS: {pinnedMessage.nis || pinnedMessage.userId}</span>
+                  <span className="message-time">{formatTime(pinnedMessage.timestamp)}</span>
+                  {pinnedMessage.edited && <span className="message-edited">(diedit)</span>}
+                </div>
+                {editingId === pinnedMessage.id ? (
+                  <div className="edit-form">
+                    <textarea value={editingText} onChange={(e) => setEditingText(e.target.value)} className="edit-input" />
+                    <button onClick={() => handleEditMessage(pinnedMessage.id)}>Simpan</button>
+                    <button onClick={() => setEditingId(null)}>Batal</button>
+                  </div>
+                ) : (
+                  <p className="message-text">{pinnedMessage.message}</p>
+                )}
+                {pinnedMessage.userId === currentUser?.nis && editingId !== pinnedMessage.id && (
+                  <div className="message-actions">
+                    <button onClick={() => { setEditingId(pinnedMessage.id); setEditingText(pinnedMessage.message); }}>Edit</button>
+                    <button onClick={() => handleDeleteMessage(pinnedMessage.id)}>Hapus</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          
+          {/* Regular Messages */}
+          {!loading && regularMessages.map((msg) => (
             <div key={msg.id} className={`message-item ${msg.userId === currentUser?.nis ? 'user-message' : ''}`}>
               <div className="message-avatar"><img src="/info/profil.png" alt="avatar" /></div>
               <div className="message-content">

@@ -7,6 +7,14 @@
   padding: 0;
 }
 
+/* Apple-style Design System */
+:root {
+  --apple-radius: 30px;
+  --apple-border: 1px solid rgba(0, 0, 0, 0.1);
+  --apple-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --apple-shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
 html,
 body {
   width: 100%;
@@ -720,10 +728,12 @@ html * {
 ================================================== */
 .hero-card {
   margin-top: 28px;
-  background: #ffffff;
+  background: transparent;
   border-radius: 50px;
   padding: clamp(24px, 5vw, 48px);
   animation: fadeUp 0.6s ease forwards;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .hero-card-inner {
@@ -2043,8 +2053,9 @@ html * {
 input {
   padding: 10px;
   margin: 10px;
-  border-radius: 50px;
-  border: none;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 button {
@@ -2052,8 +2063,9 @@ button {
   background-color: #BF841D;
   color: white;
   border: none;
-  border-radius: 50px;
+  border-radius: 30px;
   cursor: pointer;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2);
 }
 
 button:hover {
@@ -2557,10 +2569,14 @@ button:hover {
 .btn-cancel {
   background: #f0f0f0;
   color: #666;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-cancel:hover:not(:disabled) {
-  background: #e0e0e0;
+  background: #e8e8e8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .btn-cancel:disabled {
@@ -2571,14 +2587,15 @@ button:hover {
 .btn-confirm {
   background: #BF841D;
   color: white;
-  border: 2px solid #BF841D;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2);
 }
 
 .btn-confirm:hover:not(:disabled) {
   background: #9b6816;
-  border-color: #9b6816;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(191, 132, 29, 0.3);
+  box-shadow: 0 4px 16px rgba(191, 132, 29, 0.3);
 }
 
 .btn-confirm:disabled {
@@ -2688,29 +2705,30 @@ button:hover {
   min-height: 240px;
   max-height: 360px;
   background: white;
-  border-radius: 10px;
+  border-radius: 30px;
   overflow: hidden;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   transform-style: preserve-3d;
 }
 
 .gallery-card:hover {
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }
 
 .gallery-card.expanded {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
 }
 
 .gallery-card.selected {
-  border: 2px solid #BF841D;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  border: 1px solid #BF841D;
+  box-shadow: 0 4px 20px rgba(191, 132, 29, 0.2);
 }
 
 /* Card Image */
@@ -2835,7 +2853,7 @@ button:hover {
   color: white;
   border: none;
   padding: 8px 12px;
-  border-radius: 50px;
+  border-radius: 30px;
   font-weight: 700;
   font-size: 11px;
   cursor: pointer;
@@ -2845,11 +2863,13 @@ button:hover {
   flex-shrink: 0;
   position: relative;
   animation: goldenGlow 4s ease-in-out infinite;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2);
 }
 
 .card-button:hover {
   background: linear-gradient(135deg, #D4A574 0%, #BF841D 100%);
   transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(191, 132, 29, 0.3);
 }
 
 .card-button:active {
@@ -6057,9 +6077,14 @@ button:hover {
   margin: 0;
   background: none;
   border: none;
-  transition: transform 0.2s ease;
+  transition: transform 0.1s ease;
   z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+
 
 .chat-button-floating:hover {
   transform: scale(1.2);
@@ -6067,6 +6092,95 @@ button:hover {
 
 .chat-button-floating:active {
   transform: scale(1.1);
+}
+
+@keyframes fadeOutComment {
+  0% { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  75% { 
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+}
+
+/* Live Comment Notification */
+.comment-notification-container {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 280px;
+  z-index: 900;
+}
+
+.comment-notification-item {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
+  border-radius: 30px;
+  padding: 12px;
+  box-shadow: none;
+  border: none;
+  overflow: hidden;
+  animation: fadeOutComment 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.comment-nis {
+  font-weight: bold;
+  color: #000;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.comment-text {
+  color: #000;
+  font-size: 13px;
+  line-height: 1.4;
+  word-break: break-word;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Responsive - Desktop & Tablet */
+@media (max-width: 1024px) {
+  .comment-notification-container {
+    width: 250px;
+    left: 15px;
+    bottom: 85px;
+  }
+}
+
+/* Responsive - Mobile Portrait */
+@media (max-width: 768px) {
+  .comment-notification-container {
+    width: 220px;
+    bottom: 80px;
+    left: 10px;
+  }
+
+  .comment-notification-item {
+    padding: 10px;
+  }
+
+  .comment-nis {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .comment-text {
+    font-size: 12px;
+    max-height: 50px;
+  }
 }
 
 /* Login Modal */
@@ -6085,11 +6199,12 @@ button:hover {
 
 .modal-content {
   background: white;
-  border-radius: 16px;
+  border-radius: 30px;
   padding: clamp(24px, 5vw, 40px);
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .modal-content h2 {
@@ -6109,16 +6224,18 @@ button:hover {
   width: 100%;
   padding: 12px;
   margin-bottom: 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
   font-size: 14px;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .modal-content input:focus {
   outline: none;
   border-color: #BF841D;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2);
 }
 
 .modal-content input:disabled {
@@ -7150,9 +7267,128 @@ button:hover {
   line-height: 1.6;
 }
 
-.text-countdown-section {
+.tiktok-carousel-section {
   padding: 80px 20px;
+  margin-bottom: 40px;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+}
+
+.tiktok-carousel-title {
+  font-size: clamp(24px, 6vw, 48px);
+  font-weight: 700;
+  color: #2b2b2b;
   text-align: center;
+  margin-bottom: 50px;
+}
+
+.tiktok-carousel-section {
+  padding: 80px 20px;
+  margin-bottom: 40px;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+}
+
+.tiktok-carousel-container {
+  width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent;
+}
+
+.tiktok-carousel-wrapper {
+  display: flex;
+  gap: 24px;
+  width: fit-content;
+  margin: 0 auto;
+  cursor: grab;
+  user-select: none;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.tiktok-carousel-wrapper:active {
+  cursor: grabbing;
+}
+
+.tiktok-carousel-item {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 30px;
+  clip-path: inset(0 round 30px);
+  background: transparent;
+  box-shadow: none !important;
+}
+
+.tiktok-iframe {
+  border-radius: 30px !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: -8px !important;
+  padding: 0 !important;
+  position: relative;
+  display: block;
+  filter: drop-shadow(none);
+}
+
+/* Hide ALL shadows from TikTok embed */
+.tiktok-iframe,
+.tiktok-iframe *,
+.tiktok-iframe blockquote,
+.tiktok-iframe section,
+.tiktok-iframe div {
+  box-shadow: none !important;
+  border: none !important;
+  filter: drop-shadow(none) !important;
+}
+
+/* Desktop Layout - 3 Columns */
+@media (min-width: 1024px) {
+  .tiktok-carousel-container {
+    overflow-x: visible;
+  }
+
+  .tiktok-carousel-wrapper {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .tiktok-carousel-item {
+    flex: 0 1 calc(33.333% - 27px);
+    max-width: 320px;
+  }
+}
+
+/* Tablet Layout */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tiktok-carousel-wrapper {
+    width: fit-content;
+  }
+
+  .tiktok-carousel-item {
+    flex: 0 0 310px;
+  }
+}
+
+/* Mobile Layout - Horizontal Scroll */
+@media (max-width: 767px) {
+  .tiktok-carousel-item {
+    flex: 0 0 300px;
+  }
+
+  .tiktok-carousel-wrapper {
+    padding: 10px 0;
+  }
 }
 
 .text-reveal-large {
@@ -7169,47 +7405,6 @@ button:hover {
 
 .text-reveal-large .word {
   display: inline-block;
-}
-
-.countdown-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 60px;
-  flex-wrap: wrap;
-}
-
-.countdown-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.countdown-value {
-  font-size: 48px;
-  font-weight: 900;
-  color: #2b2b2b;
-  line-height: 1;
-  min-width: 70px;
-  text-align: center;
-}
-
-.countdown-label {
-  font-size: 12px;
-  color: #999;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.countdown-separator {
-  font-size: 32px;
-  font-weight: 700;
-  color: #BF841D;
-  margin: 0 8px;
-  opacity: 0.7;
 }
 
 .choose-question {
@@ -7284,16 +7479,6 @@ button:hover {
     margin-bottom: 40px;
   }
 
-  .countdown-value {
-    font-size: 36px;
-    min-width: 55px;
-  }
-
-  .countdown-separator {
-    font-size: 24px;
-    margin: 0 4px;
-  }
-
   .choose-question {
     min-height: 140px;
     margin-bottom: 40px;
@@ -7315,10 +7500,6 @@ button:hover {
   .report-section {
     padding: 30px 15px;
     margin-bottom: 40px;
-  }
-
-  .text-countdown-section {
-    padding: 60px 15px;
   }
 
   .video-section {
@@ -7375,10 +7556,6 @@ button:hover {
 
   .report-text {
     font-size: 14px;
-  }
-
-  .text-countdown-section {
-    padding: 50px 12px;
   }
 
   .video-section {
@@ -7491,6 +7668,7 @@ button:hover {
   border-radius: 0;
   background: transparent;
   border: none;
+  position: relative;
 }
 
 .message-item.user-message {
@@ -7498,6 +7676,28 @@ button:hover {
   border-color: transparent;
   align-self: flex-end;
   max-width: 70%;
+}
+
+.message-item.pinned-message {
+  background: #fff8dc;
+  padding: 12px;
+  border-left: 4px solid #FFD700;
+  border-radius: 30px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.pin-indicator {
+  font-size: 11px;
+  font-weight: 700;
+  color: #FF8C00;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .message-avatar {
@@ -7781,4 +7981,132 @@ button:hover {
 
 .obrolan-login-btn:hover {
   transform: translateY(-2px);
+}
+
+/* ================================================
+   APPLE-STYLE DESIGN SYSTEM - GLOBAL OVERRIDES
+   Consistent 30px border radius with subtle borders and soft shadows
+================================================ */
+
+/* Apply Apple-style to all popups */
+.popup-content {
+  border-radius: 30px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.popup-link {
+  border-radius: 30px !important;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2) !important;
+}
+
+.popup-link:hover {
+  box-shadow: 0 4px 16px rgba(191, 132, 29, 0.3) !important;
+}
+
+/* Apply to all buttons */
+button:not(.popup-close):not(.navbar-toggle) {
+  border-radius: 30px !important;
+  box-shadow: 0 2px 12px rgba(191, 132, 29, 0.2) !important;
+}
+
+/* Apply to all inputs */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea {
+  border-radius: 30px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Apply to all cards and containers with shadow */
+.card,
+.modal-content,
+.gallery-card,
+[class*="box"],
+[class*="container"] {
+  border-radius: 30px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Specific overrides for common classes - EXCLUDE comment notification */
+.notification-item:not(.comment-notification-item),
+.alert,
+.badge {
+  border-radius: 30px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Comment notification - force no border/shadow */
+.comment-notification-item,
+.comment-notification-container {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 30px !important;
+}
+
+/* Message items in chat */
+.message-bubble {
+  border-radius: 30px !important;
+}
+
+/* Form elements */
+.form-control {
+  border-radius: 30px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ================================================
+   REMOVE OUTER BORDERS FROM MAIN SECTIONS
+   Keep only inner card borders
+================================================ */
+
+/* Hero Card - remove outer border, keep inner transparent */
+.hero-card,
+.hero-card-inner {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Steps Sections - remove outer border */
+.steps-section,
+.steps-card-section {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Simulasi Section - remove outer border and shadow */
+.simulasi-section,
+.simulasi-card {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  filter: drop-shadow(none) !important;
+}
+
+/* TikTok Carousel Section - remove outer border */
+.tiktok-carousel-section,
+.tiktok-carousel-container,
+.tiktok-carousel-wrapper,
+.tiktok-carousel-item {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  filter: drop-shadow(none) !important;
+}
+
+/* Voting Results Section - remove outer border */
+.voting-results-section {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Container base - clean no border */
+.container {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
 }
