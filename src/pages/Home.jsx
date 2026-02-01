@@ -541,7 +541,7 @@ export default function Home() {
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.2 }}
       >
-        <h2 className="tiktok-carousel-title">Videos</h2>
+        <h2 className="tiktok-carousel-title"></h2>
         
         <div className="tiktok-carousel-container" ref={tiktokCarouselRef}>
           <div className="tiktok-carousel-wrapper">
