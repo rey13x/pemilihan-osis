@@ -6112,9 +6112,9 @@ button:hover {
 /* Live Comment Notification */
 .comment-notification-container {
   position: fixed;
-  bottom: 20px;
+  bottom: 150px;
   left: 20px;
-  width: 280px;
+  width: 380px;
   z-index: 900;
 }
 
@@ -6122,7 +6122,7 @@ button:hover {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(5px);
   border-radius: 30px;
-  padding: 12px;
+  padding: 20px;
   box-shadow: none;
   border: none;
   overflow: hidden;
@@ -6132,50 +6132,50 @@ button:hover {
 .comment-nis {
   font-weight: bold;
   color: #000;
-  font-size: 12px;
+  font-size: 14px;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   letter-spacing: 0.5px;
 }
 
 .comment-text {
   color: #000;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.5;
   word-break: break-word;
-  max-height: 60px;
+  max-height: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 /* Responsive - Desktop & Tablet */
 @media (max-width: 1024px) {
   .comment-notification-container {
-    width: 250px;
+    width: 340px;
     left: 15px;
-    bottom: 20px;
+    bottom: 130px;
   }
 }
 
 /* Responsive - Mobile Portrait */
 @media (max-width: 768px) {
   .comment-notification-container {
-    width: 220px;
-    bottom: 20px;
+    width: 300px;
+    bottom: 120px;
     left: 10px;
   }
 
   .comment-notification-item {
-    padding: 10px;
+    padding: 16px;
   }
 
   .comment-nis {
-    font-size: 11px;
-    margin-bottom: 4px;
+    font-size: 13px;
+    margin-bottom: 8px;
   }
 
   .comment-text {
